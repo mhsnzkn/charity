@@ -1,11 +1,10 @@
 import React from 'react';
 
-export default function Home() {
-    
+export default function MyAccount() {
     
     return (
         <>
-        
+            <h1>My Account</h1>
         </>
     );
 }
