@@ -4,7 +4,7 @@ export default function MyAccount() {
     
     return (
         <>
-            <h1>My Account</h1>
+            <h3>My Account</h3><hr/>
         </>
     );
 }

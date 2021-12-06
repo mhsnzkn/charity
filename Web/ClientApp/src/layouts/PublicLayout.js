@@ -5,8 +5,8 @@ export default function PublicLayout() {
 
     return (
         <>
-            <nav class="navbar navbar-light bg-light">
-                <div class="navbar-brand" >
+            <nav className="navbar navbar-light bg-light">
+                <div className="navbar-brand" >
                     <img src="/logo.png" style={{ maxHeight: '200px' }} alt="logo" />
                 </div>
             </nav>

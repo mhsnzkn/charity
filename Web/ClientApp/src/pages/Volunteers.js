@@ -4,7 +4,7 @@ export default function Volunteers() {
     
     return (
         <>
-            <h1>Volunteers</h1>
+            <h3>Volunteers</h3><hr/>
         </>
     );
 }
