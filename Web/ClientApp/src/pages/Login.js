@@ -16,7 +16,7 @@ export default function Login() {
                         <input type="password" className="form-control" placeholder="Password" />
                     </div>
                     <div className='d-flex justify-content-end'>
-                        <button type="button" className="btn btn-primary">Submit</button>
+                        <button type="button" className="btn btn-primary">Log in</button>
                     </div>
                 </form>
             </div>

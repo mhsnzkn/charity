@@ -4,7 +4,7 @@ export default function Users() {
     
     return (
         <>
-            <h3>Users</h3><hr/>
+            <h4>Users</h4><hr/>
         </>
     );
 }

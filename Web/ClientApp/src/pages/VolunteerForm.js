@@ -40,7 +40,6 @@ export default function VolunteerForm() {
             >
                 {({ values }) => (
 
-
                     <Form>
                         <h5>Personal Details</h5>
                         <div className="form-row">
@@ -100,7 +99,7 @@ export default function VolunteerForm() {
                                             <div className="form-group col-md-2 d-flex justify-content-between">
                                                 <div className='align-self-center'>
                                                     <br />
-                                                    {index >= 1 && <button onClick={() => remove((index))} className='btn btn-sm btn-danger m-2' style={{ maxHeight: '30px' }}><i className='fas fa-trash'></i></button>}
+                                                    {index > 0 && <button onClick={() => remove((index))} className='btn btn-sm btn-danger m-2' style={{ maxHeight: '30px' }}><i className='fas fa-trash'></i></button>}
                                                     {index + 1 === values.organisations.length && <button onClick={() => push({ organisation: '', role: '' })} className='btn btn-sm btn-primary m-2' style={{ maxHeight: '30px' }}><i className='fas fa-plus'></i></button>}
 
                                                 </div>
@@ -132,7 +131,7 @@ export default function VolunteerForm() {
                                             <div className="form-group col-md-2 d-flex justify-content-between">
                                                 <div className='align-self-center'>
                                                     <br />
-                                                    {index >= 1 && <button onClick={() => remove((index))} className='btn btn-sm btn-danger m-2' style={{ maxHeight: '30px' }}><i className='fas fa-trash'></i></button>}
+                                                    {index > 0 && <button onClick={() => remove((index))} className='btn btn-sm btn-danger m-2' style={{ maxHeight: '30px' }}><i className='fas fa-trash'></i></button>}
                                                     {index + 1 === values.skills.length && <button onClick={() => push({ skill: '', experience: '' })} className='btn btn-sm btn-primary m-2' style={{ maxHeight: '30px' }}><i className='fas fa-plus'></i></button>}
 
                                                 </div>

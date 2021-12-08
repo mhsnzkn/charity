@@ -20,7 +20,12 @@ a:focus {
 }
 
 .bg-custom{
-    background-color: #ef2d56;
+    background-color: #414770;
+}
+
+.custom-hidden-item{
+    transition: all ease 0.5s;
+    overflow: hidden;
 }
 
 .navbar {
