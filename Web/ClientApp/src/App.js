@@ -5,7 +5,7 @@ import { RoutePaths } from './Routes';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import './style/heart_theme.css'
-import './style/fontawesome/css/all.min.css'
+import './style/fontawesome/css/font-awesome.min.css'
 import VolunteerForm from './pages/VolunteerForm';
 import PublicLayout from './layouts/PublicLayout';
 import NotFound from './pages/NotFound';

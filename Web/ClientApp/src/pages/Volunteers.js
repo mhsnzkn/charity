@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import ReactDatatable from '@ashvin27/react-datatable';
+import ReactDatatable from '@mkikets/react-datatable';
 
 export default function Volunteers() {
     const [filter, setFilter] = useState(false);
@@ -15,30 +15,31 @@ export default function Volunteers() {
             key: "name",
             text: "Name",
             className: "name",
-            sortable: true
         },
         {
             key: "address",
             text: "Address",
-            sortable: true
         },
         {
             key: "postcode",
             text: "Postcode",
             className: "postcode",
-            sortable: true
         },
         {
             key: "rating",
             text: "Rating",
             className: "rating",
-            sortable: true
         },
         {
-            key: "type_of_food",
-            text: "Type of Food",
-            className: "type_of_food",
-            sortable: true
+            key: "_",
+            text: "Action",
+            cell: (record, index) => {
+                return(
+                    <>
+                        <button className='btn btn-sm btn-danger'><i className='fas fa-trash'></i></button>
+                    </>
+                )
+            }
         }
     ];
     const config = {
@@ -46,9 +47,11 @@ export default function Volunteers() {
         length_menu: [10, 20, 50],
         show_filter: true,
         show_pagination: true,
+        pagination: 'advance',
+        filename: "Volunteers",
         button: {
-            excel: false,
-            print: false
+            excel: true,
+            print: true
         }
     }
 
@@ -87,7 +90,7 @@ export default function Volunteers() {
                 config={config}
                 records={tableData.records}
                 columns={columns}
-                dynamic={true}
+                // dynamic={true}
                 total_record={tableData.total}
                 onChange={tableChangeHandler}/>
         </>
