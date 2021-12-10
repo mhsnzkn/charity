@@ -1,12 +1,17 @@
+import axios from 'axios';
 import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik';
 import React from 'react';
-import * as Yup from 'yup';
+import * as yup from 'yup';
 
 export default function VolunteerForm() {
     const initialValues = {
         firstName: '',
         lastName: '',
         email: '',
+        address: '',
+        postCode: '',
+        mobileNumber: '',
+        reason: '',
         organisations: [{
             organisation: '',
             role: ''
@@ -17,29 +22,43 @@ export default function VolunteerForm() {
         }],
         dbscheck: false
     }
-    const ValidationSchema = Yup.object().shape({
-        firstName: Yup.string().required("Required"),
-        lastName: Yup.string().required("Required"),
-        email: Yup.string()
+
+    const ValidationSchema = yup.object().shape({
+        firstName: yup.string().required("Required"),
+        lastName: yup.string().required("Required"),
+        address: yup.string().required("Required"),
+        postCode: yup.string().required("Required").max(8),
+        email: yup.string()
             .email("Invalid email address format")
             .required("Required"),
-        dbscheck: Yup.boolean().oneOf([true], "You must confirm DBS check to submit")
+        reason: yup.string().required('Required'),
+        organisations: yup.array().of(yup.object().shape({
+                organisation: yup.string().required("Required"),
+                role: yup.string().required("Required"),
+            })),
+        skills: yup.array().of(yup.object().shape({
+                skill: yup.string().required("Required"),
+                experience: yup.string().required("Required"),
+            })),
+        dbscheck: yup.boolean().oneOf([true], "You must confirm DBS check to submit")
     });
+    
+    const submitHandler = (values) =>{
+        axios.post('/api/volunteer', values).then(()=>{
+            alert("Ok")
+        })
+    }
 
     return (
-        <>
+        <div className='p-2 mb-2'>
             <h3>Volunteer Application Form</h3>
             <hr />
             <Formik
                 initialValues={initialValues}
-                onSubmit={async (values) => {
-                    await new Promise((r) => setTimeout(r, 500));
-                    alert(JSON.stringify(values, null, 2));
-                }}
+                onSubmit={submitHandler}
                 validationSchema={ValidationSchema}
             >
                 {({ values }) => (
-
                     <Form>
                         <h5>Personal Details</h5>
                         <div className="form-row">
@@ -87,14 +106,14 @@ export default function VolunteerForm() {
                                     {values.organisations.map((item, index) => (
                                         <React.Fragment key={index}>
                                             <div className="form-group col-md-5">
-                                                <label htmlFor={`organisations.${index}.organisation`}>Organisation</label>
-                                                <Field id={`organisations.${index}.organisation`} name={`organisations.${index}.organisation`} className="form-control" />
-                                                <ErrorMessage component="span" name={`organisations.${index}.organisation`} className="text-danger" />
+                                                <label htmlFor={`organisations[${index}].organisation`}>Organisation</label>
+                                                <Field name={`organisations[${index}].organisation`} className="form-control" />
+                                                <ErrorMessage component="span" name={`organisations[${index}].organisation`} className="text-danger" />
                                             </div>
                                             <div className="form-group col-md-5">
-                                                <label htmlFor={`organisations.${index}.role`}>Roles and Responsibilities</label>
-                                                <Field id={`organisations.${index}.role`} name={`organisations.${index}.role`} className="form-control" />
-                                                <ErrorMessage component="span" name={`organisations.${index}.role`} className="text-danger" />
+                                                <label htmlFor={`organisations[${index}].role`}>Roles and Responsibilities</label>
+                                                <Field name={`organisations[${index}].role`} className="form-control" />
+                                                <ErrorMessage component="span" name={`organisations[${index}].role`} className="text-danger" />
                                             </div>
                                             <div className="form-group col-md-2 d-flex justify-content-between">
                                                 <div className='align-self-center'>
@@ -119,14 +138,14 @@ export default function VolunteerForm() {
                                     {values.skills.map((item, index) => (
                                         <React.Fragment key={index}>
                                             <div className="form-group col-md-5">
-                                                <label htmlFor={`skills.${index}.skill`}>Skill</label>
-                                                <Field id={`skills.${index}.skill`} name={`skills.${index}.skill`} className="form-control" />
-                                                <ErrorMessage component="span" name={`skills.${index}.skill`} className="text-danger" />
+                                                <label htmlFor={`skills[${index}].skill`}>Skill</label>
+                                                <Field name={`skills[${index}].skill`} className="form-control" />
+                                                <ErrorMessage component="span" name={`skills[${index}].skill`} className="text-danger" />
                                             </div>
                                             <div className="form-group col-md-5">
-                                                <label htmlFor={`skills.${index}.experience`}>Experience</label>
-                                                <Field id={`skills.${index}.experience`} name={`skills.${index}.experience`} className="form-control" />
-                                                <ErrorMessage component="span" name={`skills.${index}.experience`} className="text-danger" />
+                                                <label htmlFor={`skills[${index}].experience`}>Experience</label>
+                                                <Field name={`skills[${index}].experience`} className="form-control" />
+                                                <ErrorMessage component="span" name={`skills[${index}].experience`} className="text-danger" />
                                             </div>
                                             <div className="form-group col-md-2 d-flex justify-content-between">
                                                 <div className='align-self-center'>
@@ -168,6 +187,6 @@ export default function VolunteerForm() {
 
                 )}
             </Formik>
-        </>
+        </div>
     );
 }

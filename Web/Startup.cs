@@ -1,7 +1,13 @@
+using Business.Abstract;
+using Business.Concrete;
+using Data;
+using DataAccess.Abstract;
+using DataAccess.Concrete;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +34,18 @@ namespace Web
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+
+            #region Services
+            services.AddScoped<IUserManager, UserManager>();
+            services.AddScoped<IUserDal, UserDal>();
+            services.AddScoped<IVolunteerManager, VolunteerManager>();
+            services.AddScoped<IVolunteerDal, VolunteerDal>();
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

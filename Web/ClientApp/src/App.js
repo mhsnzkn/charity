@@ -6,7 +6,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import './style/heart_theme.css'
 import './style/fontawesome/css/font-awesome.min.css'
-import VolunteerForm from './pages/VolunteerForm';
+import VolunteerFormPage from './pages/VolunteerFormPage';
 import PublicLayout from './layouts/PublicLayout';
 import NotFound from './pages/NotFound';
 import AdminLayout from './layouts/AdminLayout';
@@ -23,7 +23,7 @@ function App() {
 
         <Routes>
           <Route path={RoutePaths.Forms} element={<PublicLayout />} >
-            <Route path={RoutePaths.VolunteerForm} element={<VolunteerForm/>} />
+            <Route path={RoutePaths.VolunteerForm} element={<VolunteerFormPage/>} />
           </Route>
           <Route exact path={RoutePaths.Login} element={<Login />} />
 
