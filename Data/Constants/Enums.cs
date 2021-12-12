@@ -17,5 +17,10 @@ namespace Data.Constants
             Induction,
             Completed
         }
+        public enum UserStatus
+        {
+            Active,
+            Pasive
+        }
     }
 }

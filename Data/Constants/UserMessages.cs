@@ -9,5 +9,6 @@ namespace Data.Constants
     public class UserMessages
     {
         public const string Fail = "Failed";
+        public const string LoginFail = "Email or Password is wrong!";
     }
 }

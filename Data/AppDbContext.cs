@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace Data
         {
         }
 
+        public DbSet<User> Users { get; set; }
+        public DbSet<Volunteer> Volunteers { get; set; }
 
     }
 }

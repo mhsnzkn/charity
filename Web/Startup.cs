@@ -1,8 +1,10 @@
 using Business.Abstract;
 using Business.Concrete;
+using Business.Utility.Security;
 using Data;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,10 +38,26 @@ namespace Web
             });
 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = tokenOptions.Issuer,
+                    ValidAudience = tokenOptions.Audience,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = SecurityHelper.CreateSecurityKey(tokenOptions.SecurityKey)
+                };
+            });
 
             #region Services
+            services.AddScoped<ITokenHelper, JwtHelper>();
+
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IUserDal, UserDal>();
             services.AddScoped<IVolunteerManager, VolunteerManager>();
@@ -67,6 +85,8 @@ namespace Web
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

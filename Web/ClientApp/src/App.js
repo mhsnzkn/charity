@@ -1,7 +1,6 @@
 import './bootstrap.min.css';
 import Footer from './components/Footer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { RoutePaths } from './Routes';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import './style/heart_theme.css'
@@ -14,6 +13,7 @@ import Volunteers from './pages/Volunteers';
 import Users from './pages/Users';
 import MyAccount from './pages/MyAccount';
 import Logout from './pages/Logout';
+import UserEdit from './pages/UserEdit';
 
 function App() {
 
@@ -22,20 +22,21 @@ function App() {
       <Router>
 
         <Routes>
-          <Route path={RoutePaths.Forms} element={<PublicLayout />} >
-            <Route path={RoutePaths.VolunteerForm} element={<VolunteerFormPage/>} />
+          <Route path="forms" element={<PublicLayout />} >
+            <Route path="volunteerForm" element={<VolunteerFormPage/>} />
           </Route>
-          <Route exact path={RoutePaths.Login} element={<Login />} />
+          <Route exact path="login" element={<Login />} />
 
 
 
 
 
-          <Route  path={RoutePaths.Home} element={<AdminLayout />} >
-            <Route path={RoutePaths.Volunteers} element={<Volunteers/>} />
-            <Route path={RoutePaths.Users} element={<Users/>} />
-            <Route path={RoutePaths.MyAccount} element={<MyAccount/>} />
-            <Route path={RoutePaths.Logout} element={<Logout/>} />
+          <Route  path="/" element={<AdminLayout />} >
+            <Route path="volunteers" element={<Volunteers/>} />
+            <Route path="users" element={<Users/>} />
+            <Route path="users/:id" element={<UserEdit/>} />
+            <Route path="myAccount" element={<MyAccount/>} />
+            <Route path="logout" element={<Logout/>} />
             
           </Route>
 

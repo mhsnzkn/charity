@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Data.Constants.Enums;
 
 namespace Data.Entities
 {
@@ -19,6 +20,7 @@ namespace Data.Entities
         public string Job { get; set; }
         [StringLength(100)]
         public string Role { get; set; }
+        public UserStatus Status { get; set; }
         public byte[] Password { get; set; }
         public byte[] PasswordHash { get; set; }
     }

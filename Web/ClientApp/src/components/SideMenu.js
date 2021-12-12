@@ -1,5 +1,4 @@
 import React from 'react';
-import CollapsibleMenuItem from './CollapsibleMenuItem';
 import { RoutePaths } from '../Routes';
 import { Link } from 'react-router-dom';
 
@@ -23,16 +22,20 @@ export default function SideMenu({ menuActive }) {
                 <li>
                     <Link to={RoutePaths.MyAccount}>My Account</Link>
                 </li>
-
-                <CollapsibleMenuItem title="Diger Islemler">
-                    <li><Link to="Denen">deneme</Link></li>
-                    <li><Link to="Denen">deneme1</Link></li>
-                    <li><Link to="Denen">deneme2</Link></li>
-                </CollapsibleMenuItem>
-
-                <CollapsibleMenuItem title="Diger Islemler2" >
-                    <li><Link to="Denen">deneme</Link></li>
-                </CollapsibleMenuItem>
+                {/* <li>
+                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">Pages</a>
+                    <ul class="list-unstyled collapse" id="pageSubmenu" >
+                        <li>
+                            <Link to="#">Page 1</Link>
+                        </li>
+                        <li>
+                            <Link to="#">Page 2</Link>
+                        </li>
+                        <li>
+                            <Link to="#">Page 3</Link>
+                        </li>
+                    </ul>
+                </li> */}
 
                 <li>
                     <Link to={RoutePaths.Logout}>Log Out</Link>

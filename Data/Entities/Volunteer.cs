@@ -35,7 +35,6 @@ namespace Data.Entities
         public VolunteerStatus Status { get; set; }
         public DateTime CrtDate { get; set; }
         public DateTime? UptDate { get; set; }
-        public int? CrtUsr { get; set; }
         public int? UptUsr { get; set; }
 
     }

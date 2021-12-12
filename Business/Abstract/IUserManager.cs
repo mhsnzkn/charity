@@ -1,4 +1,9 @@
-﻿using System;
+﻿using Business.Base;
+using Business.Utility;
+using Data.Entities;
+using Data.Models;
+using Data.Results;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +18,9 @@ namespace Business.Abstract
         //Task<List<User>> Get(Expression<Func<User, bool>> expression = null);
         //Task<DataTableResult> GetForDataTable(AccountParamsDto param);
 
-        //Task<Result> Add(UserModel model);
+        Task<Result> Add(User entity);
+        Task<ResultData<User>> Login(UserLoginModel model);
+        string CreateAccessToken(User user);
         //Task<Result> Update(UserModel model);
         //Task<Result> Delete(User entity);
     }

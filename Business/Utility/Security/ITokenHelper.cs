@@ -1,15 +1,14 @@
 ﻿using Data.Entities;
-using DataAccess.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Abstract
+namespace Business.Utility.Security
 {
-    public interface IUserDal : IRepositoryBase<User>
+    public interface ITokenHelper
     {
-        Task<User> GetByMail(string email);
+        string CreateToken(User user);
     }
 }
