@@ -1,8 +1,7 @@
 ﻿using Business.Base;
-using Business.Utility;
+using Data.Utility.Results;
 using Data.Entities;
 using Data.Models;
-using Data.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;

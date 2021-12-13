@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Utility.Security
+namespace Data.Utility.Security
 {
     public class TokenOptions
     {

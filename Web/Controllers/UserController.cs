@@ -1,6 +1,5 @@
 ﻿using Business.Abstract;
 using Data.Models;
-using Data.Results;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

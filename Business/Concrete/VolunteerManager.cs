@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
-using Business.Utility;
+using Data.Utility.Results;
 using Data.Constants;
 using Data.Entities;
 using Data.Models;
@@ -40,7 +40,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                result.SetError(ex.Message, UserMessages.Fail);
+                result.SetError(UserMessages.Fail);
             }
             
             return result;
@@ -56,7 +56,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                result.SetError(ex.Message, UserMessages.Fail);
+                result.SetError(UserMessages.Fail);
             }
 
             return result;
@@ -84,7 +84,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                result.SetError(ex.Message, UserMessages.Fail);
+                result.SetError(UserMessages.Fail);
             }
             return result;
         }

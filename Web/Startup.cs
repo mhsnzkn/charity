@@ -1,6 +1,6 @@
 using Business.Abstract;
 using Business.Concrete;
-using Business.Utility.Security;
+using Data.Utility.Security;
 using Data;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Data.AutoMapper;
 
 namespace Web
 {
@@ -54,6 +55,8 @@ namespace Web
                     IssuerSigningKey = SecurityHelper.CreateSecurityKey(tokenOptions.SecurityKey)
                 };
             });
+
+            services.AddAutoMapper(typeof(AppProfile).Assembly);
 
             #region Services
             services.AddScoped<ITokenHelper, JwtHelper>();

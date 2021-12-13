@@ -21,7 +21,7 @@ namespace Data.Entities
         [StringLength(100)]
         public string Role { get; set; }
         public UserStatus Status { get; set; }
-        public byte[] Password { get; set; }
         public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
     }
 }

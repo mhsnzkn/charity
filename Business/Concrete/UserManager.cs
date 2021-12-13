@@ -1,10 +1,9 @@
 ﻿using Business.Abstract;
-using Business.Utility;
-using Business.Utility.Security;
+using Data.Utility.Results;
+using Data.Utility.Security;
 using Data.Constants;
 using Data.Entities;
 using Data.Models;
-using Data.Results;
 using DataAccess.Abstract;
 using System;
 using System.Collections.Generic;
@@ -37,7 +36,17 @@ namespace Business.Concrete
             if(user == null)
             {
                 result.SetError(UserMessages.LoginFail);
+                return result;
             }
+
+            var isVerified = SecurityHelper.VerifyPassword(model.Password, user.PasswordHash, user.PasswordSalt);
+            if (!isVerified)
+            {
+                result.SetError(UserMessages.LoginFail);
+                return result;
+            }
+
+            result.Data = user;
             return result;
         }
         public string CreateAccessToken(User user)

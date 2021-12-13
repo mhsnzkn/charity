@@ -10,7 +10,7 @@ namespace Data.Constants
     {
         public struct UserRoles
         {
-            const string Admin = "admin";
+            public const string Admin = "admin";
         }
 
 
