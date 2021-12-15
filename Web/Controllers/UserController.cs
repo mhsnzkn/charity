@@ -56,7 +56,7 @@ namespace Web.Controllers
         }
 
         [HttpPost("Validate")]
-        public async Task<IActionResult> Validate()
+        public IActionResult Validate()
         {
             var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
