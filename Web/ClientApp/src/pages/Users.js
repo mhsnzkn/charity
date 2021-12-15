@@ -4,7 +4,7 @@ import { useState } from 'react/cjs/react.development';
 import { Link } from 'react-router-dom';
 
 export default function Users() {
-  const [tableData, setTableData] = useState({total:0, records:{}})
+  const [tableData, setTableData] = useState({ total: 0, records: [] });
 
 
   const columns = [
