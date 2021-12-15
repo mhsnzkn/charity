@@ -10,6 +10,8 @@ namespace Data.Entities
     public class Volunteer : IEntity
     {
         public int Id { get; set; }
+        [StringLength(50)]
+        public string Email { get; set; }
         [StringLength(100)]
         public string FirstName { get; set; }
         [StringLength(100)]
