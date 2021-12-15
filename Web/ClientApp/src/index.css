@@ -22,6 +22,12 @@ a:focus {
 .bg-custom{
     background-color: #414770;
 }
+.main-div-height{
+    min-height: 93vh;;
+}
+.layout-div-height{
+    min-height: 74vh;;
+}
 
 .custom-hidden-item{
     transition: all ease 0.5s;

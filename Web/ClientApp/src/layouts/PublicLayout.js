@@ -10,9 +10,10 @@ export default function PublicLayout() {
                     <img src="/logo.png" style={{ maxHeight: '200px' }} alt="logo" />
                 </div>
             </nav>
-            <div className='container'>
-                
-                <Outlet/>
+            <div className='container layout-div-height'>
+
+                <Outlet />
+
 
             </div>
         </>

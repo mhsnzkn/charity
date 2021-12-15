@@ -3,7 +3,7 @@ import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik';
 import React from 'react';
 import * as yup from 'yup';
 
-export default function VolunteerForm() {
+export default function VolunteerForm({ isSubmit }) {
     const initialValues = {
         firstName: '',
         lastName: '',
@@ -27,26 +27,28 @@ export default function VolunteerForm() {
         firstName: yup.string().required("Required"),
         lastName: yup.string().required("Required"),
         address: yup.string().required("Required"),
+        mobileNumber: yup.string().required("Required"),
         postCode: yup.string().required("Required").max(8),
         email: yup.string()
             .email("Invalid email address format")
             .required("Required"),
         reason: yup.string().required('Required'),
         organisations: yup.array().of(yup.object().shape({
-                organisation: yup.string().required("Required"),
-                role: yup.string().required("Required"),
-            })),
+            organisation: yup.string().required("Required"),
+            role: yup.string().required("Required"),
+        })),
         skills: yup.array().of(yup.object().shape({
-                skill: yup.string().required("Required"),
-                experience: yup.string().required("Required"),
-            })),
+            skill: yup.string().required("Required"),
+            experience: yup.string().required("Required"),
+        })),
         dbscheck: yup.boolean().oneOf([true], "You must confirm DBS check to submit")
     });
-    
-    const submitHandler = (values) =>{
-        axios.post('/api/volunteer', values).then(()=>{
-            alert("Ok")
-        })
+
+    const submitHandler = (values) => {
+        // axios.post('/api/volunteer', values).then(()=>{
+        //     alert("Ok")
+        // })
+        isSubmit();
     }
 
     return (
@@ -177,7 +179,7 @@ export default function VolunteerForm() {
                                     I understand that I would have to get a DBS check through Heart4Refugees if I was to volunteer
                                 </label>
                             </div>
-                                <ErrorMessage component="span" name="dbscheck" className="text-danger" />
+                            <ErrorMessage component="span" name="dbscheck" className="text-danger" />
                         </div>
 
                         <div className='d-flex justify-content-end'>

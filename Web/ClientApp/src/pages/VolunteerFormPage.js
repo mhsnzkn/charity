@@ -5,13 +5,13 @@ import VolunteerForm from '../components/VolunteerForm';
 
 export default function VolunteerFormPage() {
     const [isSubmitted, setIsSubmitted] = useState(false);
-    
+
     return (
         <>
             {isSubmitted ?
-            <SubmitSuccess/>
-        :
-        <VolunteerForm/>}
+                <SubmitSuccess />
+                :
+                <VolunteerForm isSubmit={() => setIsSubmitted(true)} />}
         </>
     );
 }

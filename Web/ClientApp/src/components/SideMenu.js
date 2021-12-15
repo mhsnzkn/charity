@@ -25,7 +25,7 @@ export default function SideMenu({ menuActive }) {
                 </li>
                 {/* <li>
                     <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">Pages</a>
-                    <ul class="list-unstyled collapse" id="pageSubmenu" >
+                    <ul className="list-unstyled collapse" id="pageSubmenu" >
                         <li>
                             <Link to="#">Page 1</Link>
                         </li>
@@ -39,7 +39,7 @@ export default function SideMenu({ menuActive }) {
                 </li> */}
 
                 <li>
-                    <a href="/#" onClick={() => auth.signout()}>Log Out</a>
+                    <a href="#" onClick={() => auth.signout()}>Log Out</a>
                 </li>
             </ul>
         </nav>

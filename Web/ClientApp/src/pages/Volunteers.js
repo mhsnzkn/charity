@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactDatatable from '@mkikets/react-datatable';
 
 export default function Volunteers() {
-    const [tableData, setTableData] = useState({total:0, records:{}})
+    const [tableData, setTableData] = useState({ total: 0, records: {} })
 
 
     const columns = [
@@ -22,7 +22,7 @@ export default function Volunteers() {
             key: "_",
             text: "Action",
             cell: (record, index) => {
-                return(
+                return (
                     <>
                         <button className='btn btn-sm btn-danger'><i className='fas fa-trash'></i></button>
                     </>
@@ -80,7 +80,7 @@ export default function Volunteers() {
                 columns={columns}
                 // dynamic={true}
                 total_record={tableData.total}
-                onChange={tableChangeHandler}/>
+                onChange={tableChangeHandler} />
         </>
     );
 }

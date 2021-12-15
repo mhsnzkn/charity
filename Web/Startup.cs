@@ -42,7 +42,8 @@ namespace Web
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new()
                 {
