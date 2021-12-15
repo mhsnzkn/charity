@@ -1,9 +1,11 @@
 import { useFormik } from 'formik';
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../Hooks/Auth';
 import * as Yup from 'yup'
+import LoaderButton from '../components/LoaderButton';
 
 export default function Login() {
+    const [btnLoading, setBtnLoading] = useState(false);
     let auth = useAuth();
 
     const schema = Yup.object().shape({
@@ -25,7 +27,8 @@ export default function Login() {
     });
 
     const submitForm = () => {
-        auth.signin(formik.values.email, formik.values.password);
+        setBtnLoading(true);
+        auth.signin(formik.values.email, formik.values.password, ()=> setBtnLoading(false));
     }
 
     const handleKeyDown = (event) => {
@@ -62,7 +65,7 @@ export default function Login() {
                         {formik.errors.password && formik.touched.password && <span className='text-danger'>{formik.errors.password}</span>}
                     </div>
                     <div className='d-flex justify-content-end'>
-                        <button type="submit" className="btn btn-primary">Log in</button>
+                        <LoaderButton isLoading={btnLoading} type="submit" className="btn btn-primary">Log in</LoaderButton>
                     </div>
                 </form>
             </div>

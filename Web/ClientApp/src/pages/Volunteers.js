@@ -1,30 +1,49 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDatatable from '@mkikets/react-datatable';
+import axios from 'axios';
+import { useAxiosGet } from '../Hooks/HttpRequests';
 
 export default function Volunteers() {
-    const [tableData, setTableData] = useState({ total: 0, records: {} })
+    const [tableData, setTableData] = useState({ total: 0, records: [] })
+
+    const response = useAxiosGet('/api/volunteer');
+
+    useEffect(()=>{
+        if(response.data){
+            setTableData({total:response.data.total, records:response.data.records})
+        }
+    },[response.data])
+    
 
 
     const columns = [
         {
             key: "name",
             text: "Name",
+            align: 'center'
         },
         {
             key: "email",
             text: "Email",
+            className:'text-center',
+            align: 'center'
         },
         {
             key: "mobileNumber",
             text: "Mobile Number",
+            align: 'center'
         },
         {
-            key: "_",
+            key: "id",
             text: "Action",
+            align: 'center',
+            className: 'text-center',
             cell: (record, index) => {
                 return (
                     <>
-                        <button className='btn btn-sm btn-danger'><i className='fas fa-trash'></i></button>
+                        <button className='btn btn-sm btn-success m-1' onClick={()=> console.log(record.id)}><i className='fa fa-check'></i></button>
+                        <button className='btn btn-sm btn-info m-1' onClick={()=> console.log(record.id)}><i className='fa fa-list'></i></button>
+                        <button className='btn btn-sm btn-danger m-1' onClick={()=> console.log(record.id)}><i className='fa fa-trash'></i></button>
                     </>
                 )
             }
@@ -43,42 +62,47 @@ export default function Volunteers() {
         }
     }
 
-    const tableChangeHandler = () => {
-        //Get data
-        console.log('getting data')
+    const tableChangeHandler = data => {
+        let queryString = Object.keys(data).map((key) => {
+            if(key === "sort_order" && data[key]){
+                return encodeURIComponent("sort_order") + '=' + encodeURIComponent(data[key].order) + '&' + encodeURIComponent("sort_column") + '=' + encodeURIComponent(data[key].column)
+            } else {
+                return encodeURIComponent(key) + '=' + encodeURIComponent(data[key])
+            }
+            
+        }).join('&');
+
+        //this.getData(queryString);
+        console.log(queryString);
+    }
+
+    const getData = (queryString = "") => {
+        let url = "http://tradekisan.in/react-datatable/sampleAPI/?" + queryString
+        fetch(url, {
+            headers: {
+                "Accept": "application/json"
+            }
+        })
+        .then(res => res.json())
+        .then(res => {
+            this.setState({
+                total: res.total,
+                records: res.result
+            })
+        })
+
     }
 
 
     return (
         <>
             <h4>Volunteers</h4><hr />
-            {/* <div className="custom-hidden-item"
-            ref={filterDiv}
-            style={
-                filter ? {
-                    height: filterDiv.current?.scrollHeight+"px"
-                }
-                : {
-                    height: "0px"
-                }
-            } >
-                <div class="form-group row p-1">
-                    <label htmlFor="staticEmail" class="col-sm-2 col-form-label">Email</label>
-                    <div class="col-sm-10">
-                        <input type="text" readonly class="form-control" id="staticEmail" value="email@example.com"/>
-                    </div>
-                </div>
-
-            </div>
-            <div className='d-flex justify-content-end'>
-                <button className='btn btn-dark m-2' onClick={() => setFilter(!filter)}>{filter === true ? "Hide" : "Show"} Filter</button>
-            </div> */}
 
             <ReactDatatable
                 config={config}
                 records={tableData.records}
                 columns={columns}
-                // dynamic={true}
+                 dynamic={true}
                 total_record={tableData.total}
                 onChange={tableChangeHandler} />
         </>

@@ -12,6 +12,7 @@ namespace Data.Constants
         {
             Cancelled,
             Trial,
+            DBSDocument,
             DBS,
             Aggreement,
             Induction,

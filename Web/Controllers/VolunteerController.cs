@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Data.Models;
 using DataAccess.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Web.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class VolunteerController : ControllerBase
@@ -22,9 +24,9 @@ namespace Web.Controllers
 
         // GET: api/<VolunteerController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(await volunteerManager.GetTable());
         }
 
         // GET api/<VolunteerController>/5
@@ -35,6 +37,7 @@ namespace Web.Controllers
         }
 
         // POST api/<VolunteerController>
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] VolunteerModel model)
         {

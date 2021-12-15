@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Data.Dtos;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Business.Concrete
 {
@@ -34,6 +37,7 @@ namespace Business.Concrete
                 entity.Organisations = JsonConvert.SerializeObject(model.Organisations);
                 entity.Skills = JsonConvert.SerializeObject(model.Skills);
 
+                entity.Status = Enums.VolunteerStatus.Trial;
                 entity.CrtDate = DateTime.Now;
                 volunteerDal.Add(entity);
                 await volunteerDal.Save();
@@ -60,6 +64,17 @@ namespace Business.Concrete
             }
 
             return result;
+        }
+
+        public async Task<VolunteerTableDto> GetTable(Expression<Func<Volunteer, bool>> expression = null)
+        {
+            var tableModel = new VolunteerTableDto()
+            {
+                Records = await mapper.ProjectTo<VolunteerListDto>(volunteerDal.Get()).ToListAsync(),
+                Total = await volunteerDal.Get().CountAsync(),
+            };
+
+            return tableModel;
         }
 
         public async Task<Result> Update(VolunteerModel model)

@@ -1,9 +1,13 @@
 import axios from 'axios';
 import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik';
-import React from 'react';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
+import LoaderButton from './LoaderButton';
 
 export default function VolunteerForm({ isSubmit }) {
+    const [btnLoading, setBtnLoading] = useState(false);
+
     const initialValues = {
         firstName: '',
         lastName: '',
@@ -11,6 +15,7 @@ export default function VolunteerForm({ isSubmit }) {
         address: '',
         postCode: '',
         mobileNumber: '',
+        homeNumber: '',
         reason: '',
         organisations: [{
             organisation: '',
@@ -28,7 +33,7 @@ export default function VolunteerForm({ isSubmit }) {
         lastName: yup.string().required("Required"),
         address: yup.string().required("Required"),
         mobileNumber: yup.string().required("Required"),
-        postCode: yup.string().required("Required").max(8),
+        postCode: yup.string().required("Required").max(8, 'Must be at most 8 characters'),
         email: yup.string()
             .email("Invalid email address format")
             .required("Required"),
@@ -45,10 +50,20 @@ export default function VolunteerForm({ isSubmit }) {
     });
 
     const submitHandler = (values) => {
-        // axios.post('/api/volunteer', values).then(()=>{
-        //     alert("Ok")
-        // })
-        isSubmit();
+        setBtnLoading(true);
+        axios.post('/api/volunteer', values)
+        .then((res)=>{
+            if(res.data.error){
+                toast.error(res.data.message)
+            }else{
+                isSubmit();
+            }
+            setBtnLoading(false);
+        })
+        .catch(err => {
+            setBtnLoading(false);
+        })
+        
     }
 
     return (
@@ -91,7 +106,7 @@ export default function VolunteerForm({ isSubmit }) {
                             </div>
                             <div className="form-group col-md-4">
                                 <label htmlFor="postCode">Post Code</label>
-                                <Field id="postCode" name="postCode" className="form-control" />
+                                <Field id="postCode" name="postCode" className="form-control text-uppercase" />
                                 <ErrorMessage component="span" name="postCode" className="text-danger" />
                             </div>
                         </div>
@@ -183,7 +198,7 @@ export default function VolunteerForm({ isSubmit }) {
                         </div>
 
                         <div className='d-flex justify-content-end'>
-                            <button type="submit" className="btn btn-primary">Submit</button>
+                            <LoaderButton isLoading={btnLoading} type="submit" className="btn btn-primary">Submit</LoaderButton>
                         </div>
                     </Form>
 

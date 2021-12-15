@@ -10,10 +10,10 @@ import AdminLayout from './layouts/AdminLayout';
 import Volunteers from './pages/Volunteers';
 import Users from './pages/Users';
 import MyAccount from './pages/MyAccount';
-import Logout from './pages/Logout';
 import UserEdit from './pages/UserEdit';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import VolunteerDocumentForm from './components/VolunteerDocumentForm';
 
 function App() {
 
@@ -26,6 +26,7 @@ function App() {
         <Routes>
           <Route path="forms" element={<PublicLayout />} >
             <Route path="volunteerForm" element={<VolunteerFormPage />} />
+            <Route path="volunteerDocument" element={<VolunteerDocumentForm />} />
           </Route>
 
 
@@ -35,7 +36,6 @@ function App() {
             <Route path="users" element={<Users />} />
             <Route path="users/:id" element={<UserEdit />} />
             <Route path="myAccount" element={<MyAccount />} />
-            <Route path="logout" element={<Logout />} />
 
           </Route>
 
