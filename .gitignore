@@ -235,3 +235,7 @@ _Pvt_Extensions
 node_modules/
 build/
 .DS_Store
+
+#App settings
+/Web/appsettings.json
+
