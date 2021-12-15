@@ -1,8 +1,9 @@
 import React from 'react';
-import { RoutePaths } from '../Routes';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../Hooks/Auth';
 
 export default function SideMenu({ menuActive }) {
+    const auth = useAuth();
 
     return (
         <nav id="sidebar" className={menuActive ? 'active' : ''}>
@@ -14,13 +15,13 @@ export default function SideMenu({ menuActive }) {
 
             <ul className="list-unstyled components">
                 <li>
-                    <Link to={RoutePaths.Volunteers}>Volunteers</Link>
+                    <Link to="volunteers">Volunteers</Link>
                 </li>
                 <li>
-                    <Link to={RoutePaths.Users}>Users</Link>
+                    <Link to="users">Users</Link>
                 </li>
                 <li>
-                    <Link to={RoutePaths.MyAccount}>My Account</Link>
+                    <Link to="myaccount">My Account</Link>
                 </li>
                 {/* <li>
                     <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">Pages</a>
@@ -38,7 +39,7 @@ export default function SideMenu({ menuActive }) {
                 </li> */}
 
                 <li>
-                    <Link to={RoutePaths.Logout}>Log Out</Link>
+                    <a href="/#" onClick={() => auth.signout()}>Log Out</a>
                 </li>
             </ul>
         </nav>

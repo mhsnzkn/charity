@@ -1,0 +1,97 @@
+import Axios from "axios";
+import React, { useState, useEffect, useContext, createContext } from "react";
+import { toast } from "react-toastify";
+
+const authContext = createContext();
+
+
+// Provider component that wraps your app and makes auth object ...
+// ... available to any child component that calls useAuth().
+export function ProvideAuth({ children }) {
+  const auth = useProvideAuth();
+  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+}
+
+// Hook for child components to get the auth object ...
+// ... and re-render when it changes.
+export const useAuth = () => {
+  return useContext(authContext);
+};
+
+// Provider hook that creates auth object and handles state
+function useProvideAuth() {
+  const [user, setUser] = useState(null);
+  
+  // Wrap any methods we want to use making sure ...
+  // ... to save the user to state.
+  const signin = (email, password) => {
+    return Axios.post("/api/user/Login" , {email:email, password:password})
+    .then(res => {
+        if(res.data.error){
+          toast.error(res.data.message);
+          setUser(null);
+        }else{
+          localStorage.setItem('token', res.data.data)
+          setUser(res.data);
+        }
+    })
+    .catch((err) => {
+      toast.error("Connection error!");
+      setUser(null);
+    })
+  };
+
+  const signup = (email, username, password) => {
+    Axios.post("/api/user/Add" , {email:email, username:username, password:password})
+    .then(res => {
+        if(res.data.error){
+          toast.error(res.data.message);
+        }else{
+          toast.success("To activate your registry, admin should approve");
+        }
+    })
+    .catch((err) => {
+      toast.error("Connection Error");
+    })
+  };
+
+  const signout = () => {
+    localStorage.clear();
+    return setUser(null);
+  };
+
+
+//   // Subscribe to user on mount
+//   // Because this sets state in the callback it will cause any ...
+//   // ... component that utilizes this hook to re-render with the ...
+//   // ... latest auth object.
+  useEffect(() => {
+    let token = localStorage.getItem('token');
+    if(token){
+      const unsubscribe = 
+          Axios.post("/api/user/Validate" , null,{headers:{'Authorization':'Bearer '+token}})
+          .then(res => {
+              if(res.data.error===false){
+                setUser(res.data);
+              }else{
+                setUser(false);
+              }
+          })
+          .catch(() => {
+            setUser(false);
+          })
+
+   // Cleanup subscription on unmount
+   return () => unsubscribe();
+  }
+  return null;
+ }, []);
+  
+  // Return the user object and auth methods
+  return {
+    user,
+    signin,
+    signup,
+    signout,
+  };
+}

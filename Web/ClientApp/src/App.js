@@ -14,39 +14,49 @@ import Users from './pages/Users';
 import MyAccount from './pages/MyAccount';
 import Logout from './pages/Logout';
 import UserEdit from './pages/UserEdit';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { ProvideAuth } from './Hooks/Auth';
+import { PrivateRoute } from './Wrappers/PrivateRoute';
 
 function App() {
 
+
+
   return (
     <>
-      <Router>
+      <ProvideAuth>
+        <Router>
 
-        <Routes>
-          <Route path="forms" element={<PublicLayout />} >
-            <Route path="volunteerForm" element={<VolunteerFormPage/>} />
-          </Route>
-          <Route exact path="login" element={<Login />} />
-
-
-
+          <Routes>
+            <Route path="forms" element={<PublicLayout />} >
+              <Route path="volunteerForm" element={<VolunteerFormPage />} />
+            </Route>
+            <Route exact path="login" element={<Login />} />
 
 
-          <Route  path="/" element={<AdminLayout />} >
-            <Route path="volunteers" element={<Volunteers/>} />
-            <Route path="users" element={<Users/>} />
-            <Route path="users/:id" element={<UserEdit/>} />
-            <Route path="myAccount" element={<MyAccount/>} />
-            <Route path="logout" element={<Logout/>} />
-            
-          </Route>
-
-          
-          <Route path="*" element={<NotFound/>}/>
-        </Routes>
 
 
-      </Router>
-      <Footer />
+
+              <Route path="/" element={ <AdminLayout />} >
+                <Route path="volunteers" element={<Volunteers />} />
+                <Route path="users" element={<Users />} />
+                <Route path="users/:id" element={<UserEdit />} />
+                <Route path="myAccount" element={<MyAccount />} />
+                <Route path="logout" element={<Logout />} />
+
+              </Route>
+
+
+              <Route path="*" element={<NotFound />} />
+
+          </Routes>
+
+
+        </Router>
+        <ToastContainer />
+        <Footer />
+      </ProvideAuth>
     </>
   );
 }

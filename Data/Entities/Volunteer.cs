@@ -1,4 +1,5 @@
 ﻿using Data.Abstract;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -30,6 +31,7 @@ namespace Data.Entities
 
         [StringLength(1000)]
         public string Reason { get; set; }
+        public Guid Key { get; set; } = Guid.NewGuid();
         public string Organisations { get; set; }
         public string Skills { get; set; }
         public VolunteerStatus Status { get; set; }

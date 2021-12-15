@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import SideMenu from '../components/SideMenu';
+import { PrivateRoute } from '../Wrappers/PrivateRoute';
 
 export default function AdminLayout() {
     const[menuActive, setMenuActive] = useState(false);
@@ -10,6 +11,8 @@ export default function AdminLayout() {
     }
 
     return (
+        
+<PrivateRoute>
         <div className="wrapper">
         <SideMenu menuActive={menuActive}/>
 
@@ -23,5 +26,6 @@ export default function AdminLayout() {
             </div>
         </div>
     </div>
+    </PrivateRoute>
     );
 }

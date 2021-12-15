@@ -1,34 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import ReactDatatable from '@mkikets/react-datatable';
 
 export default function Volunteers() {
-    const [filter, setFilter] = useState(false);
     const [tableData, setTableData] = useState({total:0, records:{}})
-    const filterDiv = useRef();
-    useEffect(() =>{
-        setFilter(true);
-    },[])
 
 
     const columns = [
         {
             key: "name",
             text: "Name",
-            className: "name",
         },
         {
-            key: "address",
-            text: "Address",
+            key: "email",
+            text: "Email",
         },
         {
-            key: "postcode",
-            text: "Postcode",
-            className: "postcode",
-        },
-        {
-            key: "rating",
-            text: "Rating",
-            className: "rating",
+            key: "mobileNumber",
+            text: "Mobile Number",
         },
         {
             key: "_",
