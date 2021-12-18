@@ -60,7 +60,7 @@ export default function Users() {
     <>
       <h4>Users</h4><hr />
       <div className='m-1 p-1'>
-        <Link to="/users/0" className='btn btn-primary'><i className='fa fa-plus'></i> Add</Link>
+        <Link to="/Users/Edit/0" className='btn btn-primary'><i className='fa fa-plus'></i> Add</Link>
       </div>
       <ReactDatatable
         config={config}

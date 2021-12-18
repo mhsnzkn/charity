@@ -1,6 +1,6 @@
+import alertify from "alertifyjs";
 import Axios from "axios";
 import React, { useState, useEffect, useContext, createContext } from "react";
-import { toast } from "react-toastify";
 
 const authContext = createContext();
 
@@ -28,7 +28,7 @@ function useProvideAuth() {
     return Axios.post("/api/user/Login" , {email:email, password:password})
     .then(res => {
         if(res.data.error){
-          toast.error(res.data.message);
+          alertify.error(res.data.message);
           setUser(null);
         }else{
           localStorage.setItem('token', res.data.data)
@@ -36,7 +36,7 @@ function useProvideAuth() {
         }
     })
     .catch((err) => {
-      toast.error("Connection error!");
+      alertify.error("Connection error!");
       setUser(null);
     })
   };
@@ -45,13 +45,13 @@ function useProvideAuth() {
     Axios.post("/api/user/Add" , {email:email, username:username, password:password})
     .then(res => {
         if(res.data.error){
-          toast.error(res.data.message);
+          alertify.error(res.data.message);
         }else{
-          toast.success("To activate your registry, admin should approve");
+          alertify.success("To activate your registry, admin should approve");
         }
     })
     .catch((err) => {
-      toast.error("Connection Error");
+      alertify.error("Connection Error");
     })
   };
 

@@ -28,7 +28,7 @@ export default function Login() {
 
     const submitForm = () => {
         setBtnLoading(true);
-        auth.signin(formik.values.email, formik.values.password, ()=> setBtnLoading(false));
+        auth.signin(formik.values.email, formik.values.password).then(()=> setBtnLoading(false));
     }
 
     const handleKeyDown = (event) => {

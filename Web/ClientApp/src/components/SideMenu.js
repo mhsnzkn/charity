@@ -15,28 +15,19 @@ export default function SideMenu({ menuActive }) {
 
             <ul className="list-unstyled components">
                 <li>
-                    <Link to="volunteers">Volunteers</Link>
-                </li>
-                <li>
-                    <Link to="users">Users</Link>
-                </li>
-                <li>
-                    <Link to="myaccount">My Account</Link>
-                </li>
-                {/* <li>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle collapsed">Pages</a>
-                    <ul className="list-unstyled collapse" id="pageSubmenu" >
+                    <a href="#volunteers" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle collapsed">Volunteers</a>
+                    <ul className="list-unstyled collapse" id="volunteers" >
                         <li>
-                            <Link to="#">Page 1</Link>
-                        </li>
-                        <li>
-                            <Link to="#">Page 2</Link>
-                        </li>
-                        <li>
-                            <Link to="#">Page 3</Link>
+                        <Link to="VolunteerApplications">Applications</Link>
                         </li>
                     </ul>
-                </li> */}
+                </li>
+                <li>
+                    <Link to="Users">Users</Link>
+                </li>
+                <li>
+                    <Link to="MyAccount">My Account</Link>
+                </li>
 
                 <li>
                     <a href="#" onClick={() => auth.signout()}>Log Out</a>

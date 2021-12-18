@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Data.Utility.Results
     public class Result
     {
         public bool Error { get; set; } = false;
-        public string Message { get; set; }
+        public string Message { get; set; } = UserMessages.Success;
 
         public void SetError(string message)
         {

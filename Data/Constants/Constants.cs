@@ -11,6 +11,13 @@ namespace Data.Constants
         public struct UserRoles
         {
             public const string Admin = "admin";
+            public const string Volunteer = "volunteer";
+        }
+
+        public struct HttpActions
+        {
+            public const string Approve = "approve";
+            public const string Cancel = "cancel";
         }
 
 

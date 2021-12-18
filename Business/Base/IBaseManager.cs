@@ -12,7 +12,7 @@ namespace Business.Base
         where TEntity : class
         where TModel : class
     {
-        //Task<T> GetByIdAsync(int id);
+        //Task<TEntity> GetByIdAsync(int id);
         //Task<List<T>> Get(Expression<Func<T, bool>> expression = null);
         Task<Result> Add(TModel model);
         Task<Result> Update(TModel model);

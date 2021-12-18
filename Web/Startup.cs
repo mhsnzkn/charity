@@ -38,6 +38,14 @@ namespace Web
                 configuration.RootPath = "ClientApp/build";
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Allow", builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
+
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -89,6 +97,7 @@ namespace Web
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+            app.UseCors("Allow");
             app.UseAuthentication();
             app.UseAuthorization();
 

@@ -29,11 +29,6 @@ a:focus {
     min-height: 74vh;;
 }
 
-.custom-hidden-item{
-    transition: all ease 0.5s;
-    overflow: hidden;
-}
-
 .navbar {
     padding: 15px 10px;
     background: #cacaca;

@@ -66,6 +66,11 @@ namespace Business.Concrete
             return result;
         }
 
+        public async Task<VolunteerDto> GetByIdAsync(int id)
+        {
+            return mapper.Map<VolunteerDto>(await volunteerDal.GetByIdAsync(id));
+        }
+
         public async Task<VolunteerTableDto> GetTable(Expression<Func<Volunteer, bool>> expression = null)
         {
             var tableModel = new VolunteerTableDto()
@@ -101,6 +106,51 @@ namespace Business.Concrete
             {
                 result.SetError(UserMessages.Fail);
             }
+            return result;
+        }
+
+        public async Task<Result> Approve(int id)
+        {
+            var result = new Result();
+            var volunteer = await volunteerDal.GetByIdAsync(id);
+            if(volunteer == null)
+            {
+                result.SetError(UserMessages.VolunteerNotFound);
+                return result;
+            }
+            if(volunteer.Status == Enums.VolunteerStatus.Cancelled)
+            {
+                result.SetError(UserMessages.VolunteerRejected);
+                return result;
+            }
+            if(volunteer.Status == Enums.VolunteerStatus.Completed)
+            {
+                result.SetError(UserMessages.VolunteerCompleted);
+                return result;
+            }
+            
+            volunteer.Status = volunteer.Status + 1;
+            await volunteerDal.Save();
+            return result;
+        }
+        public async Task<Result> Cancel(int id, string cancellationReason)
+        {
+            var result = new Result();
+            var volunteer = await volunteerDal.GetByIdAsync(id);
+            if(volunteer == null)
+            {
+                result.SetError(UserMessages.VolunteerNotFound);
+                return result;
+            }
+            if(volunteer.Status == Enums.VolunteerStatus.Cancelled)
+            {
+                result.SetError(UserMessages.VolunteerRejected);
+                return result;
+            }
+
+            volunteer.Status = Enums.VolunteerStatus.Cancelled;
+            volunteer.CancellationReason = cancellationReason;
+            await volunteerDal.Save();
             return result;
         }
     }

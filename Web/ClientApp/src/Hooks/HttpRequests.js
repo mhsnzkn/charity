@@ -1,11 +1,12 @@
 import {useEffect, useState} from 'react'
 import axios from 'axios'
 import { useAuth } from './Auth'
+import { toast } from 'react-toastify';
+import { getHttpHeader } from '../helpers/helpers';
 
 
-export function useAxiosGet(url){
+export function useAxiosGet(url, state = null){
     let auth = useAuth();
-    let token = localStorage.getItem('token');
     const [request, setRequest] = useState({
         loading: false,
         data: null,
@@ -17,7 +18,7 @@ export function useAxiosGet(url){
             data: null,
             error: false
         })
-        axios.get(url, {headers:{'Authorization':'Bearer '+token}})
+        axios.get(url, getHttpHeader())
             .then(response => {
                 setRequest({
                     loading: false,
@@ -34,15 +35,20 @@ export function useAxiosGet(url){
                 if (err.response) {
                     if(err.response.status=== 401 || err.response.status===403){
                         auth.signout();
+                    }else{
+                        toast.error('Connection error!');
                     }
                 } else if (err.request) {
                 // client never received a response, or request never left
+                toast.error('Connection error!');
                 } else {
                 // anything else
+                toast.error('Connection error!');
                 }
                 
             })
-    }, [url, auth, token])
+    }, [url, auth, state])
 
     return request
 }
+

@@ -2,6 +2,7 @@
 using Data.Dtos;
 using Data.Entities;
 using Data.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,11 @@ namespace Data.AutoMapper
             CreateMap<VolunteerModel, Volunteer>()
                 .ForMember(a => a.PostCode, o => o.MapFrom(a => a.PostCode.ToUpper()));
             CreateMap<Volunteer, VolunteerListDto>()
-                .ForMember(o => o.Name, m => m.MapFrom(o => o.FirstName + " " + o.LastName));
+                .ForMember(o => o.Name, m => m.MapFrom(o => o.FirstName + " " + o.LastName))
+                .ForMember(o => o.StatusName, m => m.MapFrom(o => o.Status.ToString()));
+            CreateMap<Volunteer, VolunteerDto>()
+                .ForMember(a => a.Organisations, o => o.MapFrom(a => JsonConvert.DeserializeObject(a.Organisations)))
+                .ForMember(a => a.Skills, o => o.MapFrom(a => JsonConvert.DeserializeObject(a.Skills)));
             #endregion
         }
     }
