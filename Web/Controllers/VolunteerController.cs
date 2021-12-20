@@ -31,9 +31,9 @@ namespace Web.Controllers
 
         // GET: api/<VolunteerController>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery]VolunteerTableParamsDto param)
         {
-            return Ok(await volunteerManager.GetTable());
+            return Ok(await volunteerManager.GetTable(param));
         }
 
         // GET: api/<VolunteerController>

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Data.Dtos;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Data.Dtos.Datatable;
 
 namespace Business.Concrete
 {
@@ -71,12 +72,33 @@ namespace Business.Concrete
             return mapper.Map<VolunteerDto>(await volunteerDal.GetByIdAsync(id));
         }
 
-        public async Task<VolunteerTableDto> GetTable(Expression<Func<Volunteer, bool>> expression = null)
+        public async Task<TableResponseDto<VolunteerListDto>> GetTable(VolunteerTableParamsDto param)
         {
-            var tableModel = new VolunteerTableDto()
+            //var query = await mapper.ProjectTo<VolunteerListDto>(volunteerDal.Get()).ToListAsync();
+            var query = volunteerDal.Get();
+            if(param.Status != Enums.VolunteerStatus.All)
+                query = query.Where(a=>a.Status == param.Status);
+
+            if (!string.IsNullOrEmpty(param.SearchString))
+                query = query.Where(a => a.FirstName.Contains(param.SearchString) ||
+                                        a.LastName.Contains(param.SearchString) ||
+                                        a.Email.Contains(param.SearchString) ||
+                                        a.Address.Contains(param.SearchString) ||
+                                        a.PostCode.Contains(param.SearchString) ||
+                                        a.HomeNumber.Contains(param.SearchString) ||
+                                        a.MobileNumber.Contains(param.SearchString));
+
+            var total = await query.CountAsync();
+            if(param.Length > 0)
             {
-                Records = await mapper.ProjectTo<VolunteerListDto>(volunteerDal.Get()).ToListAsync(),
-                Total = await volunteerDal.Get().CountAsync(),
+                query = query.Skip(param.Start).Take(param.Length);
+            }
+
+            var tableModel = new TableResponseDto<VolunteerListDto>()
+            {
+                Records = await mapper.ProjectTo<VolunteerListDto>(query).ToListAsync(),
+                TotalItems = total,
+                PageIndex = (param.Start/param.Length)+1
             };
 
             return tableModel;

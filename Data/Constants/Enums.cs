@@ -10,6 +10,7 @@ namespace Data.Constants
     {
         public enum VolunteerStatus
         {
+            All,
             Cancelled,
             Trial,
             DBSDocument,

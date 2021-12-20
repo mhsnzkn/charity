@@ -1,5 +1,6 @@
 ﻿using Business.Base;
 using Data.Dtos;
+using Data.Dtos.Datatable;
 using Data.Entities;
 using Data.Models;
 using Data.Utility.Results;
@@ -16,7 +17,7 @@ namespace Business.Abstract
     {
         //Task<UserModel> GetModelByIdAsync(int id);
         //Task<DataTableResult> GetForDataTable(AccountParamsDto param);
-        Task<VolunteerTableDto> GetTable(Expression<Func<Volunteer, bool>> expression = null);
+        Task<TableResponseDto<VolunteerListDto>> GetTable(VolunteerTableParamsDto param);
         Task<VolunteerDto> GetByIdAsync(int id);
         Task<Result> Approve(int id);
         Task<Result> Cancel(int id, string cancellationReason);

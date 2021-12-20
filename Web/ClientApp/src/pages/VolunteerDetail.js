@@ -42,7 +42,7 @@ export default function VolunteerDetail() {
                 </div>
                 <div className="form-group col-md-4">
                     <label htmlFor="homeNumber">Home Number</label>
-                    <input value={response.data.homeNumber} className="form-control" disabled />
+                    <input value={response.data.homeNumber ?? ""} className="form-control" disabled />
                 </div>
                 <div className="form-group col-md-8">
                     <label htmlFor="address">Address</label>

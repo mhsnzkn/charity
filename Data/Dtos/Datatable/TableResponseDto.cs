@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Data.Dtos.Datatable
 {
-    public class TableBaseDto<T>
+    public class TableResponseDto<T>
     {
         public List<T> Records { get; set; }
-        public int Total { get; set; }
+        public int TotalItems { get; set; }
+        public int PageIndex { get; set; }
     }
 }
