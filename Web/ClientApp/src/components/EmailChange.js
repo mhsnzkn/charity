@@ -7,7 +7,7 @@ import { getHttpHeader } from '../helpers/helpers';
 import { useAuth } from '../Hooks/Auth';
 import LoaderButton from './LoaderButton';
 
-export default function EmailChange({currentEmail, onChange}) {
+export default function EmailChange({ currentEmail, onChange }) {
     const auth = useAuth()
     const [btnLoading, setBtnLoading] = useState(false);
 
@@ -18,34 +18,37 @@ export default function EmailChange({currentEmail, onChange}) {
     });
 
     const submitHandler = (values) => {
-        values.action = "email";
-        setBtnLoading(true);
-        axios.post("/api/user/updateinfo", values, getHttpHeader())
-            .then( res =>{
-                if(res.data.error){
-                    alertify.error(res.data.message)
-                }else{
-                    alertify.success(res.data.message)
-                    onChange(values.email);
-                }
-                setBtnLoading(false);
-            }).catch( err =>{
-                if (err.response) {
-                    if(err.response.status=== 401 || err.response.status===403){
-                        auth.signout();
-                    }else{
-                        alertify.error('Connection error!');
-                    }
-                } else if (err.request) {
-                // client never received a response, or request never left
-                alertify.error('Connection error!');
-                } else {
-                // anything else
-                alertify.error('Connection error!');
-                }
-                setBtnLoading(false);
-            })
-
+        alertify.confirm('Email Change', 'Email to login will be changed',
+            function () {
+                values.action = "email";
+                setBtnLoading(true);
+                axios.post("/api/user/updateinfo", values, getHttpHeader())
+                    .then(res => {
+                        if (res.data.error) {
+                            alertify.error(res.data.message)
+                        } else {
+                            alertify.success(res.data.message)
+                            onChange(values.email);
+                        }
+                        setBtnLoading(false);
+                    }).catch(err => {
+                        if (err.response) {
+                            if (err.response.status === 401 || err.response.status === 403) {
+                                auth.signout();
+                            } else {
+                                alertify.error('Connection error!');
+                            }
+                        } else if (err.request) {
+                            // client never received a response, or request never left
+                            alertify.error('Connection error!');
+                        } else {
+                            // anything else
+                            alertify.error('Connection error!');
+                        }
+                        setBtnLoading(false);
+                    })
+            }
+            , null);
     }
 
     return (

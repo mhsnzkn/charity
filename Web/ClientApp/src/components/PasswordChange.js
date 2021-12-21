@@ -22,33 +22,38 @@ export default function PasswordChange() {
                 .required('Required')
         }),
         onSubmit: values => {
-            values.action = "password";
-            setBtnLoading(true);
-            axios.post("/api/user/updateinfo", values, getHttpHeader())
-                .then(res => {
-                    if (res.data.error) {
-                        alertify.error(res.data.message)
-                    } else {
-                        alertify.success(res.data.message)
-                        formik.resetForm();
-                    }
-                    setBtnLoading(false);
-                }).catch(err => {
-                    if (err.response) {
-                        if (err.response.status === 401 || err.response.status === 403) {
-                            auth.signout();
-                        } else {
-                            alertify.error('Connection error!');
-                        }
-                    } else if (err.request) {
-                        // client never received a response, or request never left
-                        alertify.error('Connection error!');
-                    } else {
-                        // anything else
-                        alertify.error('Connection error!');
-                    }
-                    setBtnLoading(false);
-                })
+            alertify.confirm('Password Change', 'Password will be changed',
+                function () {
+                    values.action = "password";
+                    setBtnLoading(true);
+                    axios.post("/api/user/updateinfo", values, getHttpHeader())
+                        .then(res => {
+                            if (res.data.error) {
+                                alertify.error(res.data.message)
+                            } else {
+                                alertify.success(res.data.message)
+                                formik.resetForm();
+                            }
+                            setBtnLoading(false);
+                        }).catch(err => {
+                            if (err.response) {
+                                if (err.response.status === 401 || err.response.status === 403) {
+                                    auth.signout();
+                                } else {
+                                    alertify.error('Connection error!');
+                                }
+                            } else if (err.request) {
+                                // client never received a response, or request never left
+                                alertify.error('Connection error!');
+                            } else {
+                                // anything else
+                                alertify.error('Connection error!');
+                            }
+                            setBtnLoading(false);
+                        })
+                }
+                , null);
+
         }
     });
 
