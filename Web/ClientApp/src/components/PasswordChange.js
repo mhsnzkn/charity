@@ -1,6 +1,6 @@
 import alertify from 'alertifyjs';
 import axios from 'axios';
-import { Field, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import { getHttpHeader } from '../helpers/helpers';
 import { useAuth } from '../Hooks/Auth';

@@ -29,7 +29,6 @@ export default function Volunteers() {
             params.set('start', 0);
         }
 
-
         params.set(key, value);
         setUrl(baseUrl + "?" + params.toString());
     }
@@ -39,7 +38,7 @@ export default function Volunteers() {
         return paramUrl.get("length");
     }
 
-    const approve = (id, status) => {
+    const approve = (id) => {
         alertify.confirm("Approve", "Do you confirm to approve?",
             function () {
                 let model = { id: id, action: "approve", cancellationReason: "" };
@@ -108,11 +107,18 @@ export default function Volunteers() {
                     <td>{item.name}</td>
                     <td>{item.email}</td>
                     <td>{item.mobileNumber}</td>
-                    <td>{item.statusName}</td>
+                    <td>{new Date(item.crtDate).toLocaleDateString('uk')}</td>
+                    <td>{item.status === 1 ?
+                    <span class="badge badge-danger">{item.statusName}</span>
+                :
+                item.status === 7 ?
+                <span class="badge badge-success">{item.statusName}</span>
+            :
+            <span class="badge badge-light text-dark">{item.statusName}</span>}</td>
                     <td>
                         {item.status < 7 &&
                             <button className='btn btn-sm btn-success m-1'
-                                onClick={() => approve(item.id, item.status)} title='Approve'>
+                                onClick={() => approve(item.id)} title='Approve'>
                                 <i className='fa fa-check'></i>
                             </button>}
 
@@ -182,6 +188,7 @@ if(response.error){
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Mobile No</th>
+                        <th scope="col">Application Date</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>

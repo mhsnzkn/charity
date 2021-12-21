@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import EmailChange from '../components/EmailChange';
 import JobChange from '../components/JobChange';

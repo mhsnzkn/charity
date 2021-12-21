@@ -16,5 +16,6 @@ namespace Data.Dtos
         public VolunteerStatus Status { get; set; }
         public string StatusName { get; set; }
         public string CancellationReason { get; set; }
+        public DateTime CrtDate { get; set; }
     }
 }
