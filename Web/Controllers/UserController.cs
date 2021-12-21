@@ -1,11 +1,15 @@
 ﻿using Business.Abstract;
+using Data.Constants;
 using Data.Models;
 using Data.Utility.Results;
 using Data.Utility.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using static Data.Constants.Constants;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,6 +31,13 @@ namespace Web.Controllers
         public IActionResult Get()
         {
             return Ok();
+        }
+        // GET: api/<UserController>/info
+        [HttpGet("info")]
+        public async Task<IActionResult> GetInfo()
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            return Ok(await userManager.GetUserInfo(userId));
         }
 
         // GET api/<UserController>/5
@@ -63,10 +74,34 @@ namespace Web.Controllers
             return Ok(new ResultData<string>(token));
         }
 
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
+        // PUT api/<UserController>
+        [HttpPut]
         public void Put(int id, [FromBody] string value)
         {
+        }
+        // PUT api/<UserController>/UpdateInfo
+        [HttpPost("UpdateInfo")]
+        public async Task<IActionResult> PutInfo([FromBody] UserInfoUpdateModel model)
+        {
+            model.Id = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            Result result;
+            switch (model.Action)
+            {
+                case HttpUserActions.EmailChange:
+                    result = await userManager.EmailChange(model.Id, model.Email);
+                    break;
+                case HttpUserActions.PasswordChange:
+                    result = await userManager.PasswordChange(model.Id, model.Password);
+                    break;
+                case HttpUserActions.JobChange:
+                    result = await userManager.JobChange(model.Id, model.Job);
+                    break;
+                default:
+                    result = new Result();
+                    result.SetError(UserMessages.ActionNotFound);
+                    break;
+            }
+            return Ok(result);
         }
 
         // DELETE api/<UserController>/5

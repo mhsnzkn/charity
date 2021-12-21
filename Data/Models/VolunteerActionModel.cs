@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Dtos
+namespace Data.Models
 {
-    public class VolunteerActionDto
+    public class VolunteerActionModel
     {
         public int Id { get; set; }
         public string CancellationReason { get; set; }

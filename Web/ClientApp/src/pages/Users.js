@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ReactDatatable from '@mkikets/react-datatable';
 import { Link } from 'react-router-dom';
 
 export default function Users() {
@@ -62,13 +61,13 @@ export default function Users() {
       <div className='m-1 p-1'>
         <Link to="/Users/Edit/0" className='btn btn-primary'><i className='fa fa-plus'></i> Add</Link>
       </div>
-      <ReactDatatable
+      {/* <ReactDatatable
         config={config}
         records={tableData.records}
         columns={columns}
         dynamic={true}
         total_record={tableData.total}
-        onChange={tableChangeHandler} />
+        onChange={tableChangeHandler} /> */}
     </>
   );
 }

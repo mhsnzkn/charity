@@ -13,7 +13,7 @@ export default function VolunteerDetail() {
     if (response.error) {
         content = <ErrorPage />;
     }
-    if (response.data) {
+    if (response.loading) {
         content = <Loader />
     }
     if (response.data) {

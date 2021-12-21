@@ -1,5 +1,4 @@
 import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../Hooks/Auth';
 import Login from '../pages/Login';
 

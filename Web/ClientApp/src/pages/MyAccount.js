@@ -1,21 +1,36 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import EmailChange from '../components/EmailChange';
+import JobChange from '../components/JobChange';
+import PasswordChange from '../components/PasswordChange';
+import {useAxiosGet} from '../Hooks/HttpRequests'
 
 export default function MyAccount() {
+const [userInfo, setUserInfo] = useState({})
+
+const response = useAxiosGet('/api/user/info');
+
+useEffect(()=>{
+    if(response.data){
+        setUserInfo(response.data);
+    }
+},[response.data])
+
+const updateInfo = (key, value)=>{
+    setUserInfo({...userInfo, [key]:value})
+}
+
+
 
     return (
         <>
             <h4>My Account</h4><hr />
-            <form class="form-inline">
-                <div class="form-group mb-2">
-                    <label for="staticEmail2" class="sr-only">Email</label>
-                    <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="email@example.com" />
-                </div>
-                <div class="form-group mx-sm-3 mb-2">
-                    <label for="inputPassword2" class="sr-only">Password</label>
-                    <input type="password" class="form-control" id="inputPassword2" placeholder="Password" />
-                </div>
-                <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
-            </form>
+            <EmailChange currentEmail={userInfo.email} onChange={(value)=> updateInfo("email",value)}/>
+            <hr />
+            <JobChange currentJob={userInfo.job} onChange={(value)=> updateInfo("job",value)}/>
+            <hr />
+            <PasswordChange />
+
         </>
     );
 }

@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react'
 import axios from 'axios'
 import { useAuth } from './Auth'
-import { toast } from 'react-toastify';
 import { getHttpHeader } from '../helpers/helpers';
+import alertify from 'alertifyjs';
 
 
 export function useAxiosGet(url, state = null){
@@ -36,14 +36,14 @@ export function useAxiosGet(url, state = null){
                     if(err.response.status=== 401 || err.response.status===403){
                         auth.signout();
                     }else{
-                        toast.error('Connection error!');
+                        alertify.error('Connection error!');
                     }
                 } else if (err.request) {
                 // client never received a response, or request never left
-                toast.error('Connection error!');
+                alertify.error('Connection error!');
                 } else {
                 // anything else
-                toast.error('Connection error!');
+                alertify.error('Connection error!');
                 }
                 
             })

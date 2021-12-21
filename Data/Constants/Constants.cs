@@ -14,10 +14,16 @@ namespace Data.Constants
             public const string Volunteer = "volunteer";
         }
 
-        public struct HttpActions
+        public struct HttpVolunteerActions
         {
             public const string Approve = "approve";
             public const string Cancel = "cancel";
+        }
+        public struct HttpUserActions
+        {
+            public const string EmailChange = "email";
+            public const string PasswordChange = "password";
+            public const string JobChange = "job";
         }
 
 

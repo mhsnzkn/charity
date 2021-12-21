@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Data.Dtos;
 
 namespace Business.Abstract
 {
@@ -17,10 +18,15 @@ namespace Business.Abstract
         //Task<List<User>> Get(Expression<Func<User, bool>> expression = null);
         //Task<DataTableResult> GetForDataTable(AccountParamsDto param);
 
+        //Task<Result> Update(UserModel model);
+        //Task<Result> Delete(User entity);
+
         Task<Result> Add(User entity);
         Task<ResultData<User>> Login(UserLoginModel model);
         string CreateAccessToken(User user);
-        //Task<Result> Update(UserModel model);
-        //Task<Result> Delete(User entity);
+        Task<UserAccountInfoDto> GetUserInfo(int userId);
+        Task<Result> EmailChange(int userId, string email);
+        Task<Result> PasswordChange(int userId, string password);
+        Task<Result> JobChange(int userId, string job);
     }
 }

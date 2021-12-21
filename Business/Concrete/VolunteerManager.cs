@@ -74,8 +74,7 @@ namespace Business.Concrete
 
         public async Task<TableResponseDto<VolunteerListDto>> GetTable(VolunteerTableParamsDto param)
         {
-            //var query = await mapper.ProjectTo<VolunteerListDto>(volunteerDal.Get()).ToListAsync();
-            var query = volunteerDal.Get();
+            var query = volunteerDal.Get().OrderByDescending(a=>a.CrtDate).AsQueryable();
             if(param.Status != Enums.VolunteerStatus.All)
                 query = query.Where(a=>a.Status == param.Status);
 
@@ -137,7 +136,7 @@ namespace Business.Concrete
             var volunteer = await volunteerDal.GetByIdAsync(id);
             if(volunteer == null)
             {
-                result.SetError(UserMessages.VolunteerNotFound);
+                result.SetError(UserMessages.DataNotFound);
                 return result;
             }
             if(volunteer.Status == Enums.VolunteerStatus.Cancelled)
@@ -161,7 +160,7 @@ namespace Business.Concrete
             var volunteer = await volunteerDal.GetByIdAsync(id);
             if(volunteer == null)
             {
-                result.SetError(UserMessages.VolunteerNotFound);
+                result.SetError(UserMessages.DataNotFound);
                 return result;
             }
             if(volunteer.Status == Enums.VolunteerStatus.Cancelled)

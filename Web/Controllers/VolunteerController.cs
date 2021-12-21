@@ -64,16 +64,16 @@ namespace Web.Controllers
         }
 
         // PUT api/<VolunteerController>
-        [HttpPut]
-        public async Task<IActionResult> Put([FromBody]VolunteerActionDto volunteer)
+        [HttpPost("actions")]
+        public async Task<IActionResult> Put([FromBody]VolunteerActionModel volunteer)
         {
             Result result;
             switch (volunteer.Action)
             {
-                case HttpActions.Approve:
+                case HttpVolunteerActions.Approve:
                     result = await volunteerManager.Approve(volunteer.Id);
                     break;
-                case HttpActions.Cancel:
+                case HttpVolunteerActions.Cancel:
                     result = await volunteerManager.Cancel(volunteer.Id, volunteer.CancellationReason);
                     break;
                 default:

@@ -25,6 +25,10 @@ namespace Data.AutoMapper
                 .ForMember(a => a.Organisations, o => o.MapFrom(a => JsonConvert.DeserializeObject(a.Organisations)))
                 .ForMember(a => a.Skills, o => o.MapFrom(a => JsonConvert.DeserializeObject(a.Skills)));
             #endregion
+
+            #region User
+            CreateMap<User, UserAccountInfoDto>();
+            #endregion
         }
     }
 }
