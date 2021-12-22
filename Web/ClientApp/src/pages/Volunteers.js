@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAxiosGet } from '../Hooks/HttpRequests';
 import axios from 'axios';
-import { getHttpHeader } from '../helpers/helpers';
+import { getHttpHeader, getLengthUrl, getPageIndex } from '../helpers/helpers';
 import { useAuth } from '../Hooks/Auth';
 import alertify from 'alertifyjs';
 import ApiSelect from '../components/ApiSelect';
@@ -22,7 +22,7 @@ export default function Volunteers() {
         let params = new URLSearchParams(paramUrl);
         if (key === "page") {
             if (value < 1) return;
-            let length = getLengthUrl();
+            let length = getLengthUrl(url);
             key = 'start';
             value = (value - 1) * length;
         } else {
@@ -31,11 +31,6 @@ export default function Volunteers() {
 
         params.set(key, value);
         setUrl(baseUrl + "?" + params.toString());
-    }
-
-    const getLengthUrl = () => {
-        let paramUrl = new URLSearchParams(url);
-        return paramUrl.get("length");
     }
 
     const approve = (id) => {
@@ -109,12 +104,12 @@ export default function Volunteers() {
                     <td>{item.mobileNumber}</td>
                     <td>{new Date(item.crtDate).toLocaleDateString('uk')}</td>
                     <td>{item.status === 1 ?
-                    <span class="badge badge-danger">{item.statusName}</span>
+                    <span className="badge badge-danger">{item.statusName}</span>
                 :
                 item.status === 7 ?
-                <span class="badge badge-success">{item.statusName}</span>
+                <span className="badge badge-success">{item.statusName}</span>
             :
-            <span class="badge badge-light text-dark">{item.statusName}</span>}</td>
+            <span className="badge badge-light text-dark">{item.statusName}</span>}</td>
                     <td>
                         {item.status < 7 &&
                             <button className='btn btn-sm btn-success m-1'
@@ -179,7 +174,6 @@ if(response.error){
                     <label className="col-md-4">Search: </label>
                     <input className='form-control col-md-8' placeholder='Search' onChange={e => paramChangeHandler("searchString", e.target.value)}></input>
                 </div>
-
             </div>
 
             <table className="table table-striped table-border table-responsive-lg">
@@ -201,8 +195,8 @@ if(response.error){
             </table>
             <Paginator
                 totalItems={response.data?.totalItems ?? 0}
-                pageIndex={response.data?.pageIndex ?? 0}
-                pageSize={getLengthUrl()}
+                pageIndex={getPageIndex(url)}
+                pageSize={getLengthUrl(url)}
                 pageChange={(e) => paramChangeHandler("page", e)}
             />
 

@@ -1,7 +1,7 @@
+import alertify from 'alertifyjs';
 import axios from 'axios';
 import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik';
 import React, { useState } from 'react';
-import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import LoaderButton from './LoaderButton';
 
@@ -54,7 +54,7 @@ export default function VolunteerForm({ isSubmit }) {
         axios.post('/api/volunteer', values)
         .then((res)=>{
             if(res.data.error){
-                toast.error(res.data.message)
+                alertify.error(res.data.message)
             }else{
                 isSubmit();
             }

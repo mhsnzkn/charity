@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Data.Dtos;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Data.Dtos.Datatable;
 
 namespace Business.Concrete
 {
@@ -29,9 +30,55 @@ namespace Business.Concrete
             this.mapper = mapper;
         }
 
-        public Task<Result> Add(User model)
+        public async Task<Result> Add(UserEditModel model)
         {
-            throw new NotImplementedException();
+            var result = new Result();
+            if (string.IsNullOrEmpty(model.Password))
+            {
+                result.SetError(UserMessages.DataNotFound);
+                return result;
+            }
+            var emailCheckEntity = await userDal.GetByMail(model.Email);
+            if(emailCheckEntity is not null)
+            {
+                result.SetError(UserMessages.EmailExists);
+                return result;
+            }
+            try
+            {
+                var entity = mapper.Map<User>(model);
+                SecurityHelper.CreatePasswordHash(model.Password, out var hash, out var salt);
+                entity.PasswordHash = hash;
+                entity.PasswordSalt = salt;
+                entity.CrtDate = DateTime.Now;
+                userDal.Add(entity);
+                await userDal.Save();
+            }
+            catch (Exception)
+            {
+                result.SetError(UserMessages.Fail);
+            }
+            return result;
+        }
+        public async Task<Result> Update(UserEditModel model)
+        {
+            var result = new Result();
+            try
+            {
+                var entity = await userDal.GetByIdAsync(model.Id);
+                entity.Name = model.Name;
+                entity.Email = model.Email;
+                entity.Status = model.Status;
+                entity.Job = model.Job;
+                entity.Role = model.Role;
+                entity.UptDate = DateTime.Now;
+                await userDal.Save();
+            }
+            catch (Exception)
+            {
+                result.SetError(UserMessages.Fail);
+            }
+            return result;
         }
 
         public async Task<ResultData<User>> Login(UserLoginModel model)
@@ -41,6 +88,11 @@ namespace Business.Concrete
             if(user == null)
             {
                 result.SetError(UserMessages.LoginFail);
+                return result;
+            }
+            if(user.Status != Enums.UserStatus.Active)
+            {
+                result.SetError(UserMessages.UserNotActive);
                 return result;
             }
 
@@ -128,6 +180,30 @@ namespace Business.Concrete
             }
 
             return result;
+        }
+
+        public async Task<TableResponseDto<UserListDto>> GetTable(UserTableParamsDto param)
+        {
+            var query = userDal.Get();
+
+            if (!string.IsNullOrEmpty(param.SearchString))
+                query = query.Where(a => a.Name.Contains(param.SearchString) ||
+                                        a.Email.Contains(param.SearchString));
+
+            var total = await query.CountAsync();
+            if (param.Length > 0)
+            {
+                query = query.Skip(param.Start).Take(param.Length);
+            }
+
+            var tableModel = new TableResponseDto<UserListDto>()
+            {
+                Records = await mapper.ProjectTo<UserListDto>(query).ToListAsync(),
+                TotalItems = total,
+                PageIndex = (param.Start / param.Length) + 1
+            };
+
+            return tableModel;
         }
     }
 }

@@ -28,6 +28,9 @@ namespace Data.AutoMapper
 
             #region User
             CreateMap<User, UserAccountInfoDto>();
+            CreateMap<User, UserListDto>()
+                .ForMember(a => a.StatusName, m => m.MapFrom(a => a.Status.ToString()));
+            CreateMap<UserEditModel, User>().ReverseMap();
             #endregion
         }
     }

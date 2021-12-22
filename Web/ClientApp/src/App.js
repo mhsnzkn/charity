@@ -13,10 +13,11 @@ import AdminLayout from './layouts/AdminLayout';
 import Volunteers from './pages/Volunteers';
 import Users from './pages/Users';
 import MyAccount from './pages/MyAccount';
-import UserEdit from './pages/UserEdit';
+import UserAdd from './pages/UserAdd';
 import { ToastContainer } from 'react-toastify';
 import VolunteerDocumentForm from './components/VolunteerDocumentForm';
 import VolunteerDetail from './pages/VolunteerDetail';
+import UserEdit from './pages/UserEdit';
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
             <Route path="VolunteerApplications" element={<Volunteers />} />
             <Route path="VolunteerApplications/Detail/:id" element={<VolunteerDetail />} />
             <Route path="Users" element={<Users />} />
+            <Route path="Users/Add" element={<UserAdd />} />
             <Route path="Users/Edit/:id" element={<UserEdit />} />
             <Route path="MyAccount" element={<MyAccount />} />
 

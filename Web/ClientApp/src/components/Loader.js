@@ -5,7 +5,7 @@ export default function Loader() {
     
     return (
         <div className="d-flex justify-content-center p-4">
-            <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
     );
 }

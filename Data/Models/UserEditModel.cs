@@ -1,29 +1,26 @@
-﻿using Data.Abstract;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static Data.Constants.Enums;
 
-namespace Data.Entities
+namespace Data.Models
 {
-    public class User : IEntity
+    public class UserEditModel
     {
         public int Id { get; set; }
-        [StringLength(150)]
+        [Required]
         public string Name { get; set; }
-        [StringLength(100)]
+        [Required]
         public string Email { get; set; }
-        [StringLength(50)]
         public string Job { get; set; }
-        [StringLength(100)]
+        [Required]
         public string Role { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public UserStatus Status { get; set; }
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
-        public DateTime CrtDate { get; set; }
-        public DateTime? UptDate { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Business.Abstract;
 using Data.Constants;
+using Data.Dtos;
 using Data.Models;
 using Data.Utility.Results;
-using Data.Utility.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,9 +28,9 @@ namespace Web.Controllers
         }
         // GET: api/<UserController>
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get([FromQuery] UserTableParamsDto param)
         {
-            return Ok();
+            return Ok(await userManager.GetTable(param));
         }
         // GET: api/<UserController>/info
         [HttpGet("info")]
@@ -49,8 +49,15 @@ namespace Web.Controllers
 
         // POST api/<UserController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] UserEditModel model)
         {
+            Result result;
+            if (model.Id == 0)
+                result = await userManager.Add(model);
+            else
+                result = await userManager.Update(model);
+
+            return Ok(result);
         }
         // POST api/<UserController>
         [AllowAnonymous]
@@ -83,7 +90,9 @@ namespace Web.Controllers
         [HttpPost("UpdateInfo")]
         public async Task<IActionResult> PutInfo([FromBody] UserInfoUpdateModel model)
         {
-            model.Id = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if(model.Id == 0)
+                model.Id = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
             Result result;
             switch (model.Action)
             {

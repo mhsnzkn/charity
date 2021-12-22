@@ -7,6 +7,13 @@ export const getHttpHeader = () =>{
     return {headers:{'Authorization':'Bearer '+getToken()}};
 }
 
-export const getUrlSearchString = (page = 0, pageSize = 10, searchString = "") =>{
-    return `?start=${page * pageSize}&length=${pageSize}&searchString=${searchString}`
+export const getLengthUrl = (url) => {
+    let paramUrl = new URLSearchParams(url);
+    return paramUrl.get("length");
+}
+export const getPageIndex = (url) => {
+    let paramUrl = new URLSearchParams(url);
+    let length = paramUrl.get("length");
+    let start = paramUrl.get("start");
+    return (start/length)+1;
 }
