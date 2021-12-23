@@ -7,7 +7,7 @@ export default function PublicLayout() {
         <>
             <nav className="navbar navbar-light bg-light">
                 <div className="navbar-brand" >
-                    <img src="/logo.png" style={{ maxHeight: '200px' }} alt="logo" />
+                    <img className='img-fluid' src="/logo.png" style={{ maxHeight: '200px' }} alt="logo" />
                 </div>
             </nav>
             <div className='container layout-div-height'>
