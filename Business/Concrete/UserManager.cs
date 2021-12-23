@@ -63,6 +63,11 @@ namespace Business.Concrete
         public async Task<Result> Update(UserEditModel model)
         {
             var result = new Result();
+            if(model.Id == 1 && model.Status == Enums.UserStatus.Pasive)
+            {
+                result.SetError(UserMessages.UnauthorizedAccess);
+                return result;
+            }
             try
             {
                 var entity = await userDal.GetByIdAsync(model.Id);
@@ -204,6 +209,27 @@ namespace Business.Concrete
             };
 
             return tableModel;
+        }
+
+        public async Task<UserEditModel> GetUser(int userId)
+        {
+            return mapper.Map<UserEditModel>(await userDal.Get(a => a.Id == userId).FirstOrDefaultAsync());
+        }
+
+        public async Task<Result> Delete(int id)
+        {
+            var result = new Result();
+            try
+            {
+                var entity = new User() { Id = id };
+                userDal.Delete(entity);
+                await userDal.Save();
+            }
+            catch (Exception)
+            {
+                result.SetError(UserMessages.Fail);
+            }
+            return result;
         }
     }
 }

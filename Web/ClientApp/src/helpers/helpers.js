@@ -12,7 +12,7 @@ export const getLengthUrl = (url) => {
     return paramUrl.get("length");
 }
 export const getPageIndex = (url) => {
-    let paramUrl = new URLSearchParams(url);
+    let paramUrl = new URLSearchParams(url.split("?")[1]);
     let length = paramUrl.get("length");
     let start = paramUrl.get("start");
     return (start/length)+1;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static Data.Constants.Enums;
 
@@ -14,7 +15,7 @@ namespace Data.Dtos
         public string Email { get; set; }
         public string Job { get; set; }
         public string Role { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public UserStatus Status { get; set; }
-        public string StatusName { get; set; }
     }
 }

@@ -19,8 +19,7 @@ namespace Data.AutoMapper
             CreateMap<VolunteerModel, Volunteer>()
                 .ForMember(a => a.PostCode, o => o.MapFrom(a => a.PostCode.ToUpper()));
             CreateMap<Volunteer, VolunteerListDto>()
-                .ForMember(o => o.Name, m => m.MapFrom(o => o.FirstName + " " + o.LastName))
-                .ForMember(o => o.StatusName, m => m.MapFrom(o => o.Status.ToString()));
+                .ForMember(o => o.Name, m => m.MapFrom(o => o.FirstName + " " + o.LastName));
             CreateMap<Volunteer, VolunteerDto>()
                 .ForMember(a => a.Organisations, o => o.MapFrom(a => JsonConvert.DeserializeObject(a.Organisations)))
                 .ForMember(a => a.Skills, o => o.MapFrom(a => JsonConvert.DeserializeObject(a.Skills)));
@@ -28,8 +27,7 @@ namespace Data.AutoMapper
 
             #region User
             CreateMap<User, UserAccountInfoDto>();
-            CreateMap<User, UserListDto>()
-                .ForMember(a => a.StatusName, m => m.MapFrom(a => a.Status.ToString()));
+            CreateMap<User, UserListDto>();
             CreateMap<UserEditModel, User>().ReverseMap();
             #endregion
         }

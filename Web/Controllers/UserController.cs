@@ -39,12 +39,11 @@ namespace Web.Controllers
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             return Ok(await userManager.GetUserInfo(userId));
         }
-
-        // GET api/<UserController>/5
+        // GET: api/<UserController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> GetEditInfo(int id)
         {
-            return "value";
+            return Ok(await userManager.GetUser(id));
         }
 
         // POST api/<UserController>
@@ -90,8 +89,15 @@ namespace Web.Controllers
         [HttpPost("UpdateInfo")]
         public async Task<IActionResult> PutInfo([FromBody] UserInfoUpdateModel model)
         {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if (model.Id == 1 && userId != 1)
+            {
+                return Unauthorized(UserMessages.UnauthorizedAccess);
+            }
             if(model.Id == 0)
-                model.Id = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            {
+               model.Id = userId;
+            }
 
             Result result;
             switch (model.Action)
@@ -115,8 +121,11 @@ namespace Web.Controllers
 
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            if (id == 1)
+                return Unauthorized(UserMessages.UnauthorizedAccess);
+            return Ok(await userManager.Delete(id));
         }
     }
 }

@@ -1,0 +1,7 @@
+export const Cancelled = 'Cancelled'
+export const Trial = 'Trial'
+export const DBSDocument = 'DBSDocument'
+export const DBS = 'DBS'
+export const Aggreement = 'Aggreement'
+export const Induction = 'Induction'
+export const Completed = 'Completed'

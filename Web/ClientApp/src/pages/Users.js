@@ -1,7 +1,10 @@
+import alertify from 'alertifyjs';
+import axios from 'axios';
 import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Paginator from '../components/Paginator';
-import { getLengthUrl, getPageIndex } from '../helpers/helpers';
+import { Pasive } from '../constants/userStatus';
+import { getHttpHeader, getLengthUrl, getPageIndex } from '../helpers/helpers';
 import { useAuth } from '../Hooks/Auth';
 import { useAxiosGet } from '../Hooks/HttpRequests';
 
@@ -27,6 +30,20 @@ export default function Users() {
         params.set(key, value);
         setUrl(baseUrl + "?" + params.toString());
     }
+    const remove = (id) => {
+        alertify.confirm('Delete User', 'User will be deleted permanently', 
+        function(){
+            axios.delete(baseUrl+"/"+id, getHttpHeader()).then( res =>{
+                if (res.data.error) {
+                    return alertify.error(res.data.message);
+                }
+                alertify.success(res.data.message);
+                setUpdate(update + 1);
+            }).catch( err =>{
+                alertify.error('Connection error!')
+            })
+        },null)
+    }
 
     let tableRows;
     if (response.data) {
@@ -38,30 +55,28 @@ export default function Users() {
                     <td>{item.email}</td>
                     <td>{item.job}</td>
                     <td>{item.role}</td>
-                    <td>{item.status === 0 ?
-                        <span className="badge badge-danger">{item.statusName}</span>
+                    <td>{item.status === Pasive ?
+                        <span className="badge badge-danger">{item.status}</span>
                         :
-                        <span className="badge badge-light text-dark">{item.statusName}</span>}
+                        <span className="badge badge-light text-dark">{item.status}</span>}
                     </td>
                     <td>
-                        {/* {item.status < 7 &&
-                            <button className='btn btn-sm btn-success m-1'
-                                onClick={() => approve(item.id)} title='Approve'>
-                                <i className='fa fa-check'></i>
-                            </button>}
-
-                        <Link className='btn btn-sm btn-info m-1' to={`/VolunteerApplications/detail/${item.id}`} title='Details'>
-                            <i className='fa fa-list'></i>
+                        <Link className='btn btn-sm btn-info m-1' to={`/Users/edit/${item.id}`} title='Edit User'>
+                            <i className='fa fa-edit'></i>
                         </Link>
-                        {item.status === 1 ?
-                            <button className='btn btn-sm btn-danger m-1' onClick={() => showReason(item.cancellationReason)} title='Show Reason'>
-                                <i className='fa fa-list'></i>
-                            </button>
+                        {item.status === Pasive ?
+                            <>
+                                <button className='btn btn-sm btn-danger m-1' onClick={() => remove(item.id)} title='Delete'>
+                                    <i className='fa fa-trash'></i>
+                                </button>
+                            </>
                             :
-                            <button className='btn btn-sm btn-danger m-1' onClick={() => cancel(item.id)} title='Reject'>
-                                <i className='fa fa-times'></i>
-                            </button>
-                        } */}
+                            <>
+                                <Link to={`/Users/PassChange/${item.id}`} className='btn btn-sm btn-dark m-1' title='Password Change'>
+                                    <i className='fa fa-unlock-alt'></i>
+                                </Link>
+                            </>
+                        }
                     </td>
                 </tr>
             })
@@ -118,7 +133,6 @@ export default function Users() {
                 pageSize={length}
                 pageChange={(e) => paramChangeHandler("page", e)}
             />
-
         </>
     );
 }

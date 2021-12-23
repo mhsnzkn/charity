@@ -171,6 +171,9 @@ a.article:hover {
         background-color: #e3002f;
     }
 
+
+.ui.positive.button,.ui.positive.buttons .button{background-color:#5BBD72!important;color:#FFF}.ui.positive.button.active,.ui.positive.button:hover,.ui.positive.buttons .active.button,.ui.positive.buttons .button:hover{background-color:#58CB73!important;color:#FFF}.ui.positive.button:active,.ui.positive.buttons .button:active{background-color:#4CB164!important;color:#FFF}
+.ui.black.button,.ui.black.buttons .button{background-color:#5C6166;color:#FFF}.ui.black.button:hover,.ui.black.buttons .button:hover{background-color:#4C4C4C;color:#FFF}.ui.black.button:active,.ui.black.buttons .button:active{background-color:#333;color:#FFF}
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */

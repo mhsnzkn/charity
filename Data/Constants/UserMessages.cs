@@ -12,6 +12,7 @@ namespace Data.Constants
         public const string Fail = "Failed";
         public const string DataNotFound = "Data Not Found!";
         public const string ActionNotFound = "Action Not Found!";
+        public const string UnauthorizedAccess = "Unauthorized Access!";
         // Login
         public const string LoginFail = "Email or Password is wrong!";
         public const string UserNotActive = "User is not active!";

@@ -8,6 +8,7 @@ import ApiSelect from '../components/ApiSelect';
 import Paginator from '../components/Paginator';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
+import { Cancelled, Completed } from '../constants/volunteerStatus';
 
 export default function Volunteers() {
     const auth = useAuth();
@@ -103,15 +104,15 @@ export default function Volunteers() {
                     <td>{item.email}</td>
                     <td>{item.mobileNumber}</td>
                     <td>{new Date(item.crtDate).toLocaleDateString('uk')}</td>
-                    <td>{item.status === 1 ?
-                    <span className="badge badge-danger">{item.statusName}</span>
+                    <td>{item.status === Cancelled ?
+                    <span className="badge badge-danger">{item.status}</span>
                 :
-                item.status === 7 ?
-                <span className="badge badge-success">{item.statusName}</span>
+                item.status === Completed ?
+                <span className="badge badge-success">{item.status}</span>
             :
-            <span className="badge badge-light text-dark">{item.statusName}</span>}</td>
+            <span className="badge badge-light text-dark">{item.status}</span>}</td>
                     <td>
-                        {item.status < 7 &&
+                        {item.status !== Completed && item.status !== Cancelled &&
                             <button className='btn btn-sm btn-success m-1'
                                 onClick={() => approve(item.id)} title='Approve'>
                                 <i className='fa fa-check'></i>
@@ -120,7 +121,7 @@ export default function Volunteers() {
                         <Link className='btn btn-sm btn-info m-1' to={`/VolunteerApplications/detail/${item.id}`} title='Details'>
                             <i className='fa fa-list'></i>
                         </Link>
-                        {item.status === 1 ?
+                        {item.status === Cancelled ?
                             <button className='btn btn-sm btn-danger m-1' onClick={() => showReason(item.cancellationReason)} title='Show Reason'>
                                 <i className='fa fa-list'></i>
                             </button>
@@ -137,12 +138,13 @@ export default function Volunteers() {
         }
     }
 if(response.loading){
-    tableRows = <td colSpan="5" className='text-center'><Loader/></td>
+    tableRows = <tr><td colSpan="5" className='text-center'><Loader/></td></tr>
 }
 if(response.error){
-    tableRows = <td colSpan="5" className='text-danger'>Connection Error!</td>
+    tableRows = <tr><td colSpan="5" className='text-danger'>Connection Error!</td></tr>
 }
 
+console.log("index:"+getPageIndex(url));
     return (
         <>
             <h4>Volunteers</h4><hr />

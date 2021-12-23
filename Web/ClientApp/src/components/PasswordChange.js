@@ -6,8 +6,10 @@ import { getHttpHeader } from '../helpers/helpers';
 import { useAuth } from '../Hooks/Auth';
 import LoaderButton from './LoaderButton';
 import * as yup from 'yup'
+import { useParams } from 'react-router-dom';
 
 export default function PasswordChange() {
+    const params = useParams()
     const auth = useAuth()
     const [btnLoading, setBtnLoading] = useState(false);
 
@@ -22,6 +24,7 @@ export default function PasswordChange() {
                 .required('Required')
         }),
         onSubmit: values => {
+            values.id = params.id && params.id > 0 ? params.id : 0;
             alertify.confirm('Password Change', 'Password will be changed',
                 function () {
                     values.action = "password";
