@@ -5,7 +5,6 @@ using Data.Constants;
 using Data.Entities;
 using Data.Models;
 using DataAccess.Abstract;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +14,7 @@ using Data.Dtos;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Data.Dtos.Datatable;
+using System.Text.Json;
 
 namespace Business.Concrete
 {
@@ -35,8 +35,8 @@ namespace Business.Concrete
             try
             {
                 var entity = mapper.Map<Volunteer>(model);
-                entity.Organisations = JsonConvert.SerializeObject(model.Organisations);
-                entity.Skills = JsonConvert.SerializeObject(model.Skills);
+                entity.Organisations = JsonSerializer.Serialize(model.Organisations);
+                entity.Skills = JsonSerializer.Serialize(model.Skills);
 
                 entity.Status = Enums.VolunteerStatus.Trial;
                 entity.CrtDate = DateTime.Now;
@@ -116,8 +116,8 @@ namespace Business.Concrete
                 entity.MobileNumber = model.MobileNumber;
                 entity.HomeNumber = model.HomeNumber;
                 entity.Reason = model.Reason;
-                entity.Organisations = JsonConvert.SerializeObject(model.Organisations);
-                entity.Skills = JsonConvert.SerializeObject(model.Skills);
+                entity.Organisations = JsonSerializer.Serialize(model.Organisations);
+                entity.Skills = JsonSerializer.Serialize(model.Skills);
 
                 entity.UptDate = DateTime.Now;
 

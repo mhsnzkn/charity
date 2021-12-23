@@ -2,12 +2,11 @@
 using Data.Dtos;
 using Data.Entities;
 using Data.Models;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Data.Extensions;
 
 namespace Data.AutoMapper
 {
@@ -21,8 +20,8 @@ namespace Data.AutoMapper
             CreateMap<Volunteer, VolunteerListDto>()
                 .ForMember(o => o.Name, m => m.MapFrom(o => o.FirstName + " " + o.LastName));
             CreateMap<Volunteer, VolunteerDto>()
-                .ForMember(a => a.Organisations, o => o.MapFrom(a => JsonConvert.DeserializeObject(a.Organisations)))
-                .ForMember(a => a.Skills, o => o.MapFrom(a => JsonConvert.DeserializeObject(a.Skills)));
+                .ForMember(a => a.Organisations, o => o.MapFrom(mapExpression: a => JsonExtension.GetJsonObject<List<Organisations>>(a.Organisations)))
+                .ForMember(a => a.Skills, o => o.MapFrom(a => JsonExtension.GetJsonObject<List<Skills>>(a.Skills)));
             #endregion
 
             #region User
