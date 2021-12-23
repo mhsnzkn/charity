@@ -189,7 +189,7 @@ namespace Business.Concrete
 
         public async Task<TableResponseDto<UserListDto>> GetTable(UserTableParamsDto param)
         {
-            var query = userDal.Get();
+            var query = userDal.Get(a=>a.Id > 1);
 
             if (!string.IsNullOrEmpty(param.SearchString))
                 query = query.Where(a => a.Name.Contains(param.SearchString) ||
