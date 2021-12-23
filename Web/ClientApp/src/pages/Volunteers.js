@@ -138,10 +138,10 @@ export default function Volunteers() {
         }
     }
 if(response.loading){
-    tableRows = <tr><td colSpan="5" className='text-center'><Loader/></td></tr>
+    tableRows = <tr><td colSpan="6" className='text-center'><Loader/></td></tr>
 }
 if(response.error){
-    tableRows = <tr><td colSpan="5" className='text-danger'>Connection Error!</td></tr>
+    tableRows = <tr><td colSpan="6" className='text-danger'>Connection Error!</td></tr>
 }
 
 console.log("index:"+getPageIndex(url));

@@ -3,13 +3,12 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Paginator from '../components/Paginator';
+import Loader from '../components/Loader';
 import { Pasive } from '../constants/userStatus';
 import { getHttpHeader, getLengthUrl, getPageIndex } from '../helpers/helpers';
-import { useAuth } from '../Hooks/Auth';
 import { useAxiosGet } from '../Hooks/HttpRequests';
 
 export default function Users() {
-    const auth = useAuth();
     const baseUrl = "/api/user"
     const [url, setUrl] = useState(baseUrl + "?start=0&length=10&searchString=");
     const [update, setUpdate] = useState(0);
@@ -83,6 +82,12 @@ export default function Users() {
         } else {
             tableRows = <tr><td colSpan="5">No Data</td></tr>
         }
+    }
+    if(response.loading){
+        tableRows = <tr><td colSpan="6" className='text-center'><Loader /></td></tr>
+    }
+    if(response.error){
+        tableRows = <tr><td colSpan="6" className='text-danger'>Connection Error!</td></tr>
     }
 
 
