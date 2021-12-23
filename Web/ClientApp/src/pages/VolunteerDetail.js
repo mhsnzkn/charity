@@ -94,7 +94,7 @@ export default function VolunteerDetail() {
 
     return (
         <>
-            <Link to="/VolunteerApplications" className='btn btn-dark m-1'><i className='fa fa-undo'></i> Back</Link>
+            <Link to="/VolunteerApplications" className='btn btn-dark m-1'><i className='fas fa-undo'></i> Back</Link>
             {content}
         </>
     );

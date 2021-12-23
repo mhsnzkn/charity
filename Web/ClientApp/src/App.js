@@ -1,6 +1,6 @@
 import './bootstrap.min.css';
 import './style/heart_theme.css'
-import './style/fontawesome/css/font-awesome.min.css'
+import './style/fontawesome/css/all.min.css'
 import 'react-toastify/dist/ReactToastify.css';
 import 'alertifyjs/build/css/alertify.css';
 import 'alertifyjs/build/css/themes/semantic.min.css';

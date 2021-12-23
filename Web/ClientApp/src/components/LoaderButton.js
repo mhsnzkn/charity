@@ -9,7 +9,7 @@ export default function LoaderButton({ children, isLoading, ...rest }) {
         >
             {isLoading ?
                 <div className="d-flex justify-content-center">
-                    <i className="fa fa-circle-o-notch fa-spin "></i>
+                    <i className="fas fa-circle-notch fa-spin"></i>
                 </div>
                 :
                 children}

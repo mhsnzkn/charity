@@ -51,7 +51,7 @@ export default function UserEdit() {
         <>
             <h4>User Edit</h4>
             <hr />
-            <Link to="/Users" className='btn btn-dark m-1'><i className='fa fa-undo'></i> Back</Link>
+            <Link to="/Users" className='btn btn-dark m-1'><i className='fas fa-undo'></i> Back</Link>
             <Formik
                 initialValues={initialValues}
                 onSubmit={submitHandler}

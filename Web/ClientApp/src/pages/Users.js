@@ -61,18 +61,18 @@ export default function Users() {
                     </td>
                     <td>
                         <Link className='btn btn-sm btn-info m-1' to={`/Users/edit/${item.id}`} title='Edit User'>
-                            <i className='fa fa-edit'></i>
+                            <i className='fas fa-edit'></i>
                         </Link>
                         {item.status === Pasive ?
                             <>
                                 <button className='btn btn-sm btn-danger m-1' onClick={() => remove(item.id)} title='Delete'>
-                                    <i className='fa fa-trash'></i>
+                                    <i className='fas fa-trash'></i>
                                 </button>
                             </>
                             :
                             <>
                                 <Link to={`/Users/PassChange/${item.id}`} className='btn btn-sm btn-dark m-1' title='Password Change'>
-                                    <i className='fa fa-unlock-alt'></i>
+                                    <i className='fas fa-unlock-alt'></i>
                                 </Link>
                             </>
                         }
@@ -95,7 +95,7 @@ export default function Users() {
         <>
             <h4>Users</h4><hr />
             <div className='m-1 p-1'>
-                <Link to="/Users/Add" className='btn btn-primary'><i className='fa fa-plus'></i> Add</Link>
+                <Link to="/Users/Add" className='btn btn-primary'><i className='fas fa-plus'></i> Add</Link>
             </div>
 
 

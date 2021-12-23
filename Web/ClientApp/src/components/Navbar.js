@@ -7,7 +7,7 @@ export default function Navbar({toggleMenu}) {
             <div className="container-fluid">
 
                 <button type="button" id="sidebarCollapse" onClick={toggleMenu} className="btn btn-danger" >
-                    <i className="fa fa-align-left"></i>
+                    <i className="fas fa-align-left"></i>
                     <span> Menu</span>
                 </button>
                 

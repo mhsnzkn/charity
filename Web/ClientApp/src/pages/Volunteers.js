@@ -115,19 +115,19 @@ export default function Volunteers() {
                         {item.status !== Completed && item.status !== Cancelled &&
                             <button className='btn btn-sm btn-success m-1'
                                 onClick={() => approve(item.id)} title='Approve'>
-                                <i className='fa fa-check'></i>
+                                <i className='fas fa-check'></i>
                             </button>}
 
                         <Link className='btn btn-sm btn-info m-1' to={`/VolunteerApplications/detail/${item.id}`} title='Details'>
-                            <i className='fa fa-list'></i>
+                            <i className='fas fa-list'></i>
                         </Link>
                         {item.status === Cancelled ?
                             <button className='btn btn-sm btn-danger m-1' onClick={() => showReason(item.cancellationReason)} title='Show Reason'>
-                                <i className='fa fa-list'></i>
+                                <i className="fas fa-comment-slash"></i>
                             </button>
                             :
                             <button className='btn btn-sm btn-danger m-1' onClick={() => cancel(item.id)} title='Reject'>
-                                <i className='fa fa-times'></i>
+                                <i className="far fa-times-circle"></i>
                             </button>
                         }
                     </td>
@@ -144,7 +144,6 @@ if(response.error){
     tableRows = <tr><td colSpan="6" className='text-danger'>Connection Error!</td></tr>
 }
 
-console.log("index:"+getPageIndex(url));
     return (
         <>
             <h4>Volunteers</h4><hr />

@@ -6,7 +6,7 @@ export default function PasswordChangePage() {
     
     return (
         <>
-        <Link to="/Users" className='btn btn-dark m-1'><i className='fa fa-undo'></i> Back</Link>
+        <Link to="/Users" className='btn btn-dark m-1'><i className='fas fa-undo'></i> Back</Link>
             <PasswordChange/>
         </>
     );

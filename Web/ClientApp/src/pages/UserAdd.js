@@ -49,7 +49,7 @@ export default function UserAdd() {
         <>
             <h4>User Add</h4>
             <hr />
-            <Link to="/Users" className='btn btn-dark m-1'><i className='fa fa-undo'></i> Back</Link>
+            <Link to="/Users" className='btn btn-dark m-1'><i className='fas fa-undo'></i> Back</Link>
             <Formik
                 initialValues={initialValues}
                 onSubmit={submitHandler}
