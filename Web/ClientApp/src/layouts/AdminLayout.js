@@ -11,7 +11,6 @@ export default function AdminLayout() {
     const toggleMenu = () => {
         setMenuActive(!menuActive);
     }
-    console.log(window.innerWidth);
     useEffect(()=>{
         if(window.innerWidth < 780){
             setMenuActive(false);
