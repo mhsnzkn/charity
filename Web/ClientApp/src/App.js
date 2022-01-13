@@ -3,7 +3,6 @@ import './style/heart_theme.css'
 import './style/fontawesome/css/all.min.css'
 import 'react-toastify/dist/ReactToastify.css';
 import 'alertifyjs/build/css/alertify.css';
-import 'alertifyjs/build/css/themes/semantic.min.css';
 import Footer from './components/Footer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import VolunteerFormPage from './pages/VolunteerFormPage';
@@ -22,7 +21,6 @@ import alertify from 'alertifyjs';
 import PasswordChangePage from './pages/PasswordChangePage';
 
 function App() {
-
 
       alertify.defaults.transition = "zoom";
       alertify.defaults.theme.ok = "ui positive button";
@@ -49,7 +47,6 @@ function App() {
             <Route path="Users/Edit/:id" element={<UserEdit />} />
             <Route path="Users/PassChange/:id" element={<PasswordChangePage />} />
             <Route path="MyAccount" element={<MyAccount />} />
-
           </Route>
 
 
