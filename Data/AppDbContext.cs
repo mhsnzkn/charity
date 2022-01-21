@@ -47,13 +47,13 @@ namespace Data
                 .Property(a => a.Skills)
                 .HasConversion(
                 v => JsonSerializer.Serialize(v, null),
-                v => JsonSerializer.Deserialize<List<Skills>>(v, null));
+                v => JsonSerializer.Deserialize<Skills[]>(v, null));
 
             modelBuilder.Entity<Volunteer>()
                 .Property(a => a.Organisations)
                 .HasConversion(
                 v => JsonSerializer.Serialize(v, null),
-                v => JsonSerializer.Deserialize<List<Organisations>>(v, null));
+                v => JsonSerializer.Deserialize<Organisations[]>(v, null));
         }
 
     }

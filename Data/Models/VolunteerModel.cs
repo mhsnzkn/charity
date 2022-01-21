@@ -26,7 +26,7 @@ namespace Data.Models
         public string HomeNumber { get; set; }
         [Required]
         public string Reason { get; set; }
-        public List<Organisations> Organisations { get; set; }
-        public List<Skills> Skills { get; set; }
+        public Organisations[] Organisations { get; set; }
+        public Skills[] Skills { get; set; }
     }
 }
