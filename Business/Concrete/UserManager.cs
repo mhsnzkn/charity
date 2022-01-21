@@ -63,7 +63,7 @@ namespace Business.Concrete
         public async Task<Result> Update(UserEditModel model)
         {
             var result = new Result();
-            if(model.Id == 1 && model.Status == Enums.UserStatus.Pasive)
+            if(model.Id == 1 && model.Status == UserStatus.Pasive)
             {
                 result.SetError(UserMessages.UnauthorizedAccess);
                 return result;
@@ -95,7 +95,7 @@ namespace Business.Concrete
                 result.SetError(UserMessages.LoginFail);
                 return result;
             }
-            if(user.Status != Enums.UserStatus.Active)
+            if(user.Status != UserStatus.Active)
             {
                 result.SetError(UserMessages.UserNotActive);
                 return result;

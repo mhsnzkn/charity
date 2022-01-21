@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using static Data.Constants.Enums;
+using Data.Constants;
 
 namespace Data.Dtos
 {

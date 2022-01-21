@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Data.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using static Data.Constants.Enums;
 
 namespace Data.Dtos
 {

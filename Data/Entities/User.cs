@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Data.Constants.Enums;
+using Data.Constants;
 
 namespace Data.Entities
 {
