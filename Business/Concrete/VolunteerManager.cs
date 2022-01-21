@@ -36,7 +36,7 @@ namespace Business.Concrete
             {
                 var entity = mapper.Map<Volunteer>(model);
 
-                entity.Status = Enums.VolunteerStatus.Trial;
+                entity.Status = VolunteerStatus.Trial;
                 entity.CrtDate = DateTime.Now;
                 volunteerDal.Add(entity);
                 await volunteerDal.Save();
@@ -73,7 +73,7 @@ namespace Business.Concrete
         public async Task<TableResponseDto<VolunteerListDto>> GetTable(VolunteerTableParamsDto param)
         {
             var query = volunteerDal.Get().OrderByDescending(a=>a.CrtDate).AsQueryable();
-            if(param.Status != Enums.VolunteerStatus.All)
+            if(param.Status != VolunteerStatus.All)
                 query = query.Where(a=>a.Status == param.Status);
 
             if (!string.IsNullOrEmpty(param.SearchString))
@@ -137,12 +137,12 @@ namespace Business.Concrete
                 result.SetError(UserMessages.DataNotFound);
                 return result;
             }
-            if(volunteer.Status == Enums.VolunteerStatus.Cancelled)
+            if(volunteer.Status == VolunteerStatus.Cancelled)
             {
                 result.SetError(UserMessages.VolunteerRejected);
                 return result;
             }
-            if(volunteer.Status == Enums.VolunteerStatus.Completed)
+            if(volunteer.Status == VolunteerStatus.Completed)
             {
                 result.SetError(UserMessages.VolunteerCompleted);
                 return result;
@@ -161,13 +161,13 @@ namespace Business.Concrete
                 result.SetError(UserMessages.DataNotFound);
                 return result;
             }
-            if(volunteer.Status == Enums.VolunteerStatus.Cancelled)
+            if(volunteer.Status == VolunteerStatus.Cancelled)
             {
                 result.SetError(UserMessages.VolunteerRejected);
                 return result;
             }
 
-            volunteer.Status = Enums.VolunteerStatus.Cancelled;
+            volunteer.Status = VolunteerStatus.Cancelled;
             volunteer.CancellationReason = cancellationReason;
             await volunteerDal.Save();
             return result;

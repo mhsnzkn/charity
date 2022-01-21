@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using static Data.Constants.Enums;
+using Data.Constants;
 
 namespace Data.Entities
 {

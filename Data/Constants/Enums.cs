@@ -6,23 +6,22 @@ using System.Threading.Tasks;
 
 namespace Data.Constants
 {
-    public class Enums
+
+    public enum VolunteerStatus
     {
-        public enum VolunteerStatus
-        {
-            All,
-            Cancelled,
-            Trial,
-            DBSDocument,
-            DBS,
-            Aggreement,
-            Induction,
-            Completed
-        }
-        public enum UserStatus
-        {
-            Pasive,
-            Active,
-        }
+        All,
+        Cancelled,
+        Trial,
+        DBSDocument,
+        DBS,
+        Aggreement,
+        Induction,
+        Completed
     }
+    public enum UserStatus
+    {
+        Pasive,
+        Active,
+    }
+
 }
