@@ -1,4 +1,5 @@
 ﻿using Data.Abstract;
+using Data.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -34,8 +35,8 @@ namespace Data.Entities
         [StringLength(1000)]
         public string Reason { get; set; }
         public Guid Key { get; set; } = Guid.NewGuid();
-        public string Organisations { get; set; }
-        public string Skills { get; set; }
+        public List<Organisations> Organisations { get; set; }
+        public List<Skills> Skills { get; set; }
         public VolunteerStatus Status { get; set; }
         public DateTime CrtDate { get; set; }
         public DateTime? UptDate { get; set; }

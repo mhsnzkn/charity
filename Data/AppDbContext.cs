@@ -1,10 +1,12 @@
-﻿using Data.Entities;
+﻿using Data.Dtos;
+using Data.Entities;
 using Data.Utility.Security;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using static Data.Constants.Constants;
 
@@ -40,6 +42,18 @@ namespace Data
             modelBuilder.Entity<Volunteer>()
                 .HasIndex(a => a.Key)
                 .IsUnique();
+
+            modelBuilder.Entity<Volunteer>()
+                .Property(a => a.Skills)
+                .HasConversion(
+                v => JsonSerializer.Serialize(v, null),
+                v => JsonSerializer.Deserialize<List<Skills>>(v, null));
+
+            modelBuilder.Entity<Volunteer>()
+                .Property(a => a.Organisations)
+                .HasConversion(
+                v => JsonSerializer.Serialize(v, null),
+                v => JsonSerializer.Deserialize<List<Organisations>>(v, null));
         }
 
     }

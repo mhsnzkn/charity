@@ -19,9 +19,7 @@ namespace Data.AutoMapper
                 .ForMember(a => a.PostCode, o => o.MapFrom(a => a.PostCode.ToUpper()));
             CreateMap<Volunteer, VolunteerListDto>()
                 .ForMember(o => o.Name, m => m.MapFrom(o => o.FirstName + " " + o.LastName));
-            CreateMap<Volunteer, VolunteerDto>()
-                .ForMember(a => a.Organisations, o => o.MapFrom(mapExpression: a => JsonExtension.GetJsonObject<List<Organisations>>(a.Organisations)))
-                .ForMember(a => a.Skills, o => o.MapFrom(a => JsonExtension.GetJsonObject<List<Skills>>(a.Skills)));
+            CreateMap<Volunteer, VolunteerDto>();
             #endregion
 
             #region User

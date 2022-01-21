@@ -35,8 +35,6 @@ namespace Business.Concrete
             try
             {
                 var entity = mapper.Map<Volunteer>(model);
-                entity.Organisations = JsonSerializer.Serialize(model.Organisations);
-                entity.Skills = JsonSerializer.Serialize(model.Skills);
 
                 entity.Status = Enums.VolunteerStatus.Trial;
                 entity.CrtDate = DateTime.Now;
@@ -116,8 +114,8 @@ namespace Business.Concrete
                 entity.MobileNumber = model.MobileNumber;
                 entity.HomeNumber = model.HomeNumber;
                 entity.Reason = model.Reason;
-                entity.Organisations = JsonSerializer.Serialize(model.Organisations);
-                entity.Skills = JsonSerializer.Serialize(model.Skills);
+                entity.Organisations = model.Organisations;
+                entity.Skills = model.Skills;
 
                 entity.UptDate = DateTime.Now;
 
