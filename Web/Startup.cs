@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Data.AutoMapper;
+using Business.Utility.MailService;
 
 namespace Web
 {
@@ -69,6 +70,7 @@ namespace Web
 
             #region Services
             services.AddScoped<ITokenHelper, JwtHelper>();
+            services.AddScoped<IMailService, MailService>();
 
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IUserDal, UserDal>();

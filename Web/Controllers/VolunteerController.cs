@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Utility.MailService;
 using Data.Constants;
 using Data.Dtos;
 using Data.Entities;
@@ -21,10 +22,12 @@ namespace Web.Controllers
     public class VolunteerController : ControllerBase
     {
         private readonly IVolunteerManager volunteerManager;
+        private readonly IMailService mailService;
 
-        public VolunteerController(IVolunteerManager volunteerManager)
+        public VolunteerController(IVolunteerManager volunteerManager, IMailService mailService)
         {
             this.volunteerManager = volunteerManager;
+            this.mailService = mailService;
         }
 
         // GET: api/<VolunteerController>
@@ -58,7 +61,7 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] VolunteerModel model)
         {
-            return Ok(await volunteerManager.Add(model));
+            return Ok(await volunteerManager.AddWithMail(model));
         }
 
         // PUT api/<VolunteerController>
@@ -70,6 +73,7 @@ namespace Web.Controllers
             {
                 case HttpVolunteerActions.Approve:
                     result = await volunteerManager.Approve(volunteer.Id);
+                    //var emailResult = sendStatusMail()
                     break;
                 case HttpVolunteerActions.Cancel:
                     result = await volunteerManager.Cancel(volunteer.Id, volunteer.CancellationReason);
@@ -84,8 +88,9 @@ namespace Web.Controllers
 
         // DELETE api/<VolunteerController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            return Ok(await volunteerManager.Delete(id));
         }
     }
 }

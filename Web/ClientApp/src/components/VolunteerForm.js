@@ -33,11 +33,11 @@ export default function VolunteerForm({ isSubmit }) {
         lastName: yup.string().required("Required"),
         address: yup.string().required("Required"),
         mobileNumber: yup.string().required("Required"),
-        postCode: yup.string().required("Required").max(8, 'Must be at most 8 characters'),
+        postCode: yup.string().required("Required").max(8, 'Cannot exceed 8 characters'),
         email: yup.string()
             .email("Invalid email address format")
             .required("Required"),
-        reason: yup.string().required('Required'),
+        reason: yup.string().required('Required').max(100, 'Cannot exceed 1000 characters'),
         organisations: yup.array().of(yup.object().shape({
             organisation: yup.string().required("Required"),
             role: yup.string().required("Required"),

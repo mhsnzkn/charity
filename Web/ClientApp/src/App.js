@@ -19,17 +19,19 @@ import VolunteerDetail from './pages/VolunteerDetail';
 import UserEdit from './pages/UserEdit';
 import alertify from 'alertifyjs';
 import PasswordChangePage from './pages/PasswordChangePage';
+import ScrollTop from './Hooks/ScrollTop';
 
 function App() {
 
-      alertify.defaults.transition = "zoom";
-      alertify.defaults.theme.ok = "ui positive button";
-      alertify.defaults.theme.cancel = "ui black button";
+  alertify.defaults.transition = "zoom";
+  alertify.defaults.theme.ok = "ui positive button";
+  alertify.defaults.theme.cancel = "ui black button";
 
 
   return (
     <>
       <Router>
+        <ScrollTop />
 
         <Routes>
           <Route path="forms" element={<PublicLayout />} >

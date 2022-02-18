@@ -16,6 +16,6 @@ namespace Business.Base
         //Task<List<T>> Get(Expression<Func<T, bool>> expression = null);
         Task<Result> Add(TModel model);
         Task<Result> Update(TModel model);
-        Task<Result> Delete(TEntity entity);
+        // Task<Result> Delete(TEntity entity);
     }
 }

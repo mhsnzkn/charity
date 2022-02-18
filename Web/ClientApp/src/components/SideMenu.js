@@ -30,7 +30,7 @@ export default function SideMenu({ menuActive }) {
                 </li>
 
                 <li>
-                    <a href="#" onClick={() => auth.signout()}>Log Out</a>
+                    <a href="/" onClick={() => auth.signout()}>Log Out</a>
                 </li>
             </ul>
         </nav>

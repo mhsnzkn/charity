@@ -15,6 +15,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Data.Dtos.Datatable;
 using System.Text.Json;
+using Business.Utility.MailService;
 
 namespace Business.Concrete
 {
@@ -22,11 +23,13 @@ namespace Business.Concrete
     {
         private readonly IVolunteerDal volunteerDal;
         private readonly IMapper mapper;
+        private readonly IMailService mailService;
 
-        public VolunteerManager(IVolunteerDal VolunteerDal, IMapper mapper)
+        public VolunteerManager(IVolunteerDal VolunteerDal, IMapper mapper, IMailService mailService)
         {
             this.volunteerDal = VolunteerDal;
             this.mapper = mapper;
+            this.mailService = mailService;
         }
 
         public async Task<Result> Add(VolunteerModel model)
@@ -40,6 +43,7 @@ namespace Business.Concrete
                 entity.CrtDate = DateTime.Now;
                 volunteerDal.Add(entity);
                 await volunteerDal.Save();
+
             }
             catch (Exception ex)
             {
@@ -49,11 +53,43 @@ namespace Business.Concrete
             return result;
         }
 
-        public async Task<Result> Delete(Volunteer entity)
+        public async Task<Result> AddWithMail(VolunteerModel model)
         {
             var result = new Result();
             try
             {
+                var entity = mapper.Map<Volunteer>(model);
+
+                entity.Status = VolunteerStatus.Trial;
+                entity.CrtDate = DateTime.Now;
+                volunteerDal.Add(entity);
+                await volunteerDal.Save();
+
+                var emailResult = await mailService.SendNewApplicationMail(model.FirstName, model.LastName, model.Email);
+                if (emailResult.Error)
+                {
+                    result.Message += UserMessages.EmailSendFailed;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.SetError(UserMessages.Fail);
+            }
+            
+            return result;
+        }
+
+        public async Task<Result> Delete(int id)
+        {
+            var result = new Result();
+            try
+            {
+                var entity = await volunteerDal.GetByIdAsync(id);
+                if (entity == null) 
+                {
+                    result.SetError(UserMessages.DataNotFound);
+                    return result;
+                }
                 volunteerDal.Delete(entity);
                 await volunteerDal.Save();
             }
@@ -150,6 +186,7 @@ namespace Business.Concrete
             
             volunteer.Status = volunteer.Status + 1;
             await volunteerDal.Save();
+
             return result;
         }
         public async Task<Result> Cancel(int id, string cancellationReason)
