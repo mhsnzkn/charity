@@ -1,25 +1,23 @@
 ﻿using Data;
 using Data.Entities;
+using Data.Utility.Results;
 using DataAccess.Abstract;
 using DataAccess.Base;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataAccess.Concrete
 {
-    public class UserDal : RepositoryBase<User, AppDbContext>, IUserDal
+    public class VolunteerFileDal : RepositoryBase<VolunteerFile, AppDbContext>, IVolunteerFileDal
     {
         private readonly AppDbContext context;
 
-        public UserDal(AppDbContext context) : base(context)
+        public VolunteerFileDal(AppDbContext context) : base(context)
         {
             this.context = context;
         }
 
-        public async Task<User> GetByMail(string email)
-        {
-            return await  context.Users.Where(a => a.Email == email).FirstOrDefaultAsync();
-        }
     }
 }

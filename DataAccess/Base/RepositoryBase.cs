@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataAccess.Base
 {
     public class RepositoryBase<TEntity, TContext> : IRepositoryBase<TEntity>
-        where TEntity : class, IEntity, new()
+        where TEntity : Entity, new()
         where TContext : DbContext
     {
         private readonly TContext context;
@@ -33,12 +33,14 @@ namespace DataAccess.Base
         }
 
 
-        public void Update(TEntity entity)
+        public void Update(TEntity entity, DateTime? date = null)
         {
+            entity.UptDate = date ?? DateTime.Now;
             context.Update(entity);
         }
-        public void Add(TEntity entity)
+        public void Add(TEntity entity, DateTime? date = null)
         {
+            entity.CrtDate = date ?? DateTime.Now;
             context.Add(entity);
         }
 

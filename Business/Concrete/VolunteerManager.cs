@@ -24,12 +24,15 @@ namespace Business.Concrete
         private readonly IVolunteerDal volunteerDal;
         private readonly IMapper mapper;
         private readonly IMailService mailService;
+        private readonly ICommonFileManager commonFileManager;
 
-        public VolunteerManager(IVolunteerDal VolunteerDal, IMapper mapper, IMailService mailService)
+        public VolunteerManager(IVolunteerDal VolunteerDal, IMapper mapper, 
+            IMailService mailService, ICommonFileManager commonFileManager)
         {
             this.volunteerDal = VolunteerDal;
             this.mapper = mapper;
             this.mailService = mailService;
+            this.commonFileManager = commonFileManager;
         }
 
         public async Task<Result> Add(VolunteerModel model)
@@ -40,7 +43,6 @@ namespace Business.Concrete
                 var entity = mapper.Map<Volunteer>(model);
 
                 entity.Status = VolunteerStatus.Trial;
-                entity.CrtDate = DateTime.Now;
                 volunteerDal.Add(entity);
                 await volunteerDal.Save();
 
@@ -61,7 +63,6 @@ namespace Business.Concrete
                 var entity = mapper.Map<Volunteer>(model);
 
                 entity.Status = VolunteerStatus.Trial;
-                entity.CrtDate = DateTime.Now;
                 volunteerDal.Add(entity);
                 await volunteerDal.Save();
 
@@ -164,10 +165,9 @@ namespace Business.Concrete
             return result;
         }
 
-        public async Task<Result> Approve(int id)
+        public async Task<ResultData<Volunteer>> Approve(Volunteer volunteer)
         {
-            var result = new Result();
-            var volunteer = await volunteerDal.GetByIdAsync(id);
+            var result = new ResultData<Volunteer>();
             if(volunteer == null)
             {
                 result.SetError(UserMessages.DataNotFound);
@@ -187,6 +187,32 @@ namespace Business.Concrete
             volunteer.Status = volunteer.Status + 1;
             await volunteerDal.Save();
 
+            // TODO: Document deletion
+
+            return result;
+        }
+
+        public async Task<Result> SendStatusMail(Volunteer volunteer)
+        {
+            Result result = null;
+            switch (volunteer.Status)
+            {
+                case VolunteerStatus.DBSDocument:
+                    result = await mailService.SendDBSDocumentMail(volunteer.FirstName, volunteer.LastName, volunteer.Email);
+                    break;
+                case VolunteerStatus.DBS:
+                    result = await mailService.SendDBSUploadDocMail(volunteer.FirstName, volunteer.LastName, volunteer.Email, volunteer.Key);
+                    break;
+                case VolunteerStatus.Aggreement:
+                    break;
+                case VolunteerStatus.Induction:
+                    break;
+                case VolunteerStatus.Completed:
+                    break;
+                default:
+                    break;
+            }
+
             return result;
         }
         public async Task<Result> Cancel(int id, string cancellationReason)
@@ -203,10 +229,47 @@ namespace Business.Concrete
                 result.SetError(UserMessages.VolunteerRejected);
                 return result;
             }
+            result = await volunteerDal.Cancel(volunteer, cancellationReason);
+            await commonFileManager.DeleteVolunteerFile(id);
 
-            volunteer.Status = VolunteerStatus.Cancelled;
-            volunteer.CancellationReason = cancellationReason;
-            await volunteerDal.Save();
+            return result;
+        }
+
+        public async Task<Result> ApproveAndCheckMail(int id)
+        {
+            var volunteer = await volunteerDal.GetByIdAsync(id);
+            var result = await Approve(volunteer);
+            if (result.Error)
+            {
+                result.SetError(UserMessages.Fail);
+                return result;
+            }
+
+            var emailResult = await SendStatusMail(volunteer);
+            if (emailResult is not null && emailResult.Error)
+            {
+                result.AddMessage(emailResult.Message);
+            }
+            return result;
+        }
+
+        public async Task<Result> UploadDocuments(VolunteerDocumentPostModel model)
+        {
+            var result = new Result();
+            var volunteer = await volunteerDal.GetByKey(model.Key);
+            if (volunteer == null)
+                return result.SetError(UserMessages.UserNotFound);
+
+            for (int i = 0; i < model.Files.Length; i++)
+            {
+                var fileResult = await commonFileManager.UploadVolunteerFile(volunteer, model.Files[i], volunteer.Id + "-" + i, CommonFileTypes.DbsDocument);
+                if (fileResult.Error)
+                {
+                    result.SetError(fileResult.Message);
+                    break;
+                }
+            }
+
             return result;
         }
     }

@@ -14,12 +14,12 @@ import Users from './pages/Users';
 import MyAccount from './pages/MyAccount';
 import UserAdd from './pages/UserAdd';
 import { ToastContainer } from 'react-toastify';
-import VolunteerDocumentForm from './components/VolunteerDocumentForm';
 import VolunteerDetail from './pages/VolunteerDetail';
 import UserEdit from './pages/UserEdit';
 import alertify from 'alertifyjs';
 import PasswordChangePage from './pages/PasswordChangePage';
 import ScrollTop from './Hooks/ScrollTop';
+import VolunteerDocumentFormPage from './pages/VolunteerDocumentFormPage';
 
 function App() {
 
@@ -36,7 +36,7 @@ function App() {
         <Routes>
           <Route path="forms" element={<PublicLayout />} >
             <Route path="volunteerForm" element={<VolunteerFormPage />} />
-            <Route path="volunteerDocument" element={<VolunteerDocumentForm />} />
+            <Route path="volunteerDocument/:key" element={<VolunteerDocumentFormPage />} />
           </Route>
 
 

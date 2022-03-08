@@ -7,6 +7,7 @@ using Data.Models;
 using Data.Utility.Results;
 using DataAccess.Abstract;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -22,12 +23,10 @@ namespace Web.Controllers
     public class VolunteerController : ControllerBase
     {
         private readonly IVolunteerManager volunteerManager;
-        private readonly IMailService mailService;
 
-        public VolunteerController(IVolunteerManager volunteerManager, IMailService mailService)
+        public VolunteerController(IVolunteerManager volunteerManager)
         {
             this.volunteerManager = volunteerManager;
-            this.mailService = mailService;
         }
 
         // GET: api/<VolunteerController>
@@ -63,6 +62,14 @@ namespace Web.Controllers
         {
             return Ok(await volunteerManager.AddWithMail(model));
         }
+        // POST api/<VolunteerController>
+        [AllowAnonymous]
+        [HttpPost("Documents")]
+        public async Task<IActionResult> PostDocuments([FromForm] VolunteerDocumentPostModel model)
+        {
+            var result = await volunteerManager.UploadDocuments(model);
+            return Ok(result);
+        }
 
         // PUT api/<VolunteerController>
         [HttpPost("actions")]
@@ -72,8 +79,7 @@ namespace Web.Controllers
             switch (volunteer.Action)
             {
                 case HttpVolunteerActions.Approve:
-                    result = await volunteerManager.Approve(volunteer.Id);
-                    //var emailResult = sendStatusMail()
+                    result = await volunteerManager.ApproveAndCheckMail(volunteer.Id);
                     break;
                 case HttpVolunteerActions.Cancel:
                     result = await volunteerManager.Cancel(volunteer.Id, volunteer.CancellationReason);

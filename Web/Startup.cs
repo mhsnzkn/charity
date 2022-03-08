@@ -76,7 +76,13 @@ namespace Web
             services.AddScoped<IUserDal, UserDal>();
             services.AddScoped<IVolunteerManager, VolunteerManager>();
             services.AddScoped<IVolunteerDal, VolunteerDal>();
+            services.AddScoped<ICommonFileManager, CommonFileManager>();
+            services.AddScoped<ICommonFileDal, CommonFileDal>();
+            services.AddScoped<IAgreementManager, AgreementManager>();
+            services.AddScoped<IAgreementDal, AgreementDal>();
 
+            services.AddScoped<IVolunteerAgreementDal, VolunteerAgreementDal>();
+            services.AddScoped<IVolunteerFileDal, VolunteerFileDal>();
             #endregion
         }
 

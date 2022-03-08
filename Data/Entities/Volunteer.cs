@@ -8,9 +8,8 @@ using Data.Constants;
 
 namespace Data.Entities
 {
-    public class Volunteer : IEntity
+    public class Volunteer : Entity
     {
-        public int Id { get; set; }
         [StringLength(50)]
         public string Email { get; set; }
         [StringLength(100)]
@@ -38,9 +37,10 @@ namespace Data.Entities
         public Organisations[] Organisations { get; set; }
         public Skills[] Skills { get; set; }
         public VolunteerStatus Status { get; set; }
-        public DateTime CrtDate { get; set; }
-        public DateTime? UptDate { get; set; }
         public int? UptUsr { get; set; }
+
+        ICollection<VolunteerAgreement> VolunteerAgreements { get; set; }
+        ICollection<VolunteerFile> VolunteerFiles { get; set; }
 
     }
 }

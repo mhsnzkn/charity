@@ -18,8 +18,10 @@ namespace Business.Abstract
         Task<TableResponseDto<VolunteerListDto>> GetTable(VolunteerTableParamsDto param);
         Task<VolunteerDto> GetByIdAsync(int id);
         Task<Result> AddWithMail(VolunteerModel model);
-        Task<Result> Approve(int id);
+        Task<ResultData<Volunteer>> Approve(Volunteer volunteer);
         Task<Result> Cancel(int id, string cancellationReason);
         Task<Result> Delete(int id);
+        Task<Result> ApproveAndCheckMail(int id);
+        Task<Result> UploadDocuments(VolunteerDocumentPostModel model);
     }
 }

@@ -50,7 +50,6 @@ namespace Business.Concrete
                 SecurityHelper.CreatePasswordHash(model.Password, out var hash, out var salt);
                 entity.PasswordHash = hash;
                 entity.PasswordSalt = salt;
-                entity.CrtDate = DateTime.Now;
                 userDal.Add(entity);
                 await userDal.Save();
             }

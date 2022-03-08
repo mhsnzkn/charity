@@ -11,6 +11,7 @@ namespace Data.Constants
         public const string Success = "Success";
         public const string Fail = "Failed";
         public const string DataNotFound = "Data Not Found!";
+        public const string UserNotFound = "User Not Found!";
         public const string ActionNotFound = "Action Not Found!";
         public const string UnauthorizedAccess = "Unauthorized Access!";
         // Login
@@ -26,5 +27,9 @@ namespace Data.Constants
 
         // Mail
         public const string EmailSendFailed = " There has been an error while sending email!";
+        public const string NoEmailSent = " No status email was sent!";
+
+        // Upload
+        public const string FileUploadFailed = "File Upload failed";
     }
 }

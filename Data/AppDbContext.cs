@@ -21,7 +21,10 @@ namespace Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Volunteer> Volunteers { get; set; }
-
+        public DbSet<CommonFile> CommonFiles { get; set; }
+        public DbSet<VolunteerFile> VolunteerFiles { get;}
+        public DbSet<Agreement> Agreements { get;}
+        public DbSet<VolunteerAgreement> VolunteerAgreements { get;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -9,9 +9,8 @@ using Data.Constants;
 
 namespace Data.Entities
 {
-    public class User : IEntity
+    public class User : Entity
     {
-        public int Id { get; set; }
         [StringLength(150)]
         public string Name { get; set; }
         [StringLength(100)]
@@ -23,7 +22,5 @@ namespace Data.Entities
         public UserStatus Status { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
-        public DateTime CrtDate { get; set; }
-        public DateTime? UptDate { get; set; }
     }
 }

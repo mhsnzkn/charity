@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import * as yup from 'yup';
 import LoaderButton from './LoaderButton';
 
-export default function VolunteerForm({ isSubmit }) {
+export default function VolunteerForm({ submit }) {
     const [btnLoading, setBtnLoading] = useState(false);
 
     const initialValues = {
@@ -56,7 +56,7 @@ export default function VolunteerForm({ isSubmit }) {
             if(res.data.error){
                 alertify.error(res.data.message)
             }else{
-                isSubmit();
+                submit();
             }
             setBtnLoading(false);
         })

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import SubmitSuccess from './SubmitSuccess';
-import VolunteerForm from '../components/VolunteerForm';
+import VolunteerDocumentForm from '../components/VolunteerDocumentForm';
 
-export default function VolunteerFormPage() {
+export default function VolunteerDocumentFormPage() {
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     return (
@@ -10,7 +10,7 @@ export default function VolunteerFormPage() {
             {isSubmitted ?
                 <SubmitSuccess />
                 :
-                <VolunteerForm submit={() => setIsSubmitted(true)} />}
+                <VolunteerDocumentForm submit={() => setIsSubmitted(true)} />}
         </>
     );
 }

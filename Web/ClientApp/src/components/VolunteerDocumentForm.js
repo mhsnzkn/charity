@@ -1,106 +1,69 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { toast } from 'react-toastify';
-import * as yup from 'yup';
 import LoaderButton from './LoaderButton';
+import { useParams } from 'react-router-dom';
 
-export default function VolunteerDocumentForm() {
+export default function VolunteerDocumentForm({ submit }) {
+    const params = useParams();
     const [btnLoading, setBtnLoading] = useState(false);
+    const [values, setValues] = useState([])
+    const [validation, setValidation] = useState(true);
 
-    const initialValues = {
-        firstName: '',
-        lastName: '',
-        email: '',
-        address: '',
-        postCode: '',
-        mobileNumber: '',
-        reason: '',
-        organisations: [{
-            organisation: '',
-            role: ''
-        }],
-        skills: [{
-            skill: '',
-            experience: ''
-        }],
-        dbscheck: false
-    }
-
-    const ValidationSchema = yup.object().shape({
-        // firstName: yup.string().required("Required"),
-        // lastName: yup.string().required("Required"),
-        // address: yup.string().required("Required"),
-        // mobileNumber: yup.string().required("Required"),
-        // postCode: yup.string().required("Required").max(8),
-        // email: yup.string()
-        //     .email("Invalid email address format")
-        //     .required("Required"),
-        // reason: yup.string().required('Required'),
-        // organisations: yup.array().of(yup.object().shape({
-        //     organisation: yup.string().required("Required"),
-        //     role: yup.string().required("Required"),
-        // })),
-        // skills: yup.array().of(yup.object().shape({
-        //     skill: yup.string().required("Required"),
-        //     experience: yup.string().required("Required"),
-        // })),
-        // dbscheck: yup.boolean().oneOf([true], "You must confirm DBS check to submit")
-    });
-
-    const submitHandler = (values) => {
+    const submitHandler = () => {
+        if (values.length < 3) {
+            setValidation(false);
+            return;
+        }
         setBtnLoading(true);
-        axios.post('/api/volunteer', values)
-        .then((res)=>{
-            if(res.data.error){
-                toast.error(res.data.message)
-            }else{
-                //isSubmit();
-            }
-            setBtnLoading(false);
-        })
-        .catch(err => {
-            setBtnLoading(false);
-        })
-        
+        let formData = new FormData();
+        values.forEach(item => formData.append('files', item));
+        //formData.append('files', values);
+        formData.append('key', params.key);
+        console.log(formData);
+        axios.post('/api/volunteer/documents', formData)
+            .then((res) => {
+                if (res.data.error) {
+                    toast.error(res.data.message)
+                } else {
+                    submit();
+                }
+                setBtnLoading(false);
+            })
+            .catch(err => {
+                toast.error("Submit unsuccessful!")
+                setBtnLoading(false);
+            })
     }
-    
+
+    const chg = (e) => {
+        let files = [];
+        for (let i = 0; i < e.length; i++) {
+            files.push(e[i]);
+
+        }
+        setValues(files);
+
+        setValidation(files.length >= 3);
+    }
+
     return (
         <div className='p-2 mb-2'>
             <h3>Volunteer Documents Form</h3>
             <hr />
-            <Formik
-                initialValues={initialValues}
-                onSubmit={submitHandler}
-                validationSchema={ValidationSchema}
-            >
-                {({ values }) => (
-                    <Form>
-                        <div className="form-row">
-                            <div className="form-group col-md-4">
-                                <label htmlFor="firstName">Passport/BRP/Id</label>
-                                <Field id="firstName" name="firstName" className="form-control" type='file' />
-                                <ErrorMessage component="span" name="firstName" className="text-danger" />
-                            </div>
-                            <div className="form-group col-md-4">
-                                <label htmlFor="lastName">Second Form</label>
-                                <Field id="lastName" name="lastName" className="form-control" type='file' />
-                                <ErrorMessage component="span" name="lastName" className="text-danger" />
-                            </div>
-                            <div className="form-group col-md-4">
-                                <label htmlFor="email">Third Form</label>
-                                <Field id="email" name="email" className="form-control" type='file' />
-                                <ErrorMessage component="span" name="email" className="text-danger" />
-                            </div>
-                        </div>
+            <div className="form-row">
+                <div className="form-group col-md-12">
+                    <label htmlFor="document1">Please upload at least 3 documents</label>
+                    <input id="document1" name="document1" className="form-control" type='file' multiple
+                        onChange={(e) => chg(e.target.files)}
+                    />
+                    {!validation && <small className='text-danger'>There has to be at least 3 documents</small>}
+                </div>
+            </div>
 
-                        <div className='d-flex justify-content-end'>
-                            <LoaderButton isLoading={btnLoading} type="submit" className="btn btn-primary">Submit</LoaderButton>
-                        </div>
-                    </Form>
-
-                )}
-            </Formik>
+            <div className='d-flex justify-content-end'>
+                <LoaderButton isLoading={btnLoading} onClick={submitHandler} className="btn btn-primary">Submit</LoaderButton>
+            </div>
         </div>
     );
 }

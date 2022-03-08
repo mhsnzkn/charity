@@ -12,10 +12,23 @@ namespace Data.Utility.Results
         public bool Error { get; set; } = false;
         public string Message { get; set; } = UserMessages.Success;
 
-        public void SetError(string message)
+        public Result SetError(string message)
         {
-            this.Error = true;
-            this.Message = message;
+            if (Error)
+            {
+                this.Message += " " + message;
+            }
+            else
+            {
+                this.Error = true;
+                this.Message = message;
+            }
+            return this;
+        }
+
+        public void AddMessage(string message)
+        {
+            this.Message += " "+message;
         }
     }
 }

@@ -24,7 +24,10 @@ namespace Data.Constants
         public const string PasswordChange = "password";
         public const string JobChange = "job";
     }
-
+    public struct CommonFileTypes
+    {
+        public const string DbsDocument = "DbsDocument";
+    }
 
 
 }
