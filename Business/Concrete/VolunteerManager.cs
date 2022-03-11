@@ -106,6 +106,11 @@ namespace Business.Concrete
         {
             return mapper.Map<VolunteerDto>(await volunteerDal.GetByIdAsync(id));
         }
+        public async Task<VolunteerDetailDto> GetDetailDto(int id)
+        {
+            var query = volunteerDal.Get(a=>a.Id == id).Include(a=>a.VolunteerFiles).ThenInclude(a=>a.CommonFile);
+            return await mapper.ProjectTo<VolunteerDetailDto>(query).FirstOrDefaultAsync();
+        }
 
         public async Task<TableResponseDto<VolunteerListDto>> GetTable(VolunteerTableParamsDto param)
         {
@@ -187,7 +192,9 @@ namespace Business.Concrete
             volunteer.Status = volunteer.Status + 1;
             await volunteerDal.Save();
 
-            // TODO: Document deletion
+            // Document deletion
+            if (volunteer.Status > VolunteerStatus.DBS)
+                await commonFileManager.DeleteVolunteerFile(volunteer.Id);
 
             return result;
         }
@@ -259,6 +266,9 @@ namespace Business.Concrete
             var volunteer = await volunteerDal.GetByKey(model.Key);
             if (volunteer == null)
                 return result.SetError(UserMessages.UserNotFound);
+
+            if(volunteer.Status != VolunteerStatus.DBS)
+                return result.SetError(UserMessages.FileCannotBeUploaded);
 
             for (int i = 0; i < model.Files.Length; i++)
             {

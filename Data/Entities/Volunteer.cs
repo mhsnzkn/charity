@@ -39,8 +39,8 @@ namespace Data.Entities
         public VolunteerStatus Status { get; set; }
         public int? UptUsr { get; set; }
 
-        ICollection<VolunteerAgreement> VolunteerAgreements { get; set; }
-        ICollection<VolunteerFile> VolunteerFiles { get; set; }
+        public ICollection<VolunteerAgreement> VolunteerAgreements { get; set; }
+        public ICollection<VolunteerFile> VolunteerFiles { get; set; }
 
     }
 }

@@ -23,5 +23,6 @@ namespace Business.Abstract
         Task<Result> Delete(int id);
         Task<Result> ApproveAndCheckMail(int id);
         Task<Result> UploadDocuments(VolunteerDocumentPostModel model);
+        Task<VolunteerDetailDto> GetDetailDto(int id);
     }
 }

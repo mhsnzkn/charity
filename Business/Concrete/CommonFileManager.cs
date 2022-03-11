@@ -23,16 +23,15 @@ namespace Business.Concrete
             this.commonFileDal = commonFileDal;
             this.volunteerFileDal = volunteerFileDal;
         }
-
+        private static readonly string BasePath = Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "build");
         public async Task<CommonFile> UploadFile(IFormFile file, string fileName, string type)
         {
             CommonFile commonFile = null;
             try
             {
-                var fullpath = Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "build");
                 var extension = Path.GetExtension(file.FileName);
-                var uploadpath = Path.Combine("images", "uploads", fileName + extension);
-                using (var fs = new FileStream(Path.Combine(fullpath, uploadpath), FileMode.Create))
+                var uploadpath = Path.Combine("uploads", fileName + extension);
+                using (var fs = new FileStream(Path.Combine(BasePath, uploadpath), FileMode.Create))
                 {
                     await file.CopyToAsync(fs);
                 }
@@ -74,11 +73,12 @@ namespace Business.Concrete
         {
             try
             {
-                var volunteerFiles = await volunteerFileDal.Get(a => a.VolunteerId == volunteerId).ToListAsync();
+                var volunteerFiles = await volunteerFileDal.Get(a => a.VolunteerId == volunteerId).Include(a=>a.CommonFile).ToListAsync();
                 foreach (var item in volunteerFiles)
                 {
-                    var commonFileToDelete = new CommonFile { Id = item.CommonFileId };
-                    commonFileDal.Delete(commonFileToDelete);
+                    File.Delete(Path.Combine(BasePath, item.CommonFile.Path));
+
+                    commonFileDal.Delete(item.CommonFile);
                     volunteerFileDal.Delete(item);
                 }
                 await volunteerFileDal.Save();

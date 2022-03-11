@@ -52,7 +52,7 @@ namespace Web.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            return Ok(await volunteerManager.GetByIdAsync(id));
+            return Ok(await volunteerManager.GetDetailDto(id));
         }
 
         // POST api/<VolunteerController>

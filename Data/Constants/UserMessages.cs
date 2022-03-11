@@ -31,5 +31,6 @@ namespace Data.Constants
 
         // Upload
         public const string FileUploadFailed = "File Upload failed";
+        public const string FileCannotBeUploaded = "The file cannot be uploaded! Please contact admin!";
     }
 }

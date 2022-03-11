@@ -20,7 +20,6 @@ export default function VolunteerDocumentForm({ submit }) {
         values.forEach(item => formData.append('files', item));
         //formData.append('files', values);
         formData.append('key', params.key);
-        console.log(formData);
         axios.post('/api/volunteer/documents', formData)
             .then((res) => {
                 if (res.data.error) {

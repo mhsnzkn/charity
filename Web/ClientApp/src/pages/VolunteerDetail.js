@@ -71,7 +71,7 @@ export default function VolunteerDetail() {
             </div>
             <h5>Skills and Experience</h5>
             <div className="form-row">
-                {response.data.skills.map((item, index) => (
+                {response.data.skills?.map((item, index) => (
                     <React.Fragment key={index}>
                         <div className="form-group col-md-6">
                             <label htmlFor={`skills[${index}].skill`}>Skill</label>
@@ -89,6 +89,18 @@ export default function VolunteerDetail() {
                 <label htmlFor="reason">Why do you want to volunteer with Heart4Refugees?</label>
                 <textarea className="form-control" id="reason" value={response.data.reason} disabled />
             </div>
+            {response.data.files?.length > 0 &&
+            <>
+            <h5>Documents</h5>
+            <div className='row'>
+            {response.data.files.map( item => {
+                return <div class="card col-md-4">
+                <img src={"\\"+item.path} class="card-img-top" alt="Document"/>
+              </div>
+            })}
+            </div>
+            </>
+            }
         </>
     }
 

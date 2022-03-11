@@ -20,6 +20,8 @@ namespace Data.AutoMapper
             CreateMap<Volunteer, VolunteerListDto>()
                 .ForMember(o => o.Name, m => m.MapFrom(o => o.FirstName + " " + o.LastName));
             CreateMap<Volunteer, VolunteerDto>();
+            CreateMap<Volunteer, VolunteerDetailDto>()
+                .ForMember(o => o.Files, m => m.MapFrom(o => o.VolunteerFiles.Select(x => x.CommonFile).ToList()));
             #endregion
 
             #region User
