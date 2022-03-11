@@ -23,8 +23,16 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\build\images\**" />
+    <Compile Remove="ClientApp\build\NewFolder\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\build\images\**" />
+    <Content Remove="ClientApp\build\NewFolder\**" />
+    <EmbeddedResource Remove="ClientApp\build\images\**" />
+    <EmbeddedResource Remove="ClientApp\build\NewFolder\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\build\images\**" />
+    <None Remove="ClientApp\build\NewFolder\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
@@ -35,7 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\build\images\uploads\" />
     <Folder Include="ClientApp\public\images\uploads\" />
   </ItemGroup>
 

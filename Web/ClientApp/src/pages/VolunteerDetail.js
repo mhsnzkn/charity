@@ -95,7 +95,7 @@ export default function VolunteerDetail() {
             <div className='row'>
             {response.data.files.map( item => {
                 return <div class="card col-md-4">
-                <img src={"\\"+item.path} class="card-img-top" alt="Document"/>
+                <img src={item.path} class="card-img-top" alt="Document"/>
               </div>
             })}
             </div>

@@ -30,8 +30,8 @@ namespace Business.Concrete
             try
             {
                 var extension = Path.GetExtension(file.FileName);
-                var uploadpath = Path.Combine("uploads", fileName + extension);
-                using (var fs = new FileStream(Path.Combine(BasePath, uploadpath), FileMode.Create))
+                var uploadpath = Path.Combine("\\uploads", fileName + extension);
+                using (var fs = new FileStream(BasePath + uploadpath, FileMode.Create))
                 {
                     await file.CopyToAsync(fs);
                 }
@@ -76,7 +76,7 @@ namespace Business.Concrete
                 var volunteerFiles = await volunteerFileDal.Get(a => a.VolunteerId == volunteerId).Include(a=>a.CommonFile).ToListAsync();
                 foreach (var item in volunteerFiles)
                 {
-                    File.Delete(Path.Combine(BasePath, item.CommonFile.Path));
+                    File.Delete(BasePath + item.CommonFile.Path);
 
                     commonFileDal.Delete(item.CommonFile);
                     volunteerFileDal.Delete(item);
