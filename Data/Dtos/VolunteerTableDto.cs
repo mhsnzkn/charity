@@ -8,7 +8,7 @@ using Data.Constants;
 
 namespace Data.Dtos
 {
-    public class VolunteerListDto
+    public class VolunteerTableDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

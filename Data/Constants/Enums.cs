@@ -14,7 +14,7 @@ namespace Data.Constants
         Trial,
         DBSDocument,
         DBS,
-        Aggreement,
+        Agreement,
         Induction,
         Completed
     }

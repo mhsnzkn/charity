@@ -17,7 +17,7 @@ namespace Data.AutoMapper
             #region Volunteer
             CreateMap<VolunteerModel, Volunteer>()
                 .ForMember(a => a.PostCode, o => o.MapFrom(a => a.PostCode.ToUpper()));
-            CreateMap<Volunteer, VolunteerListDto>()
+            CreateMap<Volunteer, VolunteerTableDto>()
                 .ForMember(o => o.Name, m => m.MapFrom(o => o.FirstName + " " + o.LastName));
             CreateMap<Volunteer, VolunteerDto>();
             CreateMap<Volunteer, VolunteerDetailDto>()
@@ -28,6 +28,10 @@ namespace Data.AutoMapper
             CreateMap<User, UserAccountInfoDto>();
             CreateMap<User, UserListDto>();
             CreateMap<UserEditModel, User>().ReverseMap();
+            #endregion
+
+            #region Agreement
+            CreateMap<Agreement, AgreementModel>().ReverseMap();
             #endregion
         }
     }

@@ -74,6 +74,8 @@ namespace Business.Concrete
             try
             {
                 var volunteerFiles = await volunteerFileDal.Get(a => a.VolunteerId == volunteerId).Include(a=>a.CommonFile).ToListAsync();
+                if (volunteerFiles is null || volunteerFiles.Count == 0)
+                    return;
                 foreach (var item in volunteerFiles)
                 {
                     File.Delete(BasePath + item.CommonFile.Path);

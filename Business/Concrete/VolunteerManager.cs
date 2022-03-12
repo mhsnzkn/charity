@@ -101,18 +101,13 @@ namespace Business.Concrete
 
             return result;
         }
-
-        public async Task<VolunteerDto> GetByIdAsync(int id)
-        {
-            return mapper.Map<VolunteerDto>(await volunteerDal.GetByIdAsync(id));
-        }
         public async Task<VolunteerDetailDto> GetDetailDto(int id)
         {
             var query = volunteerDal.Get(a=>a.Id == id).Include(a=>a.VolunteerFiles).ThenInclude(a=>a.CommonFile);
             return await mapper.ProjectTo<VolunteerDetailDto>(query).FirstOrDefaultAsync();
         }
 
-        public async Task<TableResponseDto<VolunteerListDto>> GetTable(VolunteerTableParamsDto param)
+        public async Task<TableResponseDto<VolunteerTableDto>> GetTable(VolunteerTableParamsDto param)
         {
             var query = volunteerDal.Get().OrderByDescending(a=>a.CrtDate).AsQueryable();
             if(param.Status != VolunteerStatus.All)
@@ -133,9 +128,9 @@ namespace Business.Concrete
                 query = query.Skip(param.Start).Take(param.Length);
             }
 
-            var tableModel = new TableResponseDto<VolunteerListDto>()
+            var tableModel = new TableResponseDto<VolunteerTableDto>()
             {
-                Records = await mapper.ProjectTo<VolunteerListDto>(query).ToListAsync(),
+                Records = await mapper.ProjectTo<VolunteerTableDto>(query).ToListAsync(),
                 TotalItems = total,
                 PageIndex = (param.Start/param.Length)+1
             };
@@ -210,7 +205,8 @@ namespace Business.Concrete
                 case VolunteerStatus.DBS:
                     result = await mailService.SendDBSUploadDocMail(volunteer.FirstName, volunteer.LastName, volunteer.Email, volunteer.Key);
                     break;
-                case VolunteerStatus.Aggreement:
+                case VolunteerStatus.Agreement:
+                    // send agreement mail
                     break;
                 case VolunteerStatus.Induction:
                     break;
@@ -226,16 +222,13 @@ namespace Business.Concrete
         {
             var result = new Result();
             var volunteer = await volunteerDal.GetByIdAsync(id);
+
             if(volunteer == null)
-            {
-                result.SetError(UserMessages.DataNotFound);
-                return result;
-            }
+                return result.SetError(UserMessages.DataNotFound);
+            
             if(volunteer.Status == VolunteerStatus.Cancelled)
-            {
-                result.SetError(UserMessages.VolunteerRejected);
-                return result;
-            }
+                return result.SetError(UserMessages.VolunteerRejected);
+
             result = await volunteerDal.Cancel(volunteer, cancellationReason);
             await commonFileManager.DeleteVolunteerFile(id);
 
@@ -247,10 +240,7 @@ namespace Business.Concrete
             var volunteer = await volunteerDal.GetByIdAsync(id);
             var result = await Approve(volunteer);
             if (result.Error)
-            {
-                result.SetError(UserMessages.Fail);
-                return result;
-            }
+                return result.SetError(UserMessages.Fail);
 
             var emailResult = await SendStatusMail(volunteer);
             if (emailResult is not null && emailResult.Error)

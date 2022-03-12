@@ -20,6 +20,7 @@ import alertify from 'alertifyjs';
 import PasswordChangePage from './pages/PasswordChangePage';
 import ScrollTop from './Hooks/ScrollTop';
 import VolunteerDocumentFormPage from './pages/VolunteerDocumentFormPage';
+import Agreement from './pages/Agreement';
 
 function App() {
 
@@ -49,6 +50,7 @@ function App() {
             <Route path="Users/Edit/:id" element={<UserEdit />} />
             <Route path="Users/PassChange/:id" element={<PasswordChangePage />} />
             <Route path="MyAccount" element={<MyAccount />} />
+            <Route path="Agreements" element={<Agreement />} />
           </Route>
 
 

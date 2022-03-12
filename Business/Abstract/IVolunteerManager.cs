@@ -15,8 +15,7 @@ namespace Business.Abstract
 {
     public interface IVolunteerManager : IBaseManager<Volunteer, VolunteerModel>
     {
-        Task<TableResponseDto<VolunteerListDto>> GetTable(VolunteerTableParamsDto param);
-        Task<VolunteerDto> GetByIdAsync(int id);
+        Task<TableResponseDto<VolunteerTableDto>> GetTable(VolunteerTableParamsDto param);
         Task<Result> AddWithMail(VolunteerModel model);
         Task<ResultData<Volunteer>> Approve(Volunteer volunteer);
         Task<Result> Cancel(int id, string cancellationReason);
