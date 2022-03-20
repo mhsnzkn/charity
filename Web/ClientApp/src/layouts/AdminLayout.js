@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import SideMenu from '../components/SideMenu';
 import { ProvideAuth } from '../Hooks/Auth';
+import AxiosInterceptor from '../Hooks/AxiosInterceptor';
 import { PrivateRoute } from '../Wrappers/PrivateRoute';
 
 export default function AdminLayout() {
@@ -17,9 +18,12 @@ export default function AdminLayout() {
         }
     },[location])
 
+
+
     return (
         <ProvideAuth>
             <PrivateRoute>
+                <AxiosInterceptor/>
                 <div className="wrapper layout-div-height">
                     <SideMenu menuActive={menuActive} />
 

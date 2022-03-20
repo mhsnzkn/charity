@@ -28,7 +28,14 @@ export default function SideMenu({ menuActive }) {
                 <li>
                     <Link to="MyAccount">My Account</Link>
                 </li>
-
+                <li>
+                    <a href="#settings" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle collapsed">Settings</a>
+                    <ul className="list-unstyled collapse" id="settings" >
+                        <li>
+                        <Link to="Agreements">Agreements</Link>
+                        </li>
+                    </ul>
+                </li>
                 <li>
                     <a href="/" onClick={() => auth.signout()}>Log Out</a>
                 </li>

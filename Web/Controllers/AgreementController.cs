@@ -42,14 +42,9 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<Result> Post([FromBody] AgreementModel agreement)
         {
+            if(agreement.Id > 0)
+                return await agreementManager.Update(agreement);
             return await agreementManager.Add(agreement);
-        }
-
-        // PUT api/<AgreementController>/5
-        [HttpPut("{id}")]
-        public async Task<Result> Put(int id, [FromBody] AgreementModel agreement)
-        {
-            return await agreementManager.Update(agreement);
         }
 
         // DELETE api/<AgreementController>/5

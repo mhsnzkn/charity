@@ -34,6 +34,7 @@ namespace Data.Constants
         public const string FileCannotBeUploaded = "The file cannot be uploaded! Please contact admin!";
 
         // Agreement
-        public const string AgreementInUse = "Agreement in use. Cannot be deleted!";
+        public const string AgreementInUse = "Agreement in use. Cannot be deleted/altered!";
+        public const string AgreementDisabled = "Agreement disabled!";
     }
 }

@@ -26,6 +26,12 @@ namespace Data.Utility.Results
             return this;
         }
 
+        public Result SetMessage(string message)
+        {
+            this.Message=message;
+            return this;
+        }
+
         public void AddMessage(string message)
         {
             this.Message += " "+message;

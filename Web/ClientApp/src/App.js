@@ -6,6 +6,7 @@ import 'alertifyjs/build/css/alertify.css';
 import Footer from './components/Footer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import VolunteerFormPage from './pages/VolunteerFormPage';
+import AgreementEdit from './pages/AgreementEdit';
 import PublicLayout from './layouts/PublicLayout';
 import NotFound from './pages/NotFound';
 import AdminLayout from './layouts/AdminLayout';
@@ -51,6 +52,8 @@ function App() {
             <Route path="Users/PassChange/:id" element={<PasswordChangePage />} />
             <Route path="MyAccount" element={<MyAccount />} />
             <Route path="Agreements" element={<Agreement />} />
+            <Route path="Agreements/Add" element={<AgreementEdit />} />
+            <Route path="Agreements/Edit/:id" element={<AgreementEdit />} />
           </Route>
 
 

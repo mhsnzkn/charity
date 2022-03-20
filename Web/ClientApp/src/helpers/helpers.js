@@ -2,9 +2,11 @@
 export const getToken = ()=>{
     return localStorage.getItem('token');
 }
-
+export const getBearerToken = ()=>{
+    return 'Bearer '+getToken();
+}
 export const getHttpHeader = () =>{
-    return {headers:{'Authorization':'Bearer '+getToken()}};
+    return {headers:{'Authorization': getBearerToken()}};
 }
 
 export const getLengthUrl = (url) => {

@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
 import Paginator from '../components/Paginator';
-import { getHttpHeader, getLengthUrl, getPageIndex } from '../helpers/helpers';
+import { getLengthUrl, getPageIndex } from '../helpers/helpers';
 import { useAxiosGet } from '../Hooks/HttpRequests';
 
 export default function Agreement() {
@@ -29,16 +29,14 @@ export default function Agreement() {
         setUrl(baseUrl + "?" + params.toString());
     }
     const remove = (id) => {
-        alertify.confirm('Delete User', 'User will be deleted permanently', 
+        alertify.confirm('Delete Agreement', 'Agreement will be deleted or disabled', 
         function(){
-            axios.delete(baseUrl+"/"+id, getHttpHeader()).then( res =>{
+            axios.delete(baseUrl+"/"+id).then( res =>{
                 if (res.data.error) {
                     return alertify.error(res.data.message);
                 }
                 alertify.success(res.data.message);
                 setUpdate(update + 1);
-            }).catch( err =>{
-                alertify.error('Connection error!')
             })
         },null)
     }
@@ -49,52 +47,44 @@ export default function Agreement() {
 
             tableRows = response.data.records.map(item => {
                 return <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>{item.email}</td>
-                    <td>{item.job}</td>
-                    <td>{item.role}</td>
-                    <td>{item.status === Pasive ?
-                        <span className="badge badge-danger">{item.status}</span>
+                    <td>{item.title}</td>
+                    <td>{item.uptDate ? new Date(item.update).toLocaleDateString() : new Date(item.crtDate).toLocaleDateString()}</td>
+                    <td>{item.isActive === true ?
+                        <span className="badge badge-success">Active</span>
                         :
-                        <span className="badge badge-light text-dark">{item.status}</span>}
+                        <span className="badge badge-danger">Pasive</span>}
                     </td>
                     <td>
-                        <Link className='btn btn-sm btn-info m-1' to={`/Users/edit/${item.id}`} title='Edit User'>
+                        <Link className='btn btn-sm btn-info m-1' to={`/Agreements/edit/${item.id}`} title='Edit Agreement'>
                             <i className='fas fa-edit'></i>
                         </Link>
-                        {item.status === Pasive ?
+                        {item.isActive &&
                             <>
-                                <button className='btn btn-sm btn-danger m-1' onClick={() => remove(item.id)} title='Delete'>
+                                <button className='btn btn-sm btn-danger m-1' onClick={() => remove(item.id)} title='Delete/Passive'>
                                     <i className='fas fa-trash'></i>
                                 </button>
-                            </>
-                            :
-                            <>
-                                <Link to={`/Users/PassChange/${item.id}`} className='btn btn-sm btn-dark m-1' title='Password Change'>
-                                    <i className='fas fa-unlock-alt'></i>
-                                </Link>
                             </>
                         }
                     </td>
                 </tr>
             })
         } else {
-            tableRows = <tr><td colSpan="5">No Data</td></tr>
+            tableRows = <tr><td colSpan="4">No Data</td></tr>
         }
     }
     if(response.loading){
-        tableRows = <tr><td colSpan="6" className='text-center'><Loader /></td></tr>
+        tableRows = <tr><td colSpan="4" className='text-center'><Loader /></td></tr>
     }
     if(response.error){
-        tableRows = <tr><td colSpan="6" className='text-danger'>Connection Error!</td></tr>
+        tableRows = <tr><td colSpan="4" className='text-danger'>Connection Error!</td></tr>
     }
 
 
     return (
         <>
-            <h4>Users</h4><hr />
+            <h4>Agreements</h4><hr />
             <div className='m-1 p-1'>
-                <Link to="/Users/Add" className='btn btn-primary'><i className='fas fa-plus'></i> Add</Link>
+                <Link to="/Agreements/Add" className='btn btn-primary'><i className='fas fa-plus'></i> Add</Link>
             </div>
 
 
@@ -117,10 +107,8 @@ export default function Agreement() {
             <table className="table table-striped table-border table-responsive-lg">
                 <thead className="thead-light">
                     <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Job</th>
-                        <th scope="col">Role</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Date</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>

@@ -29,9 +29,9 @@ namespace Business.Concrete
             this.volunteerAgreementDal = volunteerAgreementDal;
         }
 
-        public async Task<TableResponseDto<AgreementTableDto>> GetTable(TableParams param)
+        public async Task<TableResponseDto<Agreement>> GetTable(TableParams param)
         {
-            var query = agreementDal.Get().OrderByDescending(a => a.Order).AsQueryable();
+            var query = agreementDal.Get();
 
             if (!string.IsNullOrEmpty(param.SearchString))
                 query = query.Where(a => a.Title.Contains(param.SearchString));
@@ -42,9 +42,9 @@ namespace Business.Concrete
                 query = query.Skip(param.Start).Take(param.Length);
             }
 
-            var tableModel = new TableResponseDto<AgreementTableDto>()
+            var tableModel = new TableResponseDto<Agreement>()
             {
-                Records = await mapper.ProjectTo<AgreementTableDto>(query).ToListAsync(),
+                Records = await query.ToListAsync(),
                 TotalItems = total,
                 PageIndex = (param.Start / param.Length) + 1
             };
@@ -80,9 +80,23 @@ namespace Business.Concrete
             try
             {
                 var entity = await agreementDal.GetByIdAsync(model.Id);
+                var existingData = await volunteerAgreementDal.Get(a => a.AgreementId == model.Id).AnyAsync();
+                if (existingData)
+                {
+                    result.SetError(UserMessages.AgreementInUse);
+                    if (entity.IsActive != model.IsActive)
+                    {
+                        entity.IsActive = model.IsActive;
+                        await agreementDal.Save();
+                        result.AddMessage(UserMessages.AgreementDisabled);
+                    }
+                    return result;
+                }
+
                 entity.Title = model.Title;
                 entity.Content = model.Content;
                 entity.Order = model.Order;
+                entity.IsActive = model.IsActive;
                 agreementDal.Update(entity);
                 await agreementDal.Save();
             }
@@ -99,11 +113,15 @@ namespace Business.Concrete
             var result = new Result();
             try
             {
+                var entity = await agreementDal.GetByIdAsync(id);
                 var existingData = await volunteerAgreementDal.Get(a => a.AgreementId == id).AnyAsync();
                 if (existingData)
-                    return result.SetError(UserMessages.AgreementInUse);
+                {
+                    entity.IsActive = false;
+                    await agreementDal.Save();
+                    return result.SetMessage(UserMessages.AgreementDisabled);
+                }
 
-                var entity = new Agreement { Id = id };
                 agreementDal.Delete(entity);
                 await agreementDal.Save();
             }
