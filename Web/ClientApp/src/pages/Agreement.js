@@ -48,8 +48,8 @@ export default function Agreement() {
             tableRows = response.data.records.map(item => {
                 return <tr key={item.id}>
                     <td>{item.title}</td>
-                    <td>{item.uptDate ? new Date(item.update).toLocaleDateString() : new Date(item.crtDate).toLocaleDateString()}</td>
-                    <td>{item.isActive === true ?
+                    <td>{new Date(item.date).toLocaleDateString()}</td>
+                    <td>{item.isActive ?
                         <span className="badge badge-success">Active</span>
                         :
                         <span className="badge badge-danger">Pasive</span>}

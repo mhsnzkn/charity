@@ -21,7 +21,14 @@ namespace Data.AutoMapper
                 .ForMember(o => o.Name, m => m.MapFrom(o => o.FirstName + " " + o.LastName));
             CreateMap<Volunteer, VolunteerDto>();
             CreateMap<Volunteer, VolunteerDetailDto>()
-                .ForMember(o => o.Files, m => m.MapFrom(o => o.VolunteerFiles.Select(x => x.CommonFile).ToList()));
+                .ForMember(o => o.Files, m => m.MapFrom(o => o.VolunteerFiles.Select(x => x.CommonFile).ToList()))
+                .ForMember(o => o.Agreements , m => m.MapFrom(o => o.VolunteerAgreements.Select(x =>new AgreementTableDto
+                {
+                    Id = x.Agreement.Id,
+                    IsActive = x.Agreement.IsActive,
+                    Date = x.UptDate ?? x.CrtDate,
+                    Title = x.Agreement.Title,
+                }).ToList()));
             #endregion
 
             #region User
@@ -32,6 +39,8 @@ namespace Data.AutoMapper
 
             #region Agreement
             CreateMap<Agreement, AgreementModel>().ReverseMap();
+            CreateMap<Agreement, AgreementTableDto>()
+                .ForMember(o => o.Date, m => m.MapFrom(o => o.UptDate ?? o.CrtDate));
             #endregion
         }
     }

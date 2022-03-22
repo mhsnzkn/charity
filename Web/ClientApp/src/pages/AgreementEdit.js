@@ -1,4 +1,4 @@
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { useFormik } from 'formik';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import LoaderButton from '../components/LoaderButton';
@@ -6,40 +6,24 @@ import * as yup from 'yup'
 import { getHttpHeader } from '../helpers/helpers';
 import axios from 'axios';
 import alertify from 'alertifyjs';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default function AgreementEdit() {
     const params = useParams();
     const navigate = useNavigate();
     const [btnLoading, setBtnLoading] = useState(false);
-    const [values, setValues] = useState({
-        title: '',
-        order: 1,
-        content: '',
-        isActive: true
-    });
+    const [values, setValues] = useState({});
     const url = '/api/agreement'
 
-    useEffect(()=>{
+
+    useEffect(() => {
         if (params.id) {
             axios.get(url + "/" + params.id).then(res => {
                 setValues(res.data)
             })
         }
-    },[params.id])
-    
-
-    // const initialValues = {
-    //     title : values?.title ?? '',
-    //     order : values?.order ?? 1,
-    //     content : values?.content ?? '',
-    //     status :  values?.status ?? "Active"
-    // };
-    const validationSchema = yup.object().shape({
-        title: yup.string().required('Required'),
-        order: yup.number().required('Required'),
-        content: yup.string().required('Required'),
-        isActive: yup.bool()
-    });
+    }, [params.id])
 
     const submitHandler = values => {
         setBtnLoading(true);
@@ -51,56 +35,81 @@ export default function AgreementEdit() {
                 } else {
                     navigate("/Agreements")
                 }
-                //setBtnLoading(false);
             })
-            .finally(()=> setBtnLoading(false))
+            .finally(() => setBtnLoading(false))
     }
-
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            title: values.title || '',
+            order: values.order || 1,
+            content: values.content || '',
+            isActive: values.isActive ?? true
+        },
+        onSubmit: submitHandler,
+        validationSchema: yup.object().shape({
+            title: yup.string().required('Required'),
+            order: yup.number().required('Required'),
+            content: yup.string().required('Required'),
+            isActive: yup.bool()
+        })
+    });
+    
     return (
         <>
             <h4>Agreement</h4>
             <hr />
             <Link to="/Agreements" className='btn btn-dark m-1'><i className='fas fa-undo'></i> Back</Link>
-            <Formik
-                initialValues={values}
-                onSubmit={submitHandler}
-                validationSchema={validationSchema}
-                enableReinitialize={true}
-            >
-                {({ formValues }) => (
-                    <Form>
-                        <h5>Details</h5>
-                        <div className="form-row">
-                            <div className="form-group col-md-6">
-                                <label htmlFor="title">Title</label>
-                                <Field id="title" name="title" className="form-control" />
-                                <ErrorMessage component="span" name="title" className="text-danger" />
-                            </div>
-                            <div className="form-group col-md-6">
-                                <label htmlFor="order">Order</label>
-                                <Field type="number" id="order" name="order" className="form-control" />
-                                <ErrorMessage component="span" name="order" className="text-danger" />
-                            </div>
-                            <div className="form-group col-md-12">
-                                <label htmlFor="contenttext">Content</label>
-                                <Field as="textarea" id="contenttext" name="content" className="form-control" />
-                                <ErrorMessage component="span" name="content" className="text-danger" />
-                            </div>
-                            <div className="form-check">
-                                <Field type="checkbox" id="isActive" name="isActive" className="form-check-input" />
-                                <label className="form-check-label" htmlFor="isActive">
-                                    Status
-                                </label>
-                            </div>
-                        </div>
+            <form onSubmit={formik.handleSubmit}>
+                <h5>Details</h5>
+                <div className="form-row">
+                    <div className="form-group col-md-6">
+                        <label htmlFor="title">Title</label>
+                        <input id="title" name="title" className="form-control"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.title}
+                        />
+                        {formik.touched.title && formik.errors.title && <small className='text-danger'>{formik.errors.title}</small>}
+                    </div>
+                    <div className="form-group col-md-6">
+                        <label htmlFor="order">Order</label>
+                        <input type="number" id="order" name="order" className="form-control"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.order}
+                        />
+                        {formik.touched.order && formik.errors.order && <small className='text-danger'>{formik.errors.order}</small>}
+                    </div>
+                    <div className="form-group col-md-12">
+                        <label htmlFor="contenttext">Content</label>
+                        <CKEditor
+                            editor={ClassicEditor}
+                            data={values?.content}
+                            onChange={(event, editor) => {
+                                //const data = editor.getData();
+                                formik.setFieldValue('content', editor.getData())
+                            }}
+                        />
+                        {formik.touched.content && formik.errors.content && <small className='text-danger'>{formik.errors.content}</small>}
+                    </div>
+                    <div className="form-check">
+                        <input type="checkbox" id="isActive" name="isActive" className="form-check-input"
+                            onChange={formik.handleChange}
+                            value={formik.values.isActive}
+                            checked={formik.values.isActive}
+                        />
+                        <label className="form-check-label" htmlFor="isActive">
+                            Status
+                        </label>
+                    </div>
+                </div>
 
-                        <div className='d-flex justify-content-end'>
-                            <LoaderButton isLoading={btnLoading} type="submit" className="btn btn-primary">Save</LoaderButton>
-                        </div>
-                    </Form>
+                <div className='d-flex justify-content-end'>
+                    <LoaderButton isLoading={btnLoading} type="submit" className="btn btn-primary">Save</LoaderButton>
+                </div>
+            </form>
 
-                )}
-            </Formik>
         </>
     );
 }

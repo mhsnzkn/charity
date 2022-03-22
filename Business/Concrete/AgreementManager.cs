@@ -29,7 +29,7 @@ namespace Business.Concrete
             this.volunteerAgreementDal = volunteerAgreementDal;
         }
 
-        public async Task<TableResponseDto<Agreement>> GetTable(TableParams param)
+        public async Task<TableResponseDto<AgreementTableDto>> GetTable(TableParams param)
         {
             var query = agreementDal.Get();
 
@@ -42,9 +42,9 @@ namespace Business.Concrete
                 query = query.Skip(param.Start).Take(param.Length);
             }
 
-            var tableModel = new TableResponseDto<Agreement>()
+            var tableModel = new TableResponseDto<AgreementTableDto>()
             {
-                Records = await query.ToListAsync(),
+                Records = await mapper.ProjectTo<AgreementTableDto>(query).ToListAsync(),
                 TotalItems = total,
                 PageIndex = (param.Start / param.Length) + 1
             };

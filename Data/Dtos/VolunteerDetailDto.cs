@@ -10,5 +10,6 @@ namespace Data.Dtos
     public class VolunteerDetailDto : VolunteerDto
     {
         public List<CommonFile> Files { get; set; }
+        public List<AgreementTableDto> Agreements { get; set; }
     }
 }

@@ -17,6 +17,6 @@ namespace Business.Abstract
     {
         Task<Result> Delete(int id);
         Task<Agreement> GetById(int id);
-        Task<TableResponseDto<Agreement>> GetTable(TableParams param);
+        Task<TableResponseDto<AgreementTableDto>> GetTable(TableParams param);
     }
 }
