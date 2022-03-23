@@ -1,2 +1,2 @@
-export const Pasive = 'Pasive'
+export const Passive = 'Passive'
 export const Active = 'Active'

@@ -44,7 +44,7 @@ namespace Business.Utility.MailService
                 {
                     foreach(var item in cc)
                     {
-                        //mailMessage.CC.Add(item);
+                        mailMessage.CC.Add(item);
                     }
                 }
                 mailMessage.To.Add(to);
@@ -67,7 +67,7 @@ namespace Business.Utility.MailService
 
         public async Task<Result> SendDBSDocumentMail(string firstName, string lastName, string email)
         {
-            string body = $"{Header}<p>Dear {firstName} {lastName}</p><p>Following our earlier conversation, we would like to proceed to the next stage and invite you to complete an enhanced DBS check by following the link below.</p><ul><li>Please go to <a href=\"https://www.carecheck.co.uk\" target=\"_blank\">www.carecheck.co.uk</a></li><li>Click on 'Start a DBS application'</li><li>Click on 'complete your DBS application'</li><li>Tick the important note box</li><li>You must request an enhanced application</li><li>You will be taken to the log in page.</li><li>Organisation ref is <b>HEART4REFUGEES</b></li><li>Please leave the organisation code blank and then click start.</li></ul><p>Once you have submitted it, myself or a member of my team will contact you to check your ID documents.</p><p>Turn around is pretty quick and we will be in touch as soon as we have clearance.</p><br/><p>Kind Regards</p><p>Heart4Refugees Team</p>";
+            string body = $"{Header}<p>Dear {firstName} {lastName}</p><p>Following our earlier conversation, we would like to proceed to the next stage and invite you to complete an enhanced DBS check by following the link below.</p><ul><li>Please go to <a href=\"https://www.carecheck.co.uk\" target=\"_blank\">www.carecheck.co.uk</a></li><li>Click on 'Start a DBS application'</li><li>Click on 'complete your DBS application'</li><li>Tick the important note box</li><li>You must request an enhanced application</li><li>You will be taken to the log in page.</li><li>Organisation ref is <b>HEART4REFUGEES</b></li><li>Please leave the organisation code blank and then click start.</li></ul><p>Once you have submitted it, a member of our team will contact you to check your ID documents.</p><p>Turn around is pretty quick and we will be in touch as soon as we have clearance.</p><br/><p>Kind Regards</p><p>Heart4Refugees Team</p>";
             var result = await SendMail("DBS Request", body, email);
             return result;
         }

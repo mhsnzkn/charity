@@ -20,7 +20,7 @@ namespace Data.Constants
     }
     public enum UserStatus
     {
-        Pasive,
+        Passive,
         Active,
     }
 

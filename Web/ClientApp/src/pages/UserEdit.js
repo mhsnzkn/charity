@@ -26,7 +26,7 @@ export default function UserEdit() {
         name: yup.string().required('Required'),
         email: yup.string().email("Invalid email").required('Required'),
         role: yup.string().required('Required'),
-        status: yup.string().oneOf(['Active','Pasive']).required('Required')
+        status: yup.string().oneOf(['Active','Passive']).required('Required')
     });
 
     const submitHandler = values =>{
@@ -89,7 +89,7 @@ export default function UserEdit() {
                             <div className="form-group col-md-6">
                                 <label htmlFor="status">Status</label>
                                 <Field as="select" id="status" name="status" className="form-select" >
-                                    <option value="Pasive">Pasive</option>
+                                    <option value="Passive">Passive</option>
                                     <option value="Active">Active</option>
                                 </Field>
                                 <ErrorMessage component="span" name="status" className="text-danger" />

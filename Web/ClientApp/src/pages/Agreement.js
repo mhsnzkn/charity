@@ -52,7 +52,7 @@ export default function Agreement() {
                     <td>{item.isActive ?
                         <span className="badge badge-success">Active</span>
                         :
-                        <span className="badge badge-danger">Pasive</span>}
+                        <span className="badge badge-danger">Passive</span>}
                     </td>
                     <td>
                         <Link className='btn btn-sm btn-info m-1' to={`/Agreements/edit/${item.id}`} title='Edit Agreement'>

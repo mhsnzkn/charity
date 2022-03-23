@@ -25,7 +25,7 @@ export default function UserAdd() {
         password: yup.string().min(5, "Must be at least 5 characters").required('Required'),
         passwordConfirm: yup.string().oneOf([yup.ref('password'), null], "Passwords don't match!").required('Required'),
         role: yup.string().required('Required'),
-        status: yup.string().oneOf(['Active','Pasive']).required('Required')
+        status: yup.string().oneOf(['Active','Passive']).required('Required')
     });
 
     const submitHandler = values =>{
@@ -96,7 +96,7 @@ export default function UserAdd() {
                             <div className="form-group col-md-6">
                                 <label htmlFor="status">Status</label>
                                 <Field as="select" id="status" name="status" className="form-select" >
-                                    <option value="Pasive">Pasive</option>
+                                    <option value="Passive">Passive</option>
                                     <option value="Active">Active</option>
                                 </Field>
                                 <ErrorMessage component="span" name="status" className="text-danger" />

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Paginator from '../components/Paginator';
 import Loader from '../components/Loader';
-import { Pasive } from '../constants/userStatus';
+import { Passive } from '../constants/userStatus';
 import { getHttpHeader, getLengthUrl, getPageIndex } from '../helpers/helpers';
 import { useAxiosGet } from '../Hooks/HttpRequests';
 
@@ -54,7 +54,7 @@ export default function Users() {
                     <td>{item.email}</td>
                     <td>{item.job}</td>
                     <td>{item.role}</td>
-                    <td>{item.status === Pasive ?
+                    <td>{item.status === Passive ?
                         <span className="badge badge-danger">{item.status}</span>
                         :
                         <span className="badge badge-light text-dark">{item.status}</span>}
@@ -63,7 +63,7 @@ export default function Users() {
                         <Link className='btn btn-sm btn-info m-1' to={`/Users/edit/${item.id}`} title='Edit User'>
                             <i className='fas fa-edit'></i>
                         </Link>
-                        {item.status === Pasive ?
+                        {item.status === Passive ?
                             <>
                                 <button className='btn btn-sm btn-danger m-1' onClick={() => remove(item.id)} title='Delete'>
                                     <i className='fas fa-trash'></i>

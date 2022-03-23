@@ -62,7 +62,7 @@ namespace Business.Concrete
         public async Task<Result> Update(UserEditModel model)
         {
             var result = new Result();
-            if(model.Id == 1 && model.Status == UserStatus.Pasive)
+            if(model.Id == 1 && model.Status == UserStatus.Passive)
             {
                 result.SetError(UserMessages.UnauthorizedAccess);
                 return result;
