@@ -260,6 +260,9 @@ namespace Business.Concrete
             if(volunteer.Status != VolunteerStatus.DBS)
                 return result.SetError(UserMessages.FileCannotBeUploaded);
 
+            if (model.Files is null)
+                return result.SetError(UserMessages.Fail);
+
             for (int i = 0; i < model.Files.Length; i++)
             {
                 var fileResult = await commonFileManager.UploadVolunteerFile(volunteer, model.Files[i], volunteer.Id + "-" + i, CommonFileTypes.DbsDocument);
