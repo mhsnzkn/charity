@@ -61,8 +61,6 @@ export default function AgreementEdit() {
 
     return (
         <>
-            <h4>Agreement</h4>
-            <hr />
             <Link to="/Agreements" className='btn btn-dark m-1'><i className='fas fa-undo'></i> Back</Link>
             {loading ?
                 <Loader />

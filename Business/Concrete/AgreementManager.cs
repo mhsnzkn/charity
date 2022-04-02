@@ -33,7 +33,7 @@ namespace Business.Concrete
 
         public async Task<TableResponseDto<AgreementTableDto>> GetTable(TableParams param)
         {
-            var query = agreementDal.Get();
+            var query = agreementDal.Get().OrderBy(a=>a.Order).AsQueryable();
 
             if (!string.IsNullOrEmpty(param.SearchString))
                 query = query.Where(a => a.Title.Contains(param.SearchString));
