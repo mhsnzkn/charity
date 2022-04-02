@@ -2,6 +2,7 @@ import { useFormik } from 'formik';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import LoaderButton from '../components/LoaderButton';
+import Loader from '../components/Loader';
 import * as yup from 'yup'
 import { getHttpHeader } from '../helpers/helpers';
 import axios from 'axios';
@@ -14,14 +15,17 @@ export default function AgreementEdit() {
     const navigate = useNavigate();
     const [btnLoading, setBtnLoading] = useState(false);
     const [values, setValues] = useState({});
+    const [loading, setLoading] = useState(false);
     const url = '/api/agreement'
 
 
     useEffect(() => {
         if (params.id) {
+            setLoading(true);
             axios.get(url + "/" + params.id).then(res => {
                 setValues(res.data)
             })
+                .finally(() => setLoading(false))
         }
     }, [params.id])
 
@@ -54,62 +58,66 @@ export default function AgreementEdit() {
             isActive: yup.bool()
         })
     });
-    
+
     return (
         <>
             <h4>Agreement</h4>
             <hr />
             <Link to="/Agreements" className='btn btn-dark m-1'><i className='fas fa-undo'></i> Back</Link>
-            <form onSubmit={formik.handleSubmit}>
-                <h5>Details</h5>
-                <div className="form-row">
-                    <div className="form-group col-md-6">
-                        <label htmlFor="title">Title</label>
-                        <input id="title" name="title" className="form-control"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.title}
-                        />
-                        {formik.touched.title && formik.errors.title && <small className='text-danger'>{formik.errors.title}</small>}
+            {loading ?
+                <Loader />
+                :
+                <form onSubmit={formik.handleSubmit}>
+                    <h5>Details</h5>
+                    <div className="form-row">
+                        <div className="form-group col-md-6">
+                            <label htmlFor="title">Title</label>
+                            <input id="title" name="title" className="form-control"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.title}
+                            />
+                            {formik.touched.title && formik.errors.title && <small className='text-danger'>{formik.errors.title}</small>}
+                        </div>
+                        <div className="form-group col-md-6">
+                            <label htmlFor="order">Order</label>
+                            <input type="number" id="order" name="order" className="form-control"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.order}
+                            />
+                            {formik.touched.order && formik.errors.order && <small className='text-danger'>{formik.errors.order}</small>}
+                        </div>
+                        <div className="form-group col-md-12">
+                            <label htmlFor="contenttext">Content</label>
+                            <CKEditor
+                                editor={ClassicEditor}
+                                data={values?.content}
+                                onChange={(event, editor) => {
+                                    //const data = editor.getData();
+                                    formik.setFieldValue('content', editor.getData())
+                                }}
+                            />
+                            {formik.touched.content && formik.errors.content && <small className='text-danger'>{formik.errors.content}</small>}
+                        </div>
+                        <div className="form-check">
+                            <input type="checkbox" id="isActive" name="isActive" className="form-check-input"
+                                onChange={formik.handleChange}
+                                value={formik.values.isActive}
+                                checked={formik.values.isActive}
+                            />
+                            <label className="form-check-label" htmlFor="isActive">
+                                Status
+                            </label>
+                        </div>
                     </div>
-                    <div className="form-group col-md-6">
-                        <label htmlFor="order">Order</label>
-                        <input type="number" id="order" name="order" className="form-control"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.order}
-                        />
-                        {formik.touched.order && formik.errors.order && <small className='text-danger'>{formik.errors.order}</small>}
-                    </div>
-                    <div className="form-group col-md-12">
-                        <label htmlFor="contenttext">Content</label>
-                        <CKEditor
-                            editor={ClassicEditor}
-                            data={values?.content}
-                            onChange={(event, editor) => {
-                                //const data = editor.getData();
-                                formik.setFieldValue('content', editor.getData())
-                            }}
-                        />
-                        {formik.touched.content && formik.errors.content && <small className='text-danger'>{formik.errors.content}</small>}
-                    </div>
-                    <div className="form-check">
-                        <input type="checkbox" id="isActive" name="isActive" className="form-check-input"
-                            onChange={formik.handleChange}
-                            value={formik.values.isActive}
-                            checked={formik.values.isActive}
-                        />
-                        <label className="form-check-label" htmlFor="isActive">
-                            Status
-                        </label>
-                    </div>
-                </div>
 
-                <div className='d-flex justify-content-end'>
-                    <LoaderButton isLoading={btnLoading} type="submit" className="btn btn-primary">Save</LoaderButton>
-                </div>
-            </form>
+                    <div className='d-flex justify-content-end'>
+                        <LoaderButton isLoading={btnLoading} type="submit" className="btn btn-primary">Save</LoaderButton>
+                    </div>
+                </form>
 
+            }
         </>
     );
 }
