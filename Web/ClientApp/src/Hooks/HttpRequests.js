@@ -24,6 +24,13 @@ export function useAxiosGet(url, state = null){
                     error: false
                 })
             })
+            .catch( err =>{
+                setRequest({
+                    loading: false,
+                    data: null,
+                    error: true
+                })
+            })
     }, [url, auth, state])
 
     return request

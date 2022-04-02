@@ -2,11 +2,13 @@ import alertify from 'alertifyjs';
 import axios from 'axios';
 import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import LoaderButton from './LoaderButton';
+import LoaderButton from '../components/LoaderButton';
 
-export default function VolunteerForm({ submit }) {
+export default function VolunteerForm() {
     const [btnLoading, setBtnLoading] = useState(false);
+    const navigate = useNavigate();
 
     const initialValues = {
         firstName: '',
@@ -56,11 +58,10 @@ export default function VolunteerForm({ submit }) {
             if(res.data.error){
                 alertify.error(res.data.message)
             }else{
-                submit();
+                navigate("/Forms/Completed");
             }
-            setBtnLoading(false);
         })
-        .catch(err => {
+        .finally(() => {
             setBtnLoading(false);
         })
         

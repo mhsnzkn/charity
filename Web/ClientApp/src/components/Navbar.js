@@ -13,7 +13,7 @@ export default function Navbar({toggleMenu}) {
                     <span> Menu</span>
                 </button>
                 
-            <button className='btn btn-small btn-dark float-right ' onClick={() => auth.signout()}><i className='fas fa-sign-out-alt'></i></button>
+            <a href='https://mail.ionos.co.uk' target="_blank" rel='noreferrer' className='btn btn-small btn-dark float-right' title='Go to mail'><i className='fas fa-envelope'></i></a>
             </div>
         </nav>
     );

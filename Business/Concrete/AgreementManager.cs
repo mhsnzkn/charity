@@ -21,12 +21,14 @@ namespace Business.Concrete
         private readonly IAgreementDal agreementDal;
         private readonly IMapper mapper;
         private readonly IVolunteerAgreementDal volunteerAgreementDal;
+        private readonly IVolunteerManager volunteerManager;
 
-        public AgreementManager(IAgreementDal agreementDal, IMapper mapper, IVolunteerAgreementDal volunteerAgreementDal)
+        public AgreementManager(IAgreementDal agreementDal, IMapper mapper, IVolunteerAgreementDal volunteerAgreementDal, IVolunteerManager volunteerManager)
         {
             this.agreementDal = agreementDal;
             this.mapper = mapper;
             this.volunteerAgreementDal = volunteerAgreementDal;
+            this.volunteerManager = volunteerManager;
         }
 
         public async Task<TableResponseDto<AgreementTableDto>> GetTable(TableParams param)
@@ -57,6 +59,11 @@ namespace Business.Concrete
             return await agreementDal.GetByIdAsync(id);
         }
 
+        public async Task<List<Agreement>> GetActiveAgreements()
+        {
+            return await agreementDal.Get(a=>a.IsActive).ToListAsync();
+        }
+
         public async Task<Result> Add(AgreementModel model)
         {
             var result = new Result();
@@ -83,13 +90,16 @@ namespace Business.Concrete
                 var existingData = await volunteerAgreementDal.Get(a => a.AgreementId == model.Id).AnyAsync();
                 if (existingData)
                 {
-                    result.SetError(UserMessages.AgreementInUse);
+                    if(entity.Title != model.Title || entity.Content != model.Content || entity.Order != model.Order)
+                    {
+                        result.SetError(UserMessages.AgreementInUse);
+                    }
                     if (entity.IsActive != model.IsActive)
                     {
                         entity.IsActive = model.IsActive;
-                        await agreementDal.Save();
                         result.AddMessage(UserMessages.AgreementDisabled);
                     }
+                    await agreementDal.Save();
                     return result;
                 }
 
@@ -99,6 +109,45 @@ namespace Business.Concrete
                 entity.IsActive = model.IsActive;
                 agreementDal.Update(entity);
                 await agreementDal.Save();
+            }
+            catch (Exception)
+            {
+                result.SetError(UserMessages.Fail);
+            }
+
+            return result;
+        }
+
+        public async Task<Result> SaveVolunteerAgreements(VolunteerAgreementPostModel model)
+        {
+            var result = new Result();
+            if (model.AgreementIds == null || model.AgreementIds.Length == 0)
+                return result.SetError(UserMessages.DataNotFound);
+
+            var volunteer = await volunteerManager.GetVolunteerByKey(model.Key);
+            if (volunteer is null)
+                return result.SetError(UserMessages.UserNotFound);
+
+            try
+            {
+                var existingAgreements = await volunteerAgreementDal.Get(a => a.VolunteerId == volunteer.Id).ToListAsync();
+                foreach (var item in model.AgreementIds)
+                {
+                    if (existingAgreements.Select(a => a.AgreementId).Contains(item))
+                        continue;
+                    var newAgreement = new VolunteerAgreement
+                    {
+                        AgreementId = item,
+                        Volunteer = volunteer
+                    };
+                    volunteerAgreementDal.Add(newAgreement);
+                }
+                if (volunteer.Status == VolunteerStatus.Agreement)
+                {
+                    volunteer.Status = VolunteerStatus.Induction;
+                    volunteerManager.Update(volunteer);
+                }
+                await volunteerAgreementDal.Save();
             }
             catch (Exception)
             {

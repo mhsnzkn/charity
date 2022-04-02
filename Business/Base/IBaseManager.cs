@@ -8,14 +8,13 @@ using System.Threading.Tasks;
 
 namespace Business.Base
 {
-    public interface IBaseManager<TEntity, TModel> 
-        where TEntity : class
-        where TModel : class
+    public interface IBaseManager<T> 
+        where T : class
     {
         //Task<TEntity> GetByIdAsync(int id);
         //Task<List<T>> Get(Expression<Func<T, bool>> expression = null);
-        Task<Result> Add(TModel model);
-        Task<Result> Update(TModel model);
+        Task<Result> Add(T entity);
+        Task<Result> Update(T entity);
         // Task<Result> Delete(TEntity entity);
     }
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import LoaderButton from './LoaderButton';
+import LoaderButton from '../components/LoaderButton';
 import { useNavigate, useParams } from 'react-router-dom';
 import alertify from 'alertifyjs';
 
@@ -30,10 +30,8 @@ export default function VolunteerDocumentForm() {
                 } else {
                     navigate("/Forms/Completed");
                 }
-                setBtnLoading(false);
             })
-            .catch(err => {
-                alertify.error("Submit unsuccessful!")
+            .finally(() => {
                 setBtnLoading(false);
             })
     }

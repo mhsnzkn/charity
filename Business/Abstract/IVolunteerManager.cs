@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
-    public interface IVolunteerManager : IBaseManager<Volunteer, VolunteerModel>
+    public interface IVolunteerManager
     {
         Task<TableResponseDto<VolunteerTableDto>> GetTable(VolunteerTableParamsDto param);
         Task<Result> AddWithMail(VolunteerModel model);
@@ -23,5 +23,8 @@ namespace Business.Abstract
         Task<Result> ApproveAndCheckMail(int id);
         Task<Result> UploadDocuments(VolunteerDocumentPostModel model);
         Task<VolunteerDetailDto> GetDetailDto(int id);
+        Task<Volunteer> GetVolunteerByKey(Guid key);
+        Task<Result> Update(VolunteerModel model);
+        void Update(Volunteer entity);
     }
 }

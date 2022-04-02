@@ -13,5 +13,6 @@ namespace Business.Utility.MailService
         Task<Result> SendNewApplicationMail(string firstName, string lastName, string email);
         Task<Result> SendDBSDocumentMail(string firstName, string lastName, string email);
         Task<Result> SendDBSUploadDocMail(string firstName, string lastName, string email, Guid key);
+        Task<Result> SendAgreementMail(string firstName, string lastName, string email, Guid key);
     }
 }

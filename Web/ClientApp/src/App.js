@@ -5,7 +5,6 @@ import 'alertifyjs/build/css/alertify.css';
 import 'alertifyjs/build/css/themes/semantic.min.css';
 import Footer from './components/Footer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import VolunteerFormPage from './pages/VolunteerFormPage';
 import AgreementEdit from './pages/AgreementEdit';
 import PublicLayout from './layouts/PublicLayout';
 import NotFound from './pages/NotFound';
@@ -19,9 +18,11 @@ import UserEdit from './pages/UserEdit';
 import alertify from 'alertifyjs';
 import PasswordChangePage from './pages/PasswordChangePage';
 import ScrollTop from './Hooks/ScrollTop';
-import VolunteerDocumentFormPage from './pages/VolunteerDocumentFormPage';
+import VolunteerDocumentForm from './pages/VolunteerDocumentForm';
 import Agreement from './pages/Agreement';
 import SubmitSuccess from './pages/SubmitSuccess';
+import VolunteerForm from './pages/VolunteerForm';
+import VolunteerAgreementForm from './pages/VolunteerAgreementForm';
 
 function App() {
 
@@ -37,9 +38,10 @@ function App() {
         <ScrollTop />
 
         <Routes>
-          <Route path="forms" element={<PublicLayout />} >
-            <Route path="volunteerForm" element={<VolunteerFormPage />} />
-            <Route path="volunteerDocument/:key" element={<VolunteerDocumentFormPage />} />
+          <Route path="Forms" element={<PublicLayout />} >
+            <Route path="VolunteerForm" element={<VolunteerForm />} />
+            <Route path="VolunteerDocument/:key" element={<VolunteerDocumentForm />} />
+            <Route path="VolunteerAgreement/:key" element={<VolunteerAgreementForm />} />
             <Route path="Completed" element={<SubmitSuccess />} />
           </Route>
 

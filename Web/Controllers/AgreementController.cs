@@ -6,6 +6,7 @@ using Data.Models;
 using Data.Utility.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,10 +20,12 @@ namespace Web.Controllers
     public class AgreementController : ControllerBase
     {
         private readonly IAgreementManager agreementManager;
+        private readonly IVolunteerManager volunteerManager;
 
-        public AgreementController(IAgreementManager agreementManager)
+        public AgreementController(IAgreementManager agreementManager, IVolunteerManager volunteerManager)
         {
             this.agreementManager = agreementManager;
+            this.volunteerManager = volunteerManager;
         }
         // GET: api/<AgreementController>
         [HttpGet]
@@ -38,6 +41,18 @@ namespace Web.Controllers
             return await agreementManager.GetById(id);
         }
 
+        // GET api/<AgreementController>/5
+        [AllowAnonymous]
+        [HttpGet("Volunteer/{key}")]
+        public async Task<IActionResult> GetActiveAgreements(Guid key)
+        {
+            var volunteer = await volunteerManager.GetVolunteerByKey(key);
+            if (volunteer == null)
+                return NotFound();
+
+            return Ok(await agreementManager.GetActiveAgreements());
+        }
+
         // POST api/<AgreementController>
         [HttpPost]
         public async Task<Result> Post([FromBody] AgreementModel agreement)
@@ -45,6 +60,14 @@ namespace Web.Controllers
             if(agreement.Id > 0)
                 return await agreementManager.Update(agreement);
             return await agreementManager.Add(agreement);
+        }
+        // POST api/<AgreementController>
+        [AllowAnonymous]
+        [HttpPost("Volunteer")]
+        public async Task<IActionResult> PostAgreements([FromBody] VolunteerAgreementPostModel model)
+        {
+            var result = await agreementManager.SaveVolunteerAgreements(model);
+            return Ok(result);
         }
 
         // DELETE api/<AgreementController>/5

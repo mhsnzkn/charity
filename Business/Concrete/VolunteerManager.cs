@@ -109,7 +109,7 @@ namespace Business.Concrete
 
         public async Task<TableResponseDto<VolunteerTableDto>> GetTable(VolunteerTableParamsDto param)
         {
-            var query = volunteerDal.Get().OrderByDescending(a=>a.CrtDate).AsQueryable();
+            var query = volunteerDal.Get();
             if(param.Status != VolunteerStatus.All)
                 query = query.Where(a=>a.Status == param.Status);
 
@@ -165,6 +165,8 @@ namespace Business.Concrete
             return result;
         }
 
+        public void Update(Volunteer entity) => volunteerDal.Update(entity);
+
         public async Task<ResultData<Volunteer>> Approve(Volunteer volunteer)
         {
             var result = new ResultData<Volunteer>();
@@ -206,7 +208,7 @@ namespace Business.Concrete
                     result = await mailService.SendDBSUploadDocMail(volunteer.FirstName, volunteer.LastName, volunteer.Email, volunteer.Key);
                     break;
                 case VolunteerStatus.Agreement:
-                    // send agreement mail
+                    result = await mailService.SendAgreementMail(volunteer.FirstName, volunteer.LastName, volunteer.Email, volunteer.Key);
                     break;
                 case VolunteerStatus.Induction:
                     break;
@@ -274,6 +276,11 @@ namespace Business.Concrete
             }
 
             return result;
+        }
+
+        public async Task<Volunteer> GetVolunteerByKey(Guid key)
+        {
+            return await volunteerDal.GetByKey(key);
         }
     }
 }
