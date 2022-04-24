@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,13 +10,14 @@ namespace Data.Constants
 
     public enum VolunteerStatus
     {
-        All,
         Cancelled,
-        Trial,
-        DBSDocument,
+        OnHold,
+        [Description("Application Pending")]
+        ApplicationPending,
         DBS,
-        Agreement,
+        DBSDocument,
         Induction,
+        Agreement,
         Completed
     }
     public enum UserStatus

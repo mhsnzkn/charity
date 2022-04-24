@@ -17,6 +17,7 @@ namespace Data.Constants
     {
         public const string Approve = "approve";
         public const string Cancel = "cancel";
+        public const string OnHold = "onhold";
     }
     public struct HttpUserActions
     {

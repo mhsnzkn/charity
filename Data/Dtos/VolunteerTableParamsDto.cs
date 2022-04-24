@@ -10,6 +10,6 @@ namespace Data.Dtos
 {
     public class VolunteerTableParamsDto : TableParams
     {
-        public VolunteerStatus Status { get; set; }
+        public string Status { get; set; }
     }
 }

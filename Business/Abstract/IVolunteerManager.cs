@@ -1,4 +1,5 @@
 ﻿using Business.Base;
+using Data.Constants;
 using Data.Dtos;
 using Data.Dtos.Datatable;
 using Data.Entities;
@@ -26,5 +27,7 @@ namespace Business.Abstract
         Task<Volunteer> GetVolunteerByKey(Guid key);
         Task<Result> Update(VolunteerModel model);
         void Update(Volunteer entity);
+        void SetStatus(Volunteer volunteer, VolunteerStatus status);
+        Task<Result> OnHold(int id);
     }
 }

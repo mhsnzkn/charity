@@ -90,16 +90,46 @@ export default function VolunteerDetail() {
                 <textarea className="form-control" id="reason" value={response.data.reason} disabled />
             </div>
             {response.data.files?.length > 0 &&
-            <>
-            <h5>Documents</h5>
-            <div className='row'>
-            {response.data.files.map( item => {
-                return <div class="card col-md-4">
-                <img src={item.path} class="card-img-top" alt="Document"/>
-              </div>
-            })}
-            </div>
-            </>
+                <>
+                    <h5>Documents</h5>
+                    <div className='row'>
+                        {response.data.files.map(item => {
+                            return <div class="card col-md-4">
+                                <img src={item.path} class="card-img-top" alt="Document" />
+                            </div>
+                        })}
+                    </div>
+                </>
+            }
+            {response.data.agreements?.length > 0 &&
+                <>
+                    <h5>Agreements</h5>
+                    <table className='table table-striped table-border table-responsive-lg'>
+                        <thead className='table-dark text-center'>
+                            <th>Title</th>
+                            <th>Signed Date</th>
+                            <th>Agreement Status</th>
+                            <th>Go To Agreement</th>
+                        </thead>
+                        <tbody className='text-center'>
+                        {response.data.agreements.map(item => {
+                            return <tr>
+                                <td>{item.title}</td>
+                                <td>{new Date(item.date).toLocaleDateString()}</td>
+                                <td>{item.isActive ?
+                                    <span className="badge badge-success">Active</span>
+                                    :
+                                    <span className="badge badge-danger">Passive</span>}</td>
+                                <td>
+                                    <Link to={`/Agreements/View/${item.id}`} className="btn btn-sm btn-secondary">
+                                        <i className='fas fa-paperclip'></i>
+                                    </Link>
+                                </td>
+                            </tr>
+                        })}
+                        </tbody>
+                    </table>
+                </>
             }
         </>
     }

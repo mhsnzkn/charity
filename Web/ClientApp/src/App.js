@@ -23,6 +23,7 @@ import Agreement from './pages/Agreement';
 import SubmitSuccess from './pages/SubmitSuccess';
 import VolunteerForm from './pages/VolunteerForm';
 import VolunteerAgreementForm from './pages/VolunteerAgreementForm';
+import AgreementView from './pages/AgreementView';
 
 function App() {
 
@@ -58,6 +59,7 @@ function App() {
             <Route path="Agreements" element={<Agreement />} />
             <Route path="Agreements/Add" element={<AgreementEdit />} />
             <Route path="Agreements/Edit/:id" element={<AgreementEdit />} />
+            <Route path="Agreements/View/:id" element={<AgreementView />} />
           </Route>
 
 

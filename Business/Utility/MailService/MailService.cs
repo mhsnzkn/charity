@@ -14,7 +14,7 @@ namespace Business.Utility.MailService
     {
         private readonly MailSettings mailSettings;
         private const string Header = "<div style=\"width:100%;background-color:#f2f2f0\"><img width=\"350\" src=\"https://management.heart4refugees.org/logo.png\"/></div>";
-        private const string Footer = "<br/><p>Kind Regards</p><p>Heart4Refugees Team</p>";
+        private const string Footer = "<br/><p>Kind Regards</p><p>The Admin Team</p><p>Heart4Refugees</p>";
         public MailService(IConfiguration config)
         {
             this.mailSettings = config.GetSection("MailSettings").Get<MailSettings>();
@@ -66,7 +66,7 @@ namespace Business.Utility.MailService
             return result;
         }
 
-        public async Task<Result> SendDBSDocumentMail(string firstName, string lastName, string email)
+        public async Task<Result> SendDBSMail(string firstName, string lastName, string email)
         {
             string body = $"{Header}<p>Dear {firstName} {lastName}</p><p>Following our earlier conversation, we would like to proceed to the next stage and invite you to complete an enhanced DBS check by following the link below.</p><ul><li>Please go to <a href=\"https://www.carecheck.co.uk\" target=\"_blank\">www.carecheck.co.uk</a></li><li>Click on 'Start a DBS application'</li><li>Click on 'complete your DBS application'</li><li>Tick the important note box</li><li>You must request an enhanced application</li><li>You will be taken to the log in page.</li><li>Organisation ref is <b>HEART4REFUGEES</b></li><li>Please leave the organisation code blank and then click start.</li></ul><p>Once you have submitted it, a member of our team will contact you to check your ID documents.</p><p>Turn around is pretty quick and we will be in touch as soon as we have clearance.</p>{Footer}";
             var result = await SendMail("DBS Request", body, email);
@@ -86,6 +86,19 @@ namespace Business.Utility.MailService
             var link = "https://management.heart4refugees.org/Forms/VolunteerAgreement/" + key;
             string body = $"{Header}<p>Dear {firstName} {lastName}</p><p>We have received your DBS clearance from Care Check and now need you to read and sign the Volunteer Agreement. Please ensure you have read all the policies. Once we have received your signed agreement we will arrange a date for your induction.</p><p>Please go to the page here and follow the instructions.</p><br/><br/><a href=\"{link}\" target=\"_blank\" style=\"text-decoration: none;padding: 8px;background-color:dodgerblue;color: white;\"><b>Go to the page</b></a><br/><br/>{Footer}";
             var result = await SendMail("Volunteer Agreement", body, email);
+            return result;
+        }
+
+        public async Task<Result> SendOnHoldMail(string firstName, string lastName, string email)
+        {
+            string body = $"{Header}<p>Dear {firstName} {lastName}</p><p>Thank you for your recent application to volunteer with us. At the moment we do not have any volunteer opportunities which would use your skills. However, we will keep your details on hold and if other opportunities arise we will contact you. Thanks again for your interest in us and the refugee crisis.</p>{Footer}";
+            var result = await SendMail("Heart4Refugees", body, email);
+            return result;
+        }
+        public async Task<Result> SendCompletedMail(string firstName, string lastName, string email)
+        {
+            string body = $"{Header}<p>Dear {firstName} {lastName}</p><p>Your application process is now complete and we are happy to welcome you to the Heart4Refugees team. We have added you to our volunteer email and whatsapp groups and hope you enjoy being part of our growing organisation.</p>{Footer}";
+            var result = await SendMail("Heart4Refugees", body, email);
             return result;
         }
     }

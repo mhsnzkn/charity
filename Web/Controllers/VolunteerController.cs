@@ -3,6 +3,7 @@ using Business.Utility.MailService;
 using Data.Constants;
 using Data.Dtos;
 using Data.Entities;
+using Data.Extensions;
 using Data.Models;
 using Data.Utility.Results;
 using DataAccess.Abstract;
@@ -41,9 +42,10 @@ namespace Web.Controllers
         public IEnumerable<DropDownItem> GetVolunteerStatus()
         {
             var selectList = new List<DropDownItem>();
+            selectList.Add(new DropDownItem { Id = "", Name = "All" });
             foreach (VolunteerStatus item in Enum.GetValues(typeof(VolunteerStatus)))
             {
-                selectList.Add(new DropDownItem { Id=item.GetHashCode(), Name= item.ToString() });
+                selectList.Add(new DropDownItem { Id=item.GetHashCode().ToString(), Name= item.GetDescription() });
             }
             return selectList;
         }
@@ -80,6 +82,9 @@ namespace Web.Controllers
             {
                 case HttpVolunteerActions.Approve:
                     result = await volunteerManager.ApproveAndCheckMail(volunteer.Id);
+                    break;
+                case HttpVolunteerActions.OnHold:
+                    result = await volunteerManager.OnHold(volunteer.Id);
                     break;
                 case HttpVolunteerActions.Cancel:
                     result = await volunteerManager.Cancel(volunteer.Id, volunteer.CancellationReason);

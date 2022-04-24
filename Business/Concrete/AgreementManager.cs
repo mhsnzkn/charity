@@ -144,8 +144,7 @@ namespace Business.Concrete
                 }
                 if (volunteer.Status == VolunteerStatus.Agreement)
                 {
-                    volunteer.Status = VolunteerStatus.Induction;
-                    volunteerManager.Update(volunteer);
+                    volunteerManager.SetStatus(volunteer, VolunteerStatus.Induction);
                 }
                 await volunteerAgreementDal.Save();
             }

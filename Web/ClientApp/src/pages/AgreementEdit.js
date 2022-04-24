@@ -86,6 +86,16 @@ export default function AgreementEdit() {
                             />
                             {formik.touched.order && formik.errors.order && <small className='text-danger'>{formik.errors.order}</small>}
                         </div>
+                        <div className="form-check mb-4">
+                            <input type="checkbox" id="isActive" name="isActive" className="form-check-input"
+                                onChange={formik.handleChange}
+                                value={formik.values.isActive}
+                                checked={formik.values.isActive}
+                            />
+                            <label className="form-check-label" htmlFor="isActive">
+                                Status
+                            </label>
+                        </div>
                         <div className="form-group col-md-12">
                             <label htmlFor="contenttext">Content</label>
                             <CKEditor
@@ -97,16 +107,6 @@ export default function AgreementEdit() {
                                 }}
                             />
                             {formik.touched.content && formik.errors.content && <small className='text-danger'>{formik.errors.content}</small>}
-                        </div>
-                        <div className="form-check">
-                            <input type="checkbox" id="isActive" name="isActive" className="form-check-input"
-                                onChange={formik.handleChange}
-                                value={formik.values.isActive}
-                                checked={formik.values.isActive}
-                            />
-                            <label className="form-check-label" htmlFor="isActive">
-                                Status
-                            </label>
                         </div>
                     </div>
 

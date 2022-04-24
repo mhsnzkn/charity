@@ -42,7 +42,7 @@ namespace Business.Concrete
             {
                 var entity = mapper.Map<Volunteer>(model);
 
-                entity.Status = VolunteerStatus.Trial;
+                entity.Status = VolunteerStatus.ApplicationPending;
                 volunteerDal.Add(entity);
                 await volunteerDal.Save();
 
@@ -62,7 +62,7 @@ namespace Business.Concrete
             {
                 var entity = mapper.Map<Volunteer>(model);
 
-                entity.Status = VolunteerStatus.Trial;
+                entity.Status = VolunteerStatus.ApplicationPending;
                 volunteerDal.Add(entity);
                 await volunteerDal.Save();
 
@@ -103,15 +103,18 @@ namespace Business.Concrete
         }
         public async Task<VolunteerDetailDto> GetDetailDto(int id)
         {
-            var query = volunteerDal.Get(a=>a.Id == id).Include(a=>a.VolunteerFiles).ThenInclude(a=>a.CommonFile);
+            var query = volunteerDal.Get(a=>a.Id == id);
             return await mapper.ProjectTo<VolunteerDetailDto>(query).FirstOrDefaultAsync();
         }
 
         public async Task<TableResponseDto<VolunteerTableDto>> GetTable(VolunteerTableParamsDto param)
         {
             var query = volunteerDal.Get();
-            if(param.Status != VolunteerStatus.All)
-                query = query.Where(a=>a.Status == param.Status);
+            if(!string.IsNullOrEmpty(param.Status))
+            {
+                var status = Enum.Parse<VolunteerStatus>(param.Status);
+                query = query.Where(a=>a.Status == status);
+            }
 
             if (!string.IsNullOrEmpty(param.SearchString))
                 query = query.Where(a => a.FirstName.Contains(param.SearchString) ||
@@ -166,6 +169,11 @@ namespace Business.Concrete
         }
 
         public void Update(Volunteer entity) => volunteerDal.Update(entity);
+        public void SetStatus(Volunteer volunteer, VolunteerStatus status)
+        {
+            volunteer.Status = status;
+            volunteerDal.Update(volunteer);
+        }
 
         public async Task<ResultData<Volunteer>> Approve(Volunteer volunteer)
         {
@@ -201,10 +209,10 @@ namespace Business.Concrete
             Result result = null;
             switch (volunteer.Status)
             {
-                case VolunteerStatus.DBSDocument:
-                    result = await mailService.SendDBSDocumentMail(volunteer.FirstName, volunteer.LastName, volunteer.Email);
-                    break;
                 case VolunteerStatus.DBS:
+                    result = await mailService.SendDBSMail(volunteer.FirstName, volunteer.LastName, volunteer.Email);
+                    break;
+                case VolunteerStatus.DBSDocument:
                     result = await mailService.SendDBSUploadDocMail(volunteer.FirstName, volunteer.LastName, volunteer.Email, volunteer.Key);
                     break;
                 case VolunteerStatus.Agreement:
@@ -213,6 +221,7 @@ namespace Business.Concrete
                 case VolunteerStatus.Induction:
                     break;
                 case VolunteerStatus.Completed:
+                    result = await mailService.SendCompletedMail(volunteer.FirstName, volunteer.LastName, volunteer.Email);
                     break;
                 default:
                     break;
@@ -237,6 +246,33 @@ namespace Business.Concrete
             return result;
         }
 
+        public async Task<Result> OnHold(int id)
+        {
+            var result = new Result();
+            try
+            {
+                var volunteer = await volunteerDal.GetByIdAsync(id);
+
+                if (volunteer == null)
+                    return result.SetError(UserMessages.DataNotFound);
+
+                if (volunteer.Status == VolunteerStatus.Cancelled)
+                    return result.SetError(UserMessages.VolunteerRejected);
+
+                SetStatus(volunteer, VolunteerStatus.OnHold);
+                await volunteerDal.Save();
+                
+                var mailResult = await mailService.SendOnHoldMail(volunteer.FirstName, volunteer.LastName, volunteer.Email);
+                if (mailResult.Error)
+                    result.AddMessage(UserMessages.EmailSendFailed);
+            }
+            catch (Exception)
+            {
+                result.SetError(UserMessages.Fail);
+            }
+
+            return result;
+        }
         public async Task<Result> ApproveAndCheckMail(int id)
         {
             var volunteer = await volunteerDal.GetByIdAsync(id);
