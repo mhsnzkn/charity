@@ -198,7 +198,7 @@ namespace Business.Concrete
             await volunteerDal.Save();
 
             // Document deletion
-            if (volunteer.Status > VolunteerStatus.DBS)
+            if (volunteer.Status > VolunteerStatus.DBSDocument)
                 await commonFileManager.DeleteVolunteerFile(volunteer.Id);
 
             return result;
@@ -295,7 +295,7 @@ namespace Business.Concrete
             if (volunteer == null)
                 return result.SetError(UserMessages.UserNotFound);
 
-            if(volunteer.Status != VolunteerStatus.DBS)
+            if(volunteer.Status != VolunteerStatus.DBSDocument)
                 return result.SetError(UserMessages.FileCannotBeUploaded);
 
             if (model.Files is null)
