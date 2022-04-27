@@ -105,7 +105,7 @@ export default function Volunteers() {
                     <td>
                         <div class="btn-group dropleft">
                             <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                &nbsp;
+                                
                             </button>
                             <div class="dropdown-menu">
                                 <Link className='dropdown-item' to={`/VolunteerApplications/detail/${item.id}`}>

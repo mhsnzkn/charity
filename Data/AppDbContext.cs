@@ -49,14 +49,14 @@ namespace Data
             modelBuilder.Entity<Volunteer>()
                 .Property(a => a.Skills)
                 .HasConversion(
-                v => JsonSerializer.Serialize(v, null),
-                v => JsonSerializer.Deserialize<Skills[]>(v, null));
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                v => JsonSerializer.Deserialize<Skills[]>(v, (JsonSerializerOptions)null));
 
             modelBuilder.Entity<Volunteer>()
                 .Property(a => a.Organisations)
                 .HasConversion(
-                v => JsonSerializer.Serialize(v, null),
-                v => JsonSerializer.Deserialize<Organisations[]>(v, null));
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                v => JsonSerializer.Deserialize<Organisations[]>(v, (JsonSerializerOptions)null));
         }
 
     }
