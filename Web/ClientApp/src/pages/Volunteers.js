@@ -99,16 +99,15 @@ export default function Volunteers() {
                             :
                             item.status === OnHold ?
                                 <span className="badge badge-secondary">{item.status}</span>
-                            :
-                            <span className="badge badge-light text-dark">{item.status}</span>}
-                                </td>
+                                :
+                                <span className="badge badge-light text-dark">{item.status}</span>}
+                    </td>
                     <td>
-                        <div class="dropdown show">
-                            <a className="btn btn-dark btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                &nbsp; &#9660; &nbsp;
-                            </a>
-
-                            <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <div class="btn-group dropleft">
+                            <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                &nbsp;
+                            </button>
+                            <div class="dropdown-menu">
                                 <Link className='dropdown-item' to={`/VolunteerApplications/detail/${item.id}`}>
                                     <i className='fas fa-list'></i> Details
                                 </Link>
@@ -120,10 +119,10 @@ export default function Volunteers() {
                                             <i className='fas fa-check'></i> Approve
                                         </button>
                                         {item.status !== OnHold &&
-                                        <button className='dropdown-item'
-                                            onClick={() => onHold(item.id)}>
-                                            <i className='fas fa-stop-circle'></i> On Hold
-                                        </button>}
+                                            <button className='dropdown-item'
+                                                onClick={() => onHold(item.id)}>
+                                                <i className='fas fa-stop-circle'></i> On Hold
+                                            </button>}
                                     </>
                                 }
 
