@@ -17,5 +17,6 @@ namespace Data.Models
         public string Content { get; set; }
         public int Order { get; set; } = 1;
         public bool IsActive { get; set; }
+        public bool InUse { get; set; }
     }
 }

@@ -22,9 +22,9 @@ namespace Data
         public DbSet<User> Users { get; set; }
         public DbSet<Volunteer> Volunteers { get; set; }
         public DbSet<CommonFile> CommonFiles { get; set; }
-        public DbSet<VolunteerFile> VolunteerFiles { get;}
-        public DbSet<Agreement> Agreements { get;}
-        public DbSet<VolunteerAgreement> VolunteerAgreements { get;}
+        public DbSet<VolunteerFile> VolunteerFiles { get; set; }
+        public DbSet<Agreement> Agreements { get; set; }
+        public DbSet<VolunteerAgreement> VolunteerAgreements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

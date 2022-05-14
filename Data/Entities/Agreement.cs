@@ -1,4 +1,5 @@
 ﻿using Data.Abstract;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Data.Entities
@@ -10,5 +11,7 @@ namespace Data.Entities
         public string Content { get; set; }
         public int Order { get; set; }
         public bool IsActive { get; set; }
+
+        public ICollection<VolunteerAgreement> VolunteerAgreements { get; set; }
     }
 }

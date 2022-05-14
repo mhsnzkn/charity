@@ -59,6 +59,11 @@ namespace Business.Concrete
             return await agreementDal.GetByIdAsync(id);
         }
 
+        public async Task<AgreementModel> GetModelById(int id)
+        {
+            return await agreementDal.GetModelById(id);
+        }
+
         public async Task<List<Agreement>> GetActiveAgreements()
         {
             return await agreementDal.Get(a=>a.IsActive).ToListAsync();

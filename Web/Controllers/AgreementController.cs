@@ -36,9 +36,9 @@ namespace Web.Controllers
 
         // GET api/<AgreementController>/5
         [HttpGet("{id}")]
-        public async Task<Agreement> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return await agreementManager.GetById(id);
+            return Ok(await agreementManager.GetModelById(id));
         }
 
         // GET api/<AgreementController>/5

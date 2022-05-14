@@ -19,6 +19,7 @@ namespace Business.Abstract
         Task<Result> Delete(int id);
         Task<List<Agreement>> GetActiveAgreements();
         Task<Agreement> GetById(int id);
+        Task<AgreementModel> GetModelById(int id);
         Task<TableResponseDto<AgreementTableDto>> GetTable(TableParams param);
         Task<Result> SaveVolunteerAgreements(VolunteerAgreementPostModel model);
         Task<Result> Update(AgreementModel model);
