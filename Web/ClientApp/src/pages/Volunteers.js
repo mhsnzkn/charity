@@ -38,7 +38,7 @@ export default function Volunteers() {
         alertify.confirm("Approve", "Do you confirm to approve?",
             function () {
                 let model = { id: id, action: "approve", cancellationReason: "" };
-                axios.post(baseUrl + "/actions", model, getHttpHeader())
+                axios.post(baseUrl + "/actions", model)
                     .then(res => {
                         if (res.data.error) {
                             return alertify.error(res.data.message);
@@ -52,7 +52,7 @@ export default function Volunteers() {
         alertify.prompt('Reject Volunteer Application', 'Reject Reason:', '',
             function (evt, value) {
                 let model = { id: id, action: "cancel", cancellationReason: value };
-                axios.post(baseUrl + "/actions", model, getHttpHeader())
+                axios.post(baseUrl + "/actions", model)
                     .then(res => {
                         if (res.data.error) {
                             return alertify.error(res.data.message);
@@ -66,13 +66,26 @@ export default function Volunteers() {
         alertify.confirm("On Hold", "Do you confirm to put the application on hold?",
             function () {
                 let model = { id: id, action: "onhold" };
-                axios.post(baseUrl + "/actions", model, getHttpHeader())
+                axios.post(baseUrl + "/actions", model)
                     .then(res => {
                         if (res.data.error) {
                             return alertify.error(res.data.message);
                         }
                         alertify.success(res.data.message);
                         setUpdate(update + 1);
+                    })
+            }, null);
+    }
+    const sendMail = (id) => {
+        alertify.confirm("Send Mail", "Do you confirm to send the last email?",
+            function () {
+                let model = { id: id };
+                axios.post(baseUrl + "/sendMail", model)
+                    .then(res => {
+                        if (res.data.error) {
+                            return alertify.error(res.data.message);
+                        }
+                        alertify.success(res.data.message);
                     })
             }, null);
     }
@@ -103,14 +116,18 @@ export default function Volunteers() {
                                 <span className="badge badge-light text-dark">{item.status}</span>}
                     </td>
                     <td>
-                        <div class="btn-group dropleft">
-                            <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                
+                        <div className="btn-group dropleft">
+                            <button type="button" className="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
                             </button>
-                            <div class="dropdown-menu">
+                            <div className="dropdown-menu">
                                 <Link className='dropdown-item' to={`/VolunteerApplications/detail/${item.id}`}>
                                     <i className='fas fa-list'></i> Details
                                 </Link>
+                                <button className='dropdown-item'
+                                    onClick={() => sendMail(item.id)}>
+                                    <i className='fas fa-envelope'></i> Resend Mail
+                                </button>
 
                                 {item.status !== Completed && item.status !== Cancelled &&
                                     <>

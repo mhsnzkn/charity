@@ -75,19 +75,19 @@ namespace Web.Controllers
 
         // PUT api/<VolunteerController>
         [HttpPost("actions")]
-        public async Task<IActionResult> Put([FromBody]VolunteerActionModel volunteer)
+        public async Task<IActionResult> Put([FromBody]VolunteerActionModel volunteerModel)
         {
             Result result;
-            switch (volunteer.Action)
+            switch (volunteerModel.Action)
             {
                 case HttpVolunteerActions.Approve:
-                    result = await volunteerManager.ApproveAndCheckMail(volunteer.Id);
+                    result = await volunteerManager.ApproveAndCheckMail(volunteerModel.Id);
                     break;
                 case HttpVolunteerActions.OnHold:
-                    result = await volunteerManager.OnHold(volunteer.Id);
+                    result = await volunteerManager.OnHold(volunteerModel.Id);
                     break;
                 case HttpVolunteerActions.Cancel:
-                    result = await volunteerManager.Cancel(volunteer.Id, volunteer.CancellationReason);
+                    result = await volunteerManager.Cancel(volunteerModel.Id, volunteerModel.CancellationReason);
                     break;
                 default:
                     result = new Result();
@@ -95,6 +95,12 @@ namespace Web.Controllers
                     break;
             }
             return Ok(result);
+        }
+
+        [HttpPost("SendMail")]
+        public async Task<IActionResult> ResendStatusMail([FromBody] VolunteerActionModel volunteerModel)
+        {
+            return Ok(await volunteerManager.SendStatusMail(volunteerModel.Id));
         }
 
         // DELETE api/<VolunteerController>/5

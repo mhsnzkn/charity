@@ -29,5 +29,6 @@ namespace Business.Abstract
         void Update(Volunteer entity);
         void SetStatus(Volunteer volunteer, VolunteerStatus status);
         Task<Result> OnHold(int id);
+        Task<Result> SendStatusMail(int volunteerId);
     }
 }

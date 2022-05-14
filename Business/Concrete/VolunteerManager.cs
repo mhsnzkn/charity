@@ -109,11 +109,15 @@ namespace Business.Concrete
 
         public async Task<TableResponseDto<VolunteerTableDto>> GetTable(VolunteerTableParamsDto param)
         {
-            var query = volunteerDal.Get();
+            var query = volunteerDal.Get().OrderByDescending(a=>a.CrtDate).AsQueryable();
             if(!string.IsNullOrEmpty(param.Status))
             {
                 var status = Enum.Parse<VolunteerStatus>(param.Status);
                 query = query.Where(a=>a.Status == status);
+            }
+            else
+            {
+                query = query.Where(a => a.Status != VolunteerStatus.Completed && a.Status != VolunteerStatus.Cancelled);
             }
 
             if (!string.IsNullOrEmpty(param.SearchString))
@@ -218,16 +222,25 @@ namespace Business.Concrete
                 case VolunteerStatus.Agreement:
                     result = await mailService.SendAgreementMail(volunteer.FirstName, volunteer.LastName, volunteer.Email, volunteer.Key);
                     break;
-                case VolunteerStatus.Induction:
-                    break;
                 case VolunteerStatus.Completed:
                     result = await mailService.SendCompletedMail(volunteer.FirstName, volunteer.LastName, volunteer.Email);
                     break;
                 default:
+                    result = new Result().SetMessage(UserMessages.NoEmailSent);
                     break;
             }
 
             return result;
+        }
+
+        public async Task<Result> SendStatusMail(int volunteerId)
+        {
+            var volunteer = await volunteerDal.GetByIdAsync(volunteerId);
+            if(volunteer == null)
+            {
+                return new Result().SetError(UserMessages.UserNotFound);
+            }
+            return await SendStatusMail(volunteer);
         }
         public async Task<Result> Cancel(int id, string cancellationReason)
         {
