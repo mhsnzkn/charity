@@ -59,11 +59,11 @@ export default function VolunteerDetail() {
                     <React.Fragment key={index}>
                         <div className="form-group col-md-6">
                             <label htmlFor={`organisations[${index}].organisation`}>Organisation</label>
-                            <input value={item.organisation} className="form-control" disabled />
+                            <textarea value={item.organisation} className="form-control" disabled />
                         </div>
                         <div className="form-group col-md-6">
                             <label htmlFor={`organisations[${index}].role`}>Roles and Responsibilities</label>
-                            <input value={item.role} className="form-control" disabled />
+                            <textarea value={item.role} className="form-control" disabled />
                         </div>
                     </React.Fragment>
 
@@ -75,11 +75,11 @@ export default function VolunteerDetail() {
                     <React.Fragment key={index}>
                         <div className="form-group col-md-6">
                             <label htmlFor={`skills[${index}].skill`}>Skill</label>
-                            <input value={item.skill} className="form-control" disabled />
+                            <textarea value={item.skill} className="form-control" disabled />
                         </div>
                         <div className="form-group col-md-6">
                             <label htmlFor={`skills[${index}].experience`}>Experience</label>
-                            <input value={item.experience} className="form-control" disabled />
+                            <textarea value={item.experience} className="form-control" disabled />
                         </div>
                     </React.Fragment>
                 ))}
