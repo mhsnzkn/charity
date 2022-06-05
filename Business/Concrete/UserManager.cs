@@ -110,7 +110,7 @@ namespace Business.Concrete
             result.Data = user;
             return result;
         }
-        public string CreateAccessToken(User user)
+        public AccessToken CreateAccessToken(User user)
         {
             return tokenHelper.CreateToken(user);
         }

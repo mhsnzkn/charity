@@ -26,4 +26,11 @@ namespace Data.Constants
         Active,
     }
 
+    public enum ExpenseStatus
+    {
+        Cancelled,
+        Pending,
+        Accepted
+    }
+
 }

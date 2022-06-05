@@ -22,7 +22,7 @@ namespace Data.Utility.Security
             Configuration = configuration;
             tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
         }
-        public string CreateToken(User user)
+        public AccessToken CreateToken(User user)
         {
             _accessTokenExpiration = DateTime.Now.AddDays(tokenOptions.AccessTokenExpiration);
             var securityKey = SecurityHelper.CreateSecurityKey(tokenOptions.SecurityKey);
@@ -31,12 +31,11 @@ namespace Data.Utility.Security
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             var token = jwtSecurityTokenHandler.WriteToken(jwt);
 
-            //return new AccessToken()
-            //{
-            //    Token = token,
-            //    Expiration = _accessTokenExpiration
-            //};
-            return token;
+            return new AccessToken()
+            {
+                Token = token,
+                Role = user.Role
+            };
         }
 
         public JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, User user, SigningCredentials signingCredentials)
@@ -54,9 +53,11 @@ namespace Data.Utility.Security
 
         private IEnumerable<Claim> SetClaims(User user)
         {
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
-            claims.Add(new Claim(ClaimTypes.Role, user.Role));
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.Role)
+            };
             return claims;
         }
     }

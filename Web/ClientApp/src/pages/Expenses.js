@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
 import { Cancelled, Completed, OnHold } from '../constants/volunteerStatus';
 
-export default function Volunteers() {
+export default function Expenses() {
     const baseUrl = "/api/volunteer"
     const [url, setUrl] = useState(baseUrl + "?start=0&length=10");
     const [update, setUpdate] = useState(0);

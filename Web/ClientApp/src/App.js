@@ -24,6 +24,7 @@ import SubmitSuccess from './pages/SubmitSuccess';
 import VolunteerForm from './pages/VolunteerForm';
 import VolunteerAgreementForm from './pages/VolunteerAgreementForm';
 import AgreementView from './pages/AgreementView';
+import Expenses from './pages/Expenses';
 
 function App() {
 
@@ -51,6 +52,8 @@ function App() {
           <Route path="/" element={<AdminLayout />} >
             <Route path="VolunteerApplications" element={<Volunteers />} />
             <Route path="VolunteerApplications/Detail/:id" element={<VolunteerDetail />} />
+            <Route path="VolunteerExpenses" element={<Expenses />} />
+            <Route path="VolunteerExpenses/Detail/:id" element={<VolunteerDetail />} />
             <Route path="Users" element={<Users />} />
             <Route path="Users/Add" element={<UserAdd />} />
             <Route path="Users/Edit/:id" element={<UserEdit />} />

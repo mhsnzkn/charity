@@ -1,6 +1,7 @@
 
 export const getToken = ()=>{
-    return localStorage.getItem('token');
+    const session = localStorage.getItem('session');
+    return JSON.parse(session).token;
 }
 export const getBearerToken = ()=>{
     return 'Bearer '+getToken();

@@ -3,6 +3,7 @@ using Data.Constants;
 using Data.Dtos;
 using Data.Models;
 using Data.Utility.Results;
+using Data.Utility.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -68,7 +69,7 @@ namespace Web.Controllers
 
             var token = userManager.CreateAccessToken(loginResult.Data);
 
-            return Ok(new ResultData<string>(token));
+            return Ok(new ResultData<AccessToken>(token));
         }
 
         [HttpPost("Validate")]

@@ -1,5 +1,4 @@
-﻿using Data.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Data.Utility.Security
 {
-    public interface ITokenHelper
+    public class AccessToken
     {
-        AccessToken CreateToken(User user);
+        public string Token { get; set; }
+        public string Role { get; set; }
     }
 }

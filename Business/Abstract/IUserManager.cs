@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Data.Dtos;
 using Data.Dtos.Datatable;
+using Data.Utility.Security;
 
 namespace Business.Abstract
 {
@@ -18,7 +19,7 @@ namespace Business.Abstract
         Task<Result> Update(UserEditModel model);
         Task<Result> Delete(int id);
         Task<ResultData<User>> Login(UserLoginModel model);
-        string CreateAccessToken(User user);
+        AccessToken CreateAccessToken(User user);
         Task<UserAccountInfoDto> GetUserInfo(int userId);
         Task<Result> EmailChange(int userId, string email);
         Task<Result> PasswordChange(int userId, string password);

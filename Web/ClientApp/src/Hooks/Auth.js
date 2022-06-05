@@ -31,8 +31,8 @@ function useProvideAuth() {
           alertify.error(res.data.message);
           setUser(null);
         }else{
-          localStorage.setItem('token', res.data.data)
-          setUser(res.data);
+          localStorage.setItem('session', JSON.stringify(res.data.data))
+          setUser(res.data.data);
         }
     })
     .catch((err) => {
@@ -66,8 +66,9 @@ function useProvideAuth() {
 //   // ... component that utilizes this hook to re-render with the ...
 //   // ... latest auth object.
   useEffect(() => {
-    let token = localStorage.getItem('token');
-    if(token){
+    const session = localStorage.getItem('session');
+    if(session){
+      const token = JSON.parse(session).token;
       const unsubscribe = 
           Axios.post("/api/user/Validate" , null,{headers:{'Authorization':'Bearer '+token}})
           .then(res => {
