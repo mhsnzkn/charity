@@ -15,5 +15,6 @@ namespace Business.Abstract
         Task DeleteVolunteerFile(int volunteerId);
         Task<CommonFile> UploadFile(IFormFile file, string fileName, string type);
         Task<Result> UploadVolunteerFile(Volunteer volunteer, IFormFile file, string fileName, string type);
+        Task<Result> UploadVolunteerFile(int volunteerId, IFormFile file, string fileName, string type);
     }
 }

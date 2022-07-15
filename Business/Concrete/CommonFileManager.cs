@@ -29,8 +29,12 @@ namespace Business.Concrete
             CommonFile commonFile = null;
             try
             {
-                var extension = Path.GetExtension(file.FileName);
-                var uploadpath = Path.Combine("\\uploads", fileName + extension);
+                var uploadpath = Path.Combine("\\uploads", type);
+                if (!Directory.Exists(uploadpath))
+                    Directory.CreateDirectory(uploadpath);
+
+                var fileFullName = fileName+ Path.GetExtension(file.FileName);
+                uploadpath = Path.Combine(uploadpath, fileFullName);
                 using (var fs = new FileStream(BasePath + uploadpath, FileMode.Create))
                 {
                     await file.CopyToAsync(fs);
@@ -69,6 +73,24 @@ namespace Business.Concrete
             return result;
         }
 
+        public async Task<Result> UploadVolunteerFile(int volunteerId, IFormFile file, string fileName, string type)
+        {
+            var result = new Result();
+            var commonFile = await UploadFile(file, fileName, type);
+            if (commonFile == null)
+                return result.SetError(UserMessages.FileUploadFailed);
+
+            var volunteerFile = new VolunteerFile
+            {
+                VolunteerId = volunteerId,
+                CommonFile = commonFile
+            };
+            volunteerFileDal.Add(volunteerFile);
+            await volunteerFileDal.Save();
+
+            return result;
+        }
+
         public async Task DeleteVolunteerFile(int volunteerId)
         {
             try
@@ -87,7 +109,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                
+                // log
             }
 
         }

@@ -22,5 +22,7 @@ namespace Data.Entities
         public UserStatus Status { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
+        public int? VolunteerId { get; set; }
+        public Volunteer Volunteer { get; set; }
     }
 }

@@ -30,7 +30,8 @@ namespace Data.Constants
     {
         Cancelled,
         Pending,
-        Accepted
+        Accepted,
+        Paid
     }
 
 }

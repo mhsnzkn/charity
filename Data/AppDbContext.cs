@@ -25,6 +25,7 @@ namespace Data
         public DbSet<VolunteerFile> VolunteerFiles { get; set; }
         public DbSet<Agreement> Agreements { get; set; }
         public DbSet<VolunteerAgreement> VolunteerAgreements { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

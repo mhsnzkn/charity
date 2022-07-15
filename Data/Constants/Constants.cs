@@ -28,6 +28,7 @@ namespace Data.Constants
     public struct CommonFileTypes
     {
         public const string DbsDocument = "DbsDocument";
+        public const string Expense = "Expense";
     }
 
 

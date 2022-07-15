@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220708172711_VolunteerId_addedTo_Users")]
+    partial class VolunteerId_addedTo_Users
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,7 +53,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Agreements", (string)null);
+                    b.ToTable("Agreements");
                 });
 
             modelBuilder.Entity("Data.Entities.CommonFile", b =>
@@ -82,7 +84,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CommonFiles", (string)null);
+                    b.ToTable("CommonFiles");
                 });
 
             modelBuilder.Entity("Data.Entities.User", b =>
@@ -131,7 +133,7 @@ namespace Data.Migrations
 
                     b.HasIndex("VolunteerId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
@@ -217,7 +219,7 @@ namespace Data.Migrations
                     b.HasIndex("Key")
                         .IsUnique();
 
-                    b.ToTable("Volunteers", (string)null);
+                    b.ToTable("Volunteers");
                 });
 
             modelBuilder.Entity("Data.Entities.VolunteerAgreement", b =>
@@ -246,7 +248,7 @@ namespace Data.Migrations
 
                     b.HasIndex("VolunteerId");
 
-                    b.ToTable("VolunteerAgreements", (string)null);
+                    b.ToTable("VolunteerAgreements");
                 });
 
             modelBuilder.Entity("Data.Entities.VolunteerFile", b =>
@@ -275,7 +277,7 @@ namespace Data.Migrations
 
                     b.HasIndex("VolunteerId");
 
-                    b.ToTable("VolunteerFiles", (string)null);
+                    b.ToTable("VolunteerFiles");
                 });
 
             modelBuilder.Entity("Data.Entities.User", b =>

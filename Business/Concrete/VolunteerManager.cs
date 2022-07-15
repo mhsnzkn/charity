@@ -41,13 +41,12 @@ namespace Business.Concrete
             try
             {
                 var entity = mapper.Map<Volunteer>(model);
-
                 entity.Status = VolunteerStatus.ApplicationPending;
                 volunteerDal.Add(entity);
                 await volunteerDal.Save();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 result.SetError(UserMessages.Fail);
             }
@@ -72,7 +71,7 @@ namespace Business.Concrete
                     result.Message += UserMessages.EmailSendFailed;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 result.SetError(UserMessages.Fail);
             }
@@ -94,7 +93,7 @@ namespace Business.Concrete
                 volunteerDal.Delete(entity);
                 await volunteerDal.Save();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 result.SetError(UserMessages.Fail);
             }
@@ -165,7 +164,7 @@ namespace Business.Concrete
 
                 await volunteerDal.Save();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 result.SetError(UserMessages.Fail);
             }
@@ -198,7 +197,7 @@ namespace Business.Concrete
                 return result;
             }
             
-            volunteer.Status = volunteer.Status + 1;
+            volunteer.Status++;
             await volunteerDal.Save();
 
             // Document deletion
@@ -210,26 +209,14 @@ namespace Business.Concrete
 
         public async Task<Result> SendStatusMail(Volunteer volunteer)
         {
-            Result result = null;
-            switch (volunteer.Status)
+            Result result = volunteer.Status switch
             {
-                case VolunteerStatus.DBS:
-                    result = await mailService.SendDBSMail(volunteer.FirstName, volunteer.LastName, volunteer.Email);
-                    break;
-                case VolunteerStatus.DBSDocument:
-                    result = await mailService.SendDBSUploadDocMail(volunteer.FirstName, volunteer.LastName, volunteer.Email, volunteer.Key);
-                    break;
-                case VolunteerStatus.Agreement:
-                    result = await mailService.SendAgreementMail(volunteer.FirstName, volunteer.LastName, volunteer.Email, volunteer.Key);
-                    break;
-                case VolunteerStatus.Completed:
-                    result = await mailService.SendCompletedMail(volunteer.FirstName, volunteer.LastName, volunteer.Email);
-                    break;
-                default:
-                    result = new Result().SetMessage(UserMessages.NoEmailSent);
-                    break;
-            }
-
+                VolunteerStatus.DBS => await mailService.SendDBSMail(volunteer.FirstName, volunteer.LastName, volunteer.Email),
+                VolunteerStatus.DBSDocument => await mailService.SendDBSUploadDocMail(volunteer.FirstName, volunteer.LastName, volunteer.Email, volunteer.Key),
+                VolunteerStatus.Agreement => await mailService.SendAgreementMail(volunteer.FirstName, volunteer.LastName, volunteer.Email, volunteer.Key),
+                VolunteerStatus.Completed => await mailService.SendCompletedMail(volunteer.FirstName, volunteer.LastName, volunteer.Email),
+                _ => new Result().SetMessage(UserMessages.NoEmailSent),
+            };
             return result;
         }
 

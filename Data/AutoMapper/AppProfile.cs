@@ -42,6 +42,13 @@ namespace Data.AutoMapper
             CreateMap<Agreement, AgreementTableDto>()
                 .ForMember(o => o.Date, m => m.MapFrom(o => o.UptDate ?? o.CrtDate));
             #endregion
+
+            #region Expense
+            CreateMap<Expense, ExpenseTableDto>()
+                .ForMember(o => o.UserName, m => m.MapFrom(o => o.Volunteer.FirstName +" "+o.Volunteer.LastName));
+            CreateMap<Expense, ExpenseModel>()
+                .ForMember(o => o.CommonFilePath, m => m.MapFrom(o => o.CommmonFile.Path));
+            #endregion
         }
     }
 }

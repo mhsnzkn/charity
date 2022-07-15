@@ -80,6 +80,8 @@ namespace Web
             services.AddScoped<ICommonFileDal, CommonFileDal>();
             services.AddScoped<IAgreementManager, AgreementManager>();
             services.AddScoped<IAgreementDal, AgreementDal>();
+            services.AddScoped<IExpenseManager, ExpenseManager>();
+            services.AddScoped<IExpenseDal, ExpenseDal>();
 
             services.AddScoped<IVolunteerAgreementDal, VolunteerAgreementDal>();
             services.AddScoped<IVolunteerFileDal, VolunteerFileDal>();
