@@ -14,7 +14,6 @@ namespace Data.Entities
     {
         public int VolunteerId { get; set; }
         public Volunteer Volunteer { get; set; }
-        public DateTime Date { get; set; }
         [StringLength(500)]
         public string Details { get; set; }
         [StringLength(100)]
@@ -26,7 +25,10 @@ namespace Data.Entities
         [Column(TypeName = "decimal(8,2)")]
         public decimal Amount { get; set; }
         public ExpenseStatus Status { get; set; }
-        public string CancellationReason { get; set; }
+        [StringLength(250)]
+        public string Description { get; set; }
+        public DateTime Date { get; set; }
+        public DateTime? PayDate { get; set; }
         public CommonFile CommmonFile { get; set; }
         public int? CommonFileId { get; set; }
     }

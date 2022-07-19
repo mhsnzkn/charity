@@ -45,14 +45,14 @@ namespace Web.Controllers
             selectList.Add(new DropDownItem { Id = "", Name = "All" });
             foreach (VolunteerStatus item in Enum.GetValues(typeof(VolunteerStatus)))
             {
-                selectList.Add(new DropDownItem { Id=item.GetHashCode().ToString(), Name= item.GetDescription() });
+                selectList.Add(new DropDownItem { Id=((int)item).ToString(), Name= item.GetDescription() });
             }
             return selectList;
         }
 
         // GET api/<VolunteerController>/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             return Ok(await volunteerManager.GetDetailDto(id));
         }
