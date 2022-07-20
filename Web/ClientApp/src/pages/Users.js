@@ -98,7 +98,6 @@ export default function Users() {
                 <Link to="/Users/Add" className='btn btn-primary'><i className='fas fa-plus'></i> Add</Link>
             </div>
 
-
             <div className='d-flex justify-content-between'>
                 <div className='col-md-6 row text-center'>
                     <label className="col-md-8">Rows per page: </label>

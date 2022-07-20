@@ -30,5 +30,6 @@ namespace Business.Abstract
         void SetStatus(Volunteer volunteer, VolunteerStatus status);
         Task<Result> OnHold(int id);
         Task<Result> SendStatusMail(int volunteerId);
+        Task<List<DropDownItem>> GetVolunteersForDropDown();
     }
 }

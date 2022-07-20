@@ -3,6 +3,7 @@ using Data.Constants;
 using Data.Dtos;
 using Data.Entities;
 using Data.Extensions;
+using Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -40,17 +41,19 @@ namespace Web.Controllers
 
         // POST api/<ExpenseController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm] Expense expense, [FromForm] IFormFile formFile)
+        public async Task<IActionResult> Post([FromForm] ExpenseModel model)
         {
-            return Ok(await expenseManager.Add(expense, formFile));
+            return Ok(await expenseManager.Add(model));
         }
 
         // GET: api/<ExpenseController>
         [HttpGet("GetExpenseStatus")]
         public IEnumerable<DropDownItem> GetExpenseStatus()
         {
-            var selectList = new List<DropDownItem>();
-            selectList.Add(new DropDownItem { Id = "", Name = "All" });
+            var selectList = new List<DropDownItem>
+            {
+                new DropDownItem { Id = "", Name = "All" }
+            };
             foreach (ExpenseStatus item in Enum.GetValues(typeof(ExpenseStatus)))
             {
                 selectList.Add(new DropDownItem { Id = ((int)item).ToString(), Name = item.GetDescription() });

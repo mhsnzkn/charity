@@ -17,9 +17,8 @@ export default function SideMenu({ menuActive }) {
                 <li>
                     <a href="#volunteers" data-toggle="collapse" aria-expanded="false" className="dropdown-toggle collapsed">Volunteers</a>
                     <ul className="list-unstyled collapse" id="volunteers" >
-                        <li>
-                        <Link to="VolunteerApplications">Applications</Link>
-                        </li>
+                        <li><Link to="VolunteerApplications">Applications</Link></li>
+                        <li><Link to="VolunteerExpenses">Expenses</Link></li>
                     </ul>
                 </li>
                 <li>

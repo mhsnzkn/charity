@@ -318,5 +318,10 @@ namespace Business.Concrete
         {
             return await volunteerDal.GetByKey(key);
         }
+
+        public async Task<List<DropDownItem>> GetVolunteersForDropDown()
+        {
+            return await volunteerDal.GetForDropDown();
+        }
     }
 }

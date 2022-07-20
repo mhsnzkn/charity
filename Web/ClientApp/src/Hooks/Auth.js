@@ -24,21 +24,20 @@ function useProvideAuth() {
   
   // Wrap any methods we want to use making sure ...
   // ... to save the user to state.
-  const signin = (email, password) => {
-    return Axios.post("/api/user/Login" , {email:email, password:password})
-    .then(res => {
-        if(res.data.error){
-          alertify.error(res.data.message);
-          setUser(null);
-        }else{
-          localStorage.setItem('session', JSON.stringify(res.data.data))
-          setUser(res.data.data);
-        }
-    })
-    .catch((err) => {
+  const signin = async (email, password) => {
+    try {
+      const res = await Axios.post("/api/user/Login", { email: email, password: password });
+      if (res.data.error) {
+        alertify.error(res.data.message);
+        setUser(null);
+      } else {
+        localStorage.setItem('session', JSON.stringify(res.data.data));
+        setUser(res.data.data);
+      }
+    } catch (err) {
       alertify.error("Connection error!");
       setUser(null);
-    })
+    }
   };
 
   const signup = (email, username, password) => {

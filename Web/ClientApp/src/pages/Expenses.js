@@ -10,7 +10,7 @@ import Loader from '../components/Loader';
 import { Cancelled, Completed, OnHold } from '../constants/volunteerStatus';
 
 export default function Expenses() {
-    const baseUrl = "/api/volunteer"
+    const baseUrl = "/api/expense"
     const [url, setUrl] = useState(baseUrl + "?start=0&length=10");
     const [update, setUpdate] = useState(0);
 
@@ -168,15 +168,18 @@ export default function Expenses() {
 
     return (
         <>
-            <h4>Volunteers</h4>
-            <hr />
+            <h4>Expenses</h4><hr />
+            <div className='m-1 p-1'>
+                <Link to="/VolunteerExpenses/Add" className='btn btn-primary'><i className='fas fa-plus'></i> Add</Link>
+            </div>
+
             <div className='m-3 p-3'>
                 <div className="form-group row">
                     <label className="col-sm-2 col-form-label">Status</label>
                     <div className="col-sm-4">
                         <ApiSelect
                             className="form-select"
-                            url="/api/volunteer/GetVolunteerStatus"
+                            url="/api/expense/GetExpenseStatus"
                             onChange={value => paramChangeHandler('status', value)}
                         />
                     </div>

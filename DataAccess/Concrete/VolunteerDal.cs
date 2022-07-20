@@ -7,6 +7,7 @@ using DataAccess.Abstract;
 using DataAccess.Base;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -41,6 +42,15 @@ namespace DataAccess.Concrete
             }
 
             return result;
+        }
+
+        public async Task<List<DropDownItem>> GetForDropDown()
+        {
+            return await context.Volunteers.Where(x => x.Status == VolunteerStatus.Completed).OrderBy(a=>a.FirstName).Select(a => new DropDownItem
+            {
+                Id = a.Id.ToString(), 
+                Name = a.FirstName+ a.LastName
+            }).ToListAsync();
         }
     }
 }

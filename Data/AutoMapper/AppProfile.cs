@@ -47,7 +47,8 @@ namespace Data.AutoMapper
             CreateMap<Expense, ExpenseTableDto>()
                 .ForMember(o => o.UserName, m => m.MapFrom(o => o.Volunteer.FirstName +" "+o.Volunteer.LastName));
             CreateMap<Expense, ExpenseModel>()
-                .ForMember(o => o.CommonFilePath, m => m.MapFrom(o => o.CommmonFile.Path));
+                .ForMember(o => o.FilePath, m => m.MapFrom(o => o.CommonFile.Path))
+                .ReverseMap();
             #endregion
         }
     }

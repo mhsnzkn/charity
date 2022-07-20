@@ -52,18 +52,19 @@ namespace Business.Concrete
             return tableModel;
         }
 
-        public async Task<Result> Add(Expense expense, IFormFile formFile)
+        public async Task<Result> Add(ExpenseModel model)
         {
             var result = new Result();
             try
             {
+                var expense = mapper.Map<Expense>(model);
                 expense.Status = ExpenseStatus.Pending;
                 expenseDal.Add(expense);
                 await expenseDal.Save();
 
-                if (formFile != null)
+                if (model.FormFile != null)
                 {
-                    await CommonFileManager.UploadVolunteerFile(expense.VolunteerId, formFile, $"{expense.VolunteerId}-{expense.Id}", CommonFileTypes.Expense);
+                    await CommonFileManager.UploadVolunteerFile(expense.VolunteerId, model.FormFile, $"{expense.VolunteerId}-{expense.Id}", CommonFileTypes.Expense);
                 }
 
             }

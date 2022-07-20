@@ -3,6 +3,14 @@ export const getToken = ()=>{
     const session = localStorage.getItem('session');
     return JSON.parse(session).token;
 }
+export const getRole = ()=>{
+    const session = localStorage.getItem('session');
+    return JSON.parse(session).role;
+}
+export const getVolunteerId = ()=>{
+    const session = localStorage.getItem('session');
+    return JSON.parse(session).volunteerId;
+}
 export const getBearerToken = ()=>{
     return 'Bearer '+getToken();
 }

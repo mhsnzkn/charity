@@ -41,13 +41,21 @@ namespace Web.Controllers
         [HttpGet("GetVolunteerStatus")]
         public IEnumerable<DropDownItem> GetVolunteerStatus()
         {
-            var selectList = new List<DropDownItem>();
-            selectList.Add(new DropDownItem { Id = "", Name = "All" });
+            var selectList = new List<DropDownItem>
+            {
+                new DropDownItem { Id = "", Name = "All" }
+            };
             foreach (VolunteerStatus item in Enum.GetValues(typeof(VolunteerStatus)))
             {
                 selectList.Add(new DropDownItem { Id=((int)item).ToString(), Name= item.GetDescription() });
             }
             return selectList;
+        }
+        // GET: api/<VolunteerController>
+        [HttpGet("VolunteersForDropDown")]
+        public async Task<List<DropDownItem>> GetVolunteerForDropDown()
+        {
+            return await volunteerManager.GetVolunteersForDropDown();
         }
 
         // GET api/<VolunteerController>/5
