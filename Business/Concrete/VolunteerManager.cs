@@ -303,7 +303,7 @@ namespace Business.Concrete
 
             for (int i = 0; i < model.Files.Length; i++)
             {
-                var fileResult = await commonFileManager.UploadVolunteerFile(volunteer, model.Files[i], volunteer.Id + "-" + i, CommonFileTypes.DbsDocument);
+                var fileResult = await commonFileManager.UploadVolunteerFile(volunteer.Id, model.Files[i], volunteer.Id + "-" + i, CommonFileTypes.DbsDocument);
                 if (fileResult.Error)
                 {
                     result.SetError(fileResult.Message);

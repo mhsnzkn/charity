@@ -11,7 +11,7 @@ namespace Data.Models
 {
     public class ExpenseModel
     {
-        public int UserId { get; set; }
+        public int VolunteerId { get; set; }
         public DateTime Date { get; set; }
         [StringLength(500)]
         public string Details { get; set; }

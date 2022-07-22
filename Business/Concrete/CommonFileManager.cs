@@ -30,8 +30,8 @@ namespace Business.Concrete
             try
             {
                 var uploadpath = Path.Combine("\\uploads", type);
-                if (!Directory.Exists(uploadpath))
-                    Directory.CreateDirectory(uploadpath);
+                if (!Directory.Exists(BasePath + uploadpath))
+                    Directory.CreateDirectory(BasePath + uploadpath);
 
                 var fileFullName = fileName+ Path.GetExtension(file.FileName);
                 uploadpath = Path.Combine(uploadpath, fileFullName);
@@ -53,24 +53,6 @@ namespace Business.Concrete
             }
 
             return commonFile;
-        }
-
-        public async Task<Result> UploadVolunteerFile(Volunteer volunteer, IFormFile file, string fileName, string type)
-        {
-            var result = new Result();
-            var commonFile = await UploadFile(file, fileName, type);
-            if (commonFile == null)
-                return result.SetError(UserMessages.FileUploadFailed);
-
-            var volunteerFile = new VolunteerFile
-            {
-                Volunteer = volunteer,
-                CommonFile = commonFile
-            };
-            volunteerFileDal.Add(volunteerFile);
-            await volunteerFileDal.Save();
-
-            return result;
         }
 
         public async Task<Result> UploadVolunteerFile(int volunteerId, IFormFile file, string fileName, string type)
