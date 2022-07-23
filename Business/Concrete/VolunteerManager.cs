@@ -114,10 +114,6 @@ namespace Business.Concrete
                 var status = Enum.Parse<VolunteerStatus>(param.Status);
                 query = query.Where(a=>a.Status == status);
             }
-            else
-            {
-                query = query.Where(a => a.Status != VolunteerStatus.Completed && a.Status != VolunteerStatus.Cancelled);
-            }
 
             if (!string.IsNullOrEmpty(param.SearchString))
                 query = query.Where(a => a.FirstName.Contains(param.SearchString) ||
@@ -200,9 +196,9 @@ namespace Business.Concrete
             volunteer.Status++;
             await volunteerDal.Save();
 
-            // Document deletion
+            // DBSDocument deletion
             if (volunteer.Status > VolunteerStatus.DBSDocument)
-                await commonFileManager.DeleteVolunteerFile(volunteer.Id);
+                await commonFileManager.DeleteVolunteerFiles(volunteer.Id, CommonFileTypes.DbsDocument);
 
             return result;
         }
@@ -241,7 +237,7 @@ namespace Business.Concrete
                 return result.SetError(UserMessages.VolunteerRejected);
 
             result = await volunteerDal.Cancel(volunteer, cancellationReason);
-            await commonFileManager.DeleteVolunteerFile(id);
+            await commonFileManager.DeleteVolunteerFiles(id, CommonFileTypes.DbsDocument);
 
             return result;
         }

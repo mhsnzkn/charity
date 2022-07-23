@@ -30,6 +30,11 @@ namespace Data.Constants
         public const string DbsDocument = "DbsDocument";
         public const string Expense = "Expense";
     }
-
+    public struct HttpExpenseActions
+    {
+        public const string Approve = "approve";
+        public const string Cancel = "cancel";
+        public const string Pay = "pay";
+    }
 
 }

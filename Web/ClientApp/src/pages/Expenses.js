@@ -7,7 +7,7 @@ import ApiSelect from '../components/ApiSelect';
 import Paginator from '../components/Paginator';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
-import { Cancelled, Completed, OnHold } from '../constants/volunteerStatus';
+import { Cancelled, Completed } from '../constants/volunteerStatus';
 
 export default function Expenses() {
     const baseUrl = "/api/expense"
@@ -47,7 +47,7 @@ export default function Expenses() {
             }, null);
     }
     const cancel = (id) => {
-        alertify.prompt('Reject Volunteer Application', 'Reject Reason:', '',
+        alertify.prompt('Reject Expense Payment', 'Reject Reason:', '',
             function (evt, value) {
                 let model = { id: id, action: "cancel", cancellationReason: value };
                 axios.post(baseUrl + "/actions", model)
@@ -60,34 +60,7 @@ export default function Expenses() {
                     })
             }, null);
     }
-    const onHold = (id) => {
-        alertify.confirm("On Hold", "Do you confirm to put the application on hold?",
-            function () {
-                let model = { id: id, action: "onhold" };
-                axios.post(baseUrl + "/actions", model)
-                    .then(res => {
-                        if (res.data.error) {
-                            return alertify.error(res.data.message);
-                        }
-                        alertify.success(res.data.message);
-                        setUpdate(update + 1);
-                    })
-            }, null);
-    }
-    const sendMail = (id) => {
-        alertify.confirm("Send Mail", "Do you confirm to send the last email?",
-            function () {
-                let model = { id: id };
-                axios.post(baseUrl + "/sendMail", model)
-                    .then(res => {
-                        if (res.data.error) {
-                            return alertify.error(res.data.message);
-                        }
-                        alertify.success(res.data.message);
-                    })
-            }, null);
-    }
-
+    
     const showReason = (reason) => {
         alertify.alert('Cancellation Reason', reason);
     }
@@ -98,60 +71,36 @@ export default function Expenses() {
 
             tableRows = response.data.records.map(item => {
                 return <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>{item.email}</td>
-                    <td>{item.mobileNumber}</td>
-                    <td>{new Date(item.crtDate).toLocaleDateString('uk')}</td>
+                    <td>{item.userName}</td>
+                    <td>{new Date(item.date).toLocaleDateString('uk')}</td>
+                    <td>{item.amount}</td>
                     <td>{item.status === Cancelled ?
                         <span className="badge badge-danger">{item.status}</span>
                         :
                         item.status === Completed ?
                             <span className="badge badge-success">{item.status}</span>
                             :
-                            item.status === OnHold ?
-                                <span className="badge badge-secondary">{item.status}</span>
-                                :
-                                <span className="badge badge-light text-dark">{item.status}</span>}
+                            <span className="badge badge-light text-dark">{item.status}</span>}
                     </td>
+                    <td>{item.payDate && new Date(item.payDate).toLocaleDateString('uk')}</td>
                     <td>
-                        <div className="btn-group dropleft">
-                            <button type="button" className="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
+                        <Link className='btn btn-sm btn-info m-1' to={`/VolunteerExpenses/Edit/${item.id}`} title="Edit">
+                            <i className='fas fa-edit'></i>
+                        </Link>
+                        <button className='btn btn-sm btn-success m-1' onClick={() => approve(item.id)}  title="Accept">
+                            <i className='fas fa-check'></i>
+                        </button>
+                        
+                        {item.status === Cancelled ?
+                            <button className='btn btn-sm btn-danger m-1' onClick={() => showReason(item.description)} title="Show Reason">
+                                <i className="fas fa-comment-slash"></i> Show Reason
                             </button>
-                            <div className="dropdown-menu">
-                                <Link className='dropdown-item' to={`/VolunteerApplications/detail/${item.id}`}>
-                                    <i className='fas fa-list'></i> Details
-                                </Link>
-                                <button className='dropdown-item'
-                                    onClick={() => sendMail(item.id)}>
-                                    <i className='fas fa-envelope'></i> Resend Mail
-                                </button>
+                            :
+                            <button className='btn btn-sm btn-danger m-1' onClick={() => cancel(item.id)} title="Cancel">
+                                <i className="far fa-times-circle"></i>
+                            </button>
+                        }
 
-                                {item.status !== Completed && item.status !== Cancelled &&
-                                    <>
-                                        <button className='dropdown-item'
-                                            onClick={() => approve(item.id)}>
-                                            <i className='fas fa-check'></i> Approve
-                                        </button>
-                                        {item.status !== OnHold &&
-                                            <button className='dropdown-item'
-                                                onClick={() => onHold(item.id)}>
-                                                <i className='fas fa-stop-circle'></i> On Hold
-                                            </button>}
-                                    </>
-                                }
-
-                                {item.status === Cancelled ?
-                                    <button className='dropdown-item' onClick={() => showReason(item.cancellationReason)}>
-                                        <i className="fas fa-comment-slash"></i> Show Reason
-                                    </button>
-                                    :
-                                    <button className='dropdown-item' onClick={() => cancel(item.id)}>
-                                        <i className="far fa-times-circle"></i> Cancel
-                                    </button>
-                                }
-                            </div>
-                        </div>
                     </td>
                 </tr>
             })
@@ -206,10 +155,10 @@ export default function Expenses() {
                 <thead className="thead-light">
                     <tr>
                         <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Mobile No</th>
-                        <th scope="col">Application Date</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Amount</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Date Paid</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>

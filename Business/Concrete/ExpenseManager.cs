@@ -52,6 +52,42 @@ namespace Business.Concrete
             return tableModel;
         }
 
+        public async Task<Result> Save(ExpenseModel model)
+        {
+            if (model.Id == 0)
+                return await Add(model);
+            else
+                return await Update(model);
+
+        }
+        public async Task<Result> Update(ExpenseModel model)
+        {
+            var result = new Result();
+            try
+            {
+                var expense = await expenseDal.GetByIdAsync(model.Id);
+                expense.Details = model.Details;
+                expense.ModeOfTransport = model.ModeOfTransport;
+                expense.Amount = model.Amount;
+                expense.Claim = model.Claim;
+                expense.TotalMileage = model.TotalMileage;
+                expense.Date = model.Date;
+                expense.VolunteerId = model.VolunteerId;
+
+                await expenseDal.Save();
+
+                if (model.FormFile != null)
+                {
+                    await CommonFileManager.UploadVolunteerFile(expense.VolunteerId, model.FormFile, $"{expense.VolunteerId}-{expense.Id}", CommonFileTypes.Expense);
+                }
+
+            }
+            catch (Exception)
+            {
+                result.SetError(UserMessages.Fail);
+            }
+            return result;
+        }
         public async Task<Result> Add(ExpenseModel model)
         {
             var result = new Result();
@@ -77,7 +113,7 @@ namespace Business.Concrete
 
         public async Task<ExpenseModel> GetModelById(int id)
         {
-            return mapper.Map<ExpenseModel>(await expenseDal.GetByIdAsync(id));
+            return await mapper.ProjectTo<ExpenseModel>(expenseDal.Get(a=>a.Id == id)).FirstOrDefaultAsync();
         }
     }
 }

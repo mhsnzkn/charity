@@ -24,21 +24,12 @@ namespace Business.Concrete
             this.volunteerFileDal = volunteerFileDal;
         }
         private static readonly string BasePath = Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "build");
-        public async Task<CommonFile> UploadFile(IFormFile file, string fileName, string type)
+        public async Task<CommonFile> UploadSaveFile(IFormFile file, string fileName, string type)
         {
             CommonFile commonFile = null;
             try
             {
-                var uploadpath = Path.Combine("\\uploads", type);
-                if (!Directory.Exists(BasePath + uploadpath))
-                    Directory.CreateDirectory(BasePath + uploadpath);
-
-                var fileFullName = fileName+ Path.GetExtension(file.FileName);
-                uploadpath = Path.Combine(uploadpath, fileFullName);
-                using (var fs = new FileStream(BasePath + uploadpath, FileMode.Create))
-                {
-                    await file.CopyToAsync(fs);
-                }
+                var uploadpath = await UploadFile(file, fileName, type);
 
                 commonFile = new CommonFile()
                 {
@@ -55,10 +46,26 @@ namespace Business.Concrete
             return commonFile;
         }
 
+        private async Task<string> UploadFile(IFormFile file, string fileName, string type)
+        {
+            var uploadpath = Path.Combine("\\uploads", type);
+            if (!Directory.Exists(BasePath + uploadpath))
+                Directory.CreateDirectory(BasePath + uploadpath);
+
+            var fileFullName = fileName + Path.GetExtension(file.FileName);
+            uploadpath = Path.Combine(uploadpath, fileFullName);
+            using (var fs = new FileStream(BasePath + uploadpath, FileMode.Create))
+            {
+                await file.CopyToAsync(fs);
+            }
+
+            return uploadpath;
+        }
+
         public async Task<Result> UploadVolunteerFile(int volunteerId, IFormFile file, string fileName, string type)
         {
             var result = new Result();
-            var commonFile = await UploadFile(file, fileName, type);
+            var commonFile = await UploadSaveFile(file, fileName, type);
             if (commonFile == null)
                 return result.SetError(UserMessages.FileUploadFailed);
 
@@ -73,11 +80,11 @@ namespace Business.Concrete
             return result;
         }
 
-        public async Task DeleteVolunteerFile(int volunteerId)
+        public async Task DeleteVolunteerFiles(int volunteerId, string type)
         {
             try
             {
-                var volunteerFiles = await volunteerFileDal.Get(a => a.VolunteerId == volunteerId).Include(a=>a.CommonFile).ToListAsync();
+                var volunteerFiles = await volunteerFileDal.Get(a => a.VolunteerId == volunteerId && a.CommonFile.Type == type).Include(a=>a.CommonFile).ToListAsync();
                 if (volunteerFiles is null || volunteerFiles.Count == 0)
                     return;
                 foreach (var item in volunteerFiles)

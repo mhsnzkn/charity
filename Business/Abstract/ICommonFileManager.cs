@@ -12,8 +12,8 @@ namespace Business.Abstract
 {
     public interface ICommonFileManager
     {
-        Task DeleteVolunteerFile(int volunteerId);
-        Task<CommonFile> UploadFile(IFormFile file, string fileName, string type);
+        Task DeleteVolunteerFiles(int volunteerId, string type);
+        Task<CommonFile> UploadSaveFile(IFormFile file, string fileName, string type);
         Task<Result> UploadVolunteerFile(int volunteerId, IFormFile file, string fileName, string type);
     }
 }

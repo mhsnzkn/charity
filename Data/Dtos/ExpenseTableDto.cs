@@ -17,5 +17,6 @@ namespace Data.Dtos
         public ExpenseStatus Status { get; set; }
         public string UserName { get; set; }
         public DateTime? PayDate { get; set; }
+        public string Description { get; set; }
     }
 }

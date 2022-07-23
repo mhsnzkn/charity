@@ -18,20 +18,20 @@ export default function ExpenseEdit() {
     const url = '/api/expense';
 
 
-    // useEffect(() => {
-    //     if (params.id) {
-    //         setLoading(true);
-    //         axios.get(url + "/" + params.id).then(res => {
-    //             setValues(res.data)
-    //         })
-    //             .finally(() => setLoading(false))
-    //     }
-    // }, [params.id])
+    useEffect(() => {
+        if (params.id) {
+            setLoading(true);
+            axios.get(url + "/" + params.id).then(res => {
+                setValues(res.data)
+            })
+                .finally(() => setLoading(false))
+        }
+    }, [params.id])
 
     const submitHandler = values => {
         setBtnLoading(true);
         const formData = new FormData();
-        formData.append('id', params.id);
+        formData.append('id', params.id || 0);
         formData.append('details', values.details);
         formData.append('modeOfTransport', values.modeOfTransport);
         formData.append('claim', values.claim);
@@ -39,10 +39,8 @@ export default function ExpenseEdit() {
         formData.append('totalMileage', values.totalMileage);
         formData.append('date', values.date);
         formData.append('volunteerId', values.volunteerId);
-
         formData.append('formFile', file);
 
-        values.id = params.id;
         axios.post(url, formData)
             .then((res) => {
                 if (res.data.error) {
@@ -58,11 +56,11 @@ export default function ExpenseEdit() {
         enableReinitialize: true,
         initialValues: {
             details: values.details || '',
-            modeOfTransport: values.details || '',
-            claim: values.details || '',
+            modeOfTransport: values.modeOfTransport || '',
+            claim: values.claim || '',
             amount: values.amount || 0,
-            totalMileage: values.amount || 0,
-            date: values.date || new Date().toISOString().split('T')[0],
+            totalMileage: values.totalMileage || 0,
+            date: values.date ? new Date(values.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
             volunteerId: values.volunteerId || ''
         },
         onSubmit: submitHandler,
@@ -142,7 +140,7 @@ export default function ExpenseEdit() {
                             {formik.touched.amount && formik.errors.amount && <small className='text-danger'>{formik.errors.amount}</small>}
                         </div>
                         <div className="form-group col-md-6">
-                            <label htmlFor="formFile">File</label>
+                            <label htmlFor="formFile">New File</label>
                             <input type="file" id="formFile" name="formFile" className="form-control"
                                 onChange={(e) => setFile(e.target.files[0])}
                             />
@@ -153,6 +151,7 @@ export default function ExpenseEdit() {
                                 onChange={(e)=> formik.setFieldValue('volunteerId', e)} 
                                 url="/api/volunteer/VolunteersForDropDown"
                                 defaultValue={{id:'', name:'--Choose--'}}
+                                value={formik.values.volunteerId}
                                 />
                             {formik.touched.volunteerId && formik.errors.volunteerId && <small className='text-danger'>{formik.errors.volunteerId}</small>}
                         </div>
@@ -161,6 +160,9 @@ export default function ExpenseEdit() {
                     <div className='d-flex justify-content-end'>
                         <LoaderButton isLoading={btnLoading} type="submit" className="btn btn-primary">Save</LoaderButton>
                     </div>
+                    
+                    {values.filePath && <div><img className='img-fluid' src={values.filePath} alt='expense'/></div>}
+                    
                 </form>
 
             }

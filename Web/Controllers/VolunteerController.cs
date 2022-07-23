@@ -81,7 +81,6 @@ namespace Web.Controllers
             return Ok(result);
         }
 
-        // PUT api/<VolunteerController>
         [HttpPost("actions")]
         public async Task<IActionResult> Put([FromBody]VolunteerActionModel volunteerModel)
         {

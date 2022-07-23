@@ -4,6 +4,7 @@ using Data.Dtos;
 using Data.Entities;
 using Data.Extensions;
 using Data.Models;
+using Data.Utility.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +44,10 @@ namespace Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromForm] ExpenseModel model)
         {
-            return Ok(await expenseManager.Add(model));
+            if (!model.IsValid())
+                return BadRequest();
+
+            return Ok(await expenseManager.Save(model));
         }
 
         // GET: api/<ExpenseController>
@@ -61,10 +65,27 @@ namespace Web.Controllers
             return selectList;
         }
 
-        // PUT api/<ExpenseController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost("actions")]
+        public async Task<IActionResult> Actions([FromBody] VolunteerActionModel volunteerModel)
         {
+            Result result;
+            switch (volunteerModel.Action)
+            {
+                //case HttpExpenseActions.Approve:
+                //    result = await volunteerManager.ApproveAndCheckMail(volunteerModel.Id);
+                //    break;
+                //case HttpExpenseActions.Pay:
+                //    result = await volunteerManager.OnHold(volunteerModel.Id);
+                //    break;
+                //case HttpExpenseActions.Cancel:
+                //    result = await volunteerManager.Cancel(volunteerModel.Id, volunteerModel.CancellationReason);
+                //    break;
+                default:
+                    result = new Result();
+                    result.SetError(UserMessages.ActionNotFound);
+                    break;
+            }
+            return Ok(result);
         }
 
         // DELETE api/<ExpenseController>/5

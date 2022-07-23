@@ -49,7 +49,7 @@ namespace DataAccess.Concrete
             return await context.Volunteers.Where(x => x.Status == VolunteerStatus.Completed).OrderBy(a=>a.FirstName).Select(a => new DropDownItem
             {
                 Id = a.Id.ToString(), 
-                Name = a.FirstName+ a.LastName
+                Name = a.FirstName + " " + a.LastName
             }).ToListAsync();
         }
     }
