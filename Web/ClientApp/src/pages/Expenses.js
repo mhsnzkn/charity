@@ -7,7 +7,7 @@ import ApiSelect from '../components/ApiSelect';
 import Paginator from '../components/Paginator';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
-import { Cancelled, Completed } from '../constants/volunteerStatus';
+import { Cancelled, Accepted, Paid } from '../constants/expenseStatus';
 
 export default function Expenses() {
     const baseUrl = "/api/expense"
@@ -33,7 +33,7 @@ export default function Expenses() {
     }
 
     const approve = (id) => {
-        alertify.confirm("Approve", "Do you confirm to approve?",
+        alertify.confirm("Accept", "Do you confirm to accept?",
             function () {
                 let model = { id: id, action: "approve", cancellationReason: "" };
                 axios.post(baseUrl + "/actions", model)
@@ -60,7 +60,25 @@ export default function Expenses() {
                     })
             }, null);
     }
-    
+    const pay = (id) => {
+        alertify.prompt('Expense Payment', 'Paid Date:', '',
+            function (evt, value) {
+                if (value) {
+                    let model = { id: id, action: "pay", date: value };
+                    axios.post(baseUrl + "/actions", model)
+                        .then(res => {
+                            if (res.data.error) {
+                                return alertify.error(res.data.message);
+                            }
+                            alertify.success(res.data.message);
+                            setUpdate(update + 1);
+                        })
+                }else{
+                    alertify.alert("Payment is not done", "Date is required")
+                }
+            }, null).set('type', 'date');
+    }
+
     const showReason = (reason) => {
         alertify.alert('Cancellation Reason', reason);
     }
@@ -77,23 +95,33 @@ export default function Expenses() {
                     <td>{item.status === Cancelled ?
                         <span className="badge badge-danger">{item.status}</span>
                         :
-                        item.status === Completed ?
+                        item.status === Paid ?
                             <span className="badge badge-success">{item.status}</span>
                             :
-                            <span className="badge badge-light text-dark">{item.status}</span>}
+                            item.status === Accepted ?
+                                <span className="badge badge-info ">{item.status}</span>
+                                :
+                                <span className="badge badge-light text-dark">{item.status}</span>}
                     </td>
                     <td>{item.payDate && new Date(item.payDate).toLocaleDateString('uk')}</td>
                     <td>
                         <Link className='btn btn-sm btn-info m-1' to={`/VolunteerExpenses/Edit/${item.id}`} title="Edit">
                             <i className='fas fa-edit'></i>
                         </Link>
-                        <button className='btn btn-sm btn-success m-1' onClick={() => approve(item.id)}  title="Accept">
-                            <i className='fas fa-check'></i>
-                        </button>
-                        
+                        {item.status === Accepted ?
+                            <button className='btn btn-sm btn-success m-1' onClick={() => pay(item.id)} title="Pay">
+                                <i className="fas fas fa-money-bill"></i>
+                            </button>
+                            :
+                            <button className='btn btn-sm btn-success m-1' onClick={() => approve(item.id)} title="Accept">
+                                <i className='fas fa-check'></i>
+                            </button>
+                        }
+
+
                         {item.status === Cancelled ?
                             <button className='btn btn-sm btn-danger m-1' onClick={() => showReason(item.description)} title="Show Reason">
-                                <i className="fas fa-comment-slash"></i> Show Reason
+                                <i className="fas fa-comment-slash"></i>
                             </button>
                             :
                             <button className='btn btn-sm btn-danger m-1' onClick={() => cancel(item.id)} title="Cancel">

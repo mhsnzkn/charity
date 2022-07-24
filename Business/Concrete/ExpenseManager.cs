@@ -29,12 +29,17 @@ namespace Business.Concrete
             CommonFileManager = commonFileManager;
         }
 
-        public async Task<TableResponseDto<ExpenseTableDto>> GetTable(TableParams param)
+        public async Task<TableResponseDto<ExpenseTableDto>> GetTable(ExpenseTableParamsDto param)
         {
             var query = expenseDal.Get().OrderBy(a=>a.CrtDate).AsQueryable();
 
             if (!string.IsNullOrEmpty(param.SearchString))
                 query = query.Where(a => a.Volunteer.FirstName.Contains(param.SearchString) || a.Volunteer.LastName.Contains(param.SearchString));
+            if (!string.IsNullOrEmpty(param.Status))
+            {
+                var status = Enum.Parse<ExpenseStatus>(param.Status);
+                query = query.Where(a => a.Status == status);
+            }
 
             var total = await query.CountAsync();
             if (param.Length > 0)
@@ -114,6 +119,44 @@ namespace Business.Concrete
         public async Task<ExpenseModel> GetModelById(int id)
         {
             return await mapper.ProjectTo<ExpenseModel>(expenseDal.Get(a=>a.Id == id)).FirstOrDefaultAsync();
+        }
+
+        public async Task<Result> Approve(int id)
+        {
+            var result = new Result();
+            var expense = await expenseDal.GetByIdAsync(id);
+            if (expense is null)
+                return result.SetError(UserMessages.DataNotFound);
+
+            expense.Status = ExpenseStatus.Accepted;
+            await expenseDal.Save();
+            return result;
+        }
+
+        public async Task<Result> Pay(int id, DateTime date)
+        {
+            var result = new Result();
+            var expense = await expenseDal.GetByIdAsync(id);
+            if (expense is null)
+                return result.SetError(UserMessages.DataNotFound);
+
+            expense.Status = ExpenseStatus.Paid;
+            expense.PayDate = date;
+            await expenseDal.Save();
+            return result;
+        }
+
+        public async Task<Result> Cancel(int id, string cancellationReason)
+        {
+            var result = new Result();
+            var expense = await expenseDal.GetByIdAsync(id);
+            if (expense is null)
+                return result.SetError(UserMessages.DataNotFound);
+
+            expense.Status = ExpenseStatus.Cancelled;
+            expense.Description = cancellationReason;
+            await expenseDal.Save();
+            return result;
         }
     }
 }

@@ -82,7 +82,7 @@ namespace Web.Controllers
         }
 
         [HttpPost("actions")]
-        public async Task<IActionResult> Put([FromBody]VolunteerActionModel volunteerModel)
+        public async Task<IActionResult> Put([FromBody]ActionModel volunteerModel)
         {
             Result result;
             switch (volunteerModel.Action)
@@ -105,7 +105,7 @@ namespace Web.Controllers
         }
 
         [HttpPost("SendMail")]
-        public async Task<IActionResult> ResendStatusMail([FromBody] VolunteerActionModel volunteerModel)
+        public async Task<IActionResult> ResendStatusMail([FromBody] ActionModel volunteerModel)
         {
             return Ok(await volunteerManager.SendStatusMail(volunteerModel.Id));
         }

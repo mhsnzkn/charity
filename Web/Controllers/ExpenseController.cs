@@ -66,20 +66,20 @@ namespace Web.Controllers
         }
 
         [HttpPost("actions")]
-        public async Task<IActionResult> Actions([FromBody] VolunteerActionModel volunteerModel)
+        public async Task<IActionResult> Actions([FromBody] ExpenseActionModel actionModel)
         {
             Result result;
-            switch (volunteerModel.Action)
+            switch (actionModel.Action)
             {
-                //case HttpExpenseActions.Approve:
-                //    result = await volunteerManager.ApproveAndCheckMail(volunteerModel.Id);
-                //    break;
-                //case HttpExpenseActions.Pay:
-                //    result = await volunteerManager.OnHold(volunteerModel.Id);
-                //    break;
-                //case HttpExpenseActions.Cancel:
-                //    result = await volunteerManager.Cancel(volunteerModel.Id, volunteerModel.CancellationReason);
-                //    break;
+                case HttpExpenseActions.Approve:
+                    result = await expenseManager.Approve(actionModel.Id);
+                    break;
+                case HttpExpenseActions.Pay:
+                    result = await expenseManager.Pay(actionModel.Id, actionModel.Date);
+                    break;
+                case HttpExpenseActions.Cancel:
+                    result = await expenseManager.Cancel(actionModel.Id, actionModel.CancellationReason);
+                    break;
                 default:
                     result = new Result();
                     result.SetError(UserMessages.ActionNotFound);
