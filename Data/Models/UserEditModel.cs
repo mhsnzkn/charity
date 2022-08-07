@@ -22,5 +22,6 @@ namespace Data.Models
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public UserStatus Status { get; set; }
         public string Password { get; set; }
+        public int VolunteerId { get; set; }
     }
 }

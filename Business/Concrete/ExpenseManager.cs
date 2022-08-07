@@ -40,6 +40,10 @@ namespace Business.Concrete
                 var status = Enum.Parse<ExpenseStatus>(param.Status);
                 query = query.Where(a => a.Status == status);
             }
+            if(param.Date is not null)
+            {
+                query = query.Where(a => a.Date >= param.Date && a.Date < param.Date.Value.AddMonths(1));
+            }
 
             var total = await query.CountAsync();
             if (param.Length > 0)

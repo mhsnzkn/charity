@@ -8,17 +8,18 @@ import Paginator from '../components/Paginator';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
 import { Cancelled, Accepted, Paid } from '../constants/expenseStatus';
+import ReactDatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function Expenses() {
     const baseUrl = "/api/expense"
-    const [url, setUrl] = useState(baseUrl + "?start=0&length=10");
+    const [url, setUrl] = useState("start=0&length=10");
     const [update, setUpdate] = useState(0);
 
-    let response = useAxiosGet(url, update);
+    let response = useAxiosGet(baseUrl + "?" + url, update);
 
     const paramChangeHandler = (key, value) => {
-        let paramUrl = url.split('?')[1];
-        let params = new URLSearchParams(paramUrl);
+        let params = new URLSearchParams(url);
         if (key === "page") {
             if (value < 1) return;
             let length = getLengthUrl(url);
@@ -29,7 +30,7 @@ export default function Expenses() {
         }
 
         params.set(key, value);
-        setUrl(baseUrl + "?" + params.toString());
+        setUrl(params.toString());
     }
 
     const approve = (id) => {
@@ -73,7 +74,7 @@ export default function Expenses() {
                             alertify.success(res.data.message);
                             setUpdate(update + 1);
                         })
-                }else{
+                } else {
                     alertify.alert("Payment is not done", "Date is required")
                 }
             }, null).set('type', 'date');
@@ -158,6 +159,15 @@ export default function Expenses() {
                             className="form-select"
                             url="/api/expense/GetExpenseStatus"
                             onChange={value => paramChangeHandler('status', value)}
+                        />
+                    </div>
+                    <label className="col-sm-2 col-form-label">Date</label>
+                    <div className="col-sm-4">
+                        <ReactDatePicker
+                            onChange={v => paramChangeHandler('date', v.toLocaleDateString())}
+                            showMonthYearPicker
+                            dateFormat="MM/yyyy"
+                            val
                         />
                     </div>
                 </div>

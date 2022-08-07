@@ -7,20 +7,28 @@ import { getHttpHeader } from '../helpers/helpers';
 import axios from 'axios';
 import alertify from 'alertifyjs';
 import { useAxiosGet } from '../Hooks/HttpRequests';
+import { Admin, Volunteer } from '../constants/userRoles';
 
 export default function UserEdit() {
     const params = useParams();
     const [btnLoading, setBtnLoading] = useState(false);
     const navigate = useNavigate();
     const url = '/api/user'
+    const volunteerResponse = useAxiosGet("/api/Volunteer/VolunteersForDropDown");
     const response = useAxiosGet(url+"/"+params.id)
+    
+    let volunteerOptions;
+    if(volunteerResponse.data){
+        volunteerOptions = volunteerResponse.data.map(item => {return <option key={item.id} value={item.id}>{item.name}</option>})
+    }
 
     const initialValues = {
         name : response.data?.name ?? '',
         email : response.data?.email ?? '',
         job : response.data?.job ?? '',
         role : response.data?.role ?? '',
-        status :  response.data?.status ?? "Active"
+        status :  response.data?.status ?? "Active",
+        volunteerId: response.data?.volunteerId ?? ""
     };
     const validationSchema = yup.object().shape({
         name: yup.string().required('Required'),
@@ -81,8 +89,8 @@ export default function UserEdit() {
                                 <label htmlFor="role">Role</label>
                                 <Field as="select" id="role" name="role" className="form-select" >
                                     <option value="">--Choose--</option>
-                                    <option value="volunteer">Volunteer</option>
-                                    <option value="admin">Admin</option>
+                                    <option value={Volunteer}>Volunteer</option>
+                                    <option value={Admin}>Admin</option>
                                 </Field>
                                 <ErrorMessage component="span" name="role" className="text-danger" />
                             </div>
@@ -93,6 +101,14 @@ export default function UserEdit() {
                                     <option value="Active">Active</option>
                                 </Field>
                                 <ErrorMessage component="span" name="status" className="text-danger" />
+                            </div>
+                            <div className="form-group col-md-6">
+                                <label htmlFor="volunteer">Volunteer</label>
+                                <Field as="select" id="volunteer" name="volunteer" className="form-select" >
+                                    <option value="">--Choose--</option>
+                                    {volunteerOptions}
+                                </Field>
+                                <ErrorMessage component="span" name="volunteer" className="text-danger" />
                             </div>
                         </div>
 

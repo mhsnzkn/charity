@@ -1,11 +1,23 @@
+import { Admin, Volunteer } from "../constants/userRoles";
 
 export const getToken = ()=>{
     const session = localStorage.getItem('session');
     return JSON.parse(session).token;
 }
-export const getRole = ()=>{
+export const getUserRole = ()=>{
     const session = localStorage.getItem('session');
     return JSON.parse(session).role;
+}
+export const getRole = (role)=>{
+    switch (role) {
+        case Volunteer:
+            return "Volunteer";
+        case Admin:
+            return "Admin"
+    
+        default:
+            return ""
+    }
 }
 export const getVolunteerId = ()=>{
     const session = localStorage.getItem('session');

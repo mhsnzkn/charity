@@ -75,6 +75,7 @@ namespace Business.Concrete
                 entity.Status = model.Status;
                 entity.Job = model.Job;
                 entity.Role = model.Role;
+                entity.VolunteerId = model.VolunteerId;
                 entity.UptDate = DateTime.Now;
                 await userDal.Save();
             }
