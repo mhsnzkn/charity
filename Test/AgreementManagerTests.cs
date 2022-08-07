@@ -36,19 +36,5 @@ namespace Test
             Assert.Null(result);
 
         }
-        [Fact]
-        public async Task GetById_WhenCalledInvalidId_ThenReturnNull2()
-        {
-            /// Assign
-            mock.Setup(p => p.GetByIdAsync(1)).ReturnsAsync(new Agreement { Id = 1, Title = "Test Title", Content = "", Order = 1});
-            AgreementManager manager = new (mock.Object, null, null, null);
-
-            /// Act
-            var result = await manager.GetById(2);
-
-            /// Assert
-            Assert.Null(result);
-
-        }
     }
 }
