@@ -16,8 +16,11 @@ namespace Business.Abstract
 {
     public interface IExpenseManager
     {
-        Task<Result> Add(Expense expense, IFormFile formFile);
+        Task<Result> Save(ExpenseModel model);
         Task<ExpenseModel> GetModelById(int id);
-        Task<TableResponseDto<ExpenseTableDto>> GetTable(TableParams param);
+        Task<TableResponseDto<ExpenseTableDto>> GetTable(ExpenseTableParamsDto param);
+        Task<Result> Approve(int id);
+        Task<Result> Pay(int id, DateTime date);
+        Task<Result> Cancel(int id, string cancellationReason);
     }
 }

@@ -10,5 +10,6 @@ namespace Data.Utility.Security
     {
         public string Token { get; set; }
         public string Role { get; set; }
+        public int VolunteerId { get; set; }
     }
 }

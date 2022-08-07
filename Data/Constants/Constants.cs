@@ -9,8 +9,8 @@ namespace Data.Constants
 
     public struct UserRoles
     {
-        public const string Admin = "admin";
-        public const string Volunteer = "volunteer";
+        public const string Admin = "E7BwbC6sz4wKnG";
+        public const string Volunteer = "WpigdAQFU8f2HH";
     }
 
     public struct HttpVolunteerActions
@@ -30,6 +30,11 @@ namespace Data.Constants
         public const string DbsDocument = "DbsDocument";
         public const string Expense = "Expense";
     }
-
+    public struct HttpExpenseActions
+    {
+        public const string Approve = "approve";
+        public const string Cancel = "cancel";
+        public const string Pay = "pay";
+    }
 
 }

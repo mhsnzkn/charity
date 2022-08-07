@@ -19,12 +19,13 @@ import alertify from 'alertifyjs';
 import PasswordChangePage from './pages/PasswordChangePage';
 import ScrollTop from './Hooks/ScrollTop';
 import VolunteerDocumentForm from './pages/VolunteerDocumentForm';
-import Agreement from './pages/Agreement';
+import Agreements from './pages/Agreements';
 import SubmitSuccess from './pages/SubmitSuccess';
 import VolunteerForm from './pages/VolunteerForm';
 import VolunteerAgreementForm from './pages/VolunteerAgreementForm';
 import AgreementView from './pages/AgreementView';
 import Expenses from './pages/Expenses';
+import ExpenseEdit from './pages/ExpenseEdit';
 
 function App() {
 
@@ -53,13 +54,14 @@ function App() {
             <Route path="VolunteerApplications" element={<Volunteers />} />
             <Route path="VolunteerApplications/Detail/:id" element={<VolunteerDetail />} />
             <Route path="VolunteerExpenses" element={<Expenses />} />
-            <Route path="VolunteerExpenses/Detail/:id" element={<VolunteerDetail />} />
+            <Route path="VolunteerExpenses/Add" element={<ExpenseEdit />} />
+            <Route path="VolunteerExpenses/Edit/:id" element={<ExpenseEdit />} />
             <Route path="Users" element={<Users />} />
             <Route path="Users/Add" element={<UserAdd />} />
             <Route path="Users/Edit/:id" element={<UserEdit />} />
             <Route path="Users/PassChange/:id" element={<PasswordChangePage />} />
             <Route path="MyAccount" element={<MyAccount />} />
-            <Route path="Agreements" element={<Agreement />} />
+            <Route path="Agreements" element={<Agreements />} />
             <Route path="Agreements/Add" element={<AgreementEdit />} />
             <Route path="Agreements/Edit/:id" element={<AgreementEdit />} />
             <Route path="Agreements/View/:id" element={<AgreementView />} />

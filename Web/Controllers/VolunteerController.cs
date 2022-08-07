@@ -41,13 +41,21 @@ namespace Web.Controllers
         [HttpGet("GetVolunteerStatus")]
         public IEnumerable<DropDownItem> GetVolunteerStatus()
         {
-            var selectList = new List<DropDownItem>();
-            selectList.Add(new DropDownItem { Id = "", Name = "All" });
+            var selectList = new List<DropDownItem>
+            {
+                new DropDownItem { Id = "", Name = "All" }
+            };
             foreach (VolunteerStatus item in Enum.GetValues(typeof(VolunteerStatus)))
             {
                 selectList.Add(new DropDownItem { Id=((int)item).ToString(), Name= item.GetDescription() });
             }
             return selectList;
+        }
+        // GET: api/<VolunteerController>
+        [HttpGet("VolunteersForDropDown")]
+        public async Task<List<DropDownItem>> GetVolunteerForDropDown()
+        {
+            return await volunteerManager.GetVolunteersForDropDown();
         }
 
         // GET api/<VolunteerController>/5
@@ -73,9 +81,8 @@ namespace Web.Controllers
             return Ok(result);
         }
 
-        // PUT api/<VolunteerController>
         [HttpPost("actions")]
-        public async Task<IActionResult> Put([FromBody]VolunteerActionModel volunteerModel)
+        public async Task<IActionResult> Put([FromBody]ActionModel volunteerModel)
         {
             Result result;
             switch (volunteerModel.Action)
@@ -98,7 +105,7 @@ namespace Web.Controllers
         }
 
         [HttpPost("SendMail")]
-        public async Task<IActionResult> ResendStatusMail([FromBody] VolunteerActionModel volunteerModel)
+        public async Task<IActionResult> ResendStatusMail([FromBody] ActionModel volunteerModel)
         {
             return Ok(await volunteerManager.SendStatusMail(volunteerModel.Id));
         }

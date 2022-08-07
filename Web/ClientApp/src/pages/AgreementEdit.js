@@ -4,7 +4,6 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import LoaderButton from '../components/LoaderButton';
 import Loader from '../components/Loader';
 import * as yup from 'yup'
-import { getHttpHeader } from '../helpers/helpers';
 import axios from 'axios';
 import alertify from 'alertifyjs';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -32,7 +31,7 @@ export default function AgreementEdit() {
     const submitHandler = values => {
         setBtnLoading(true);
         values.id = params.id;
-        axios.post(url, values, getHttpHeader())
+        axios.post(url, values)
             .then((res) => {
                 if (res.data.error) {
                     alertify.error(res.data.message)

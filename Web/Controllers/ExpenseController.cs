@@ -3,6 +3,8 @@ using Data.Constants;
 using Data.Dtos;
 using Data.Entities;
 using Data.Extensions;
+using Data.Models;
+using Data.Utility.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -40,17 +42,22 @@ namespace Web.Controllers
 
         // POST api/<ExpenseController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm] Expense expense, [FromForm] IFormFile formFile)
+        public async Task<IActionResult> Post([FromForm] ExpenseModel model)
         {
-            return Ok(await expenseManager.Add(expense, formFile));
+            if (!model.IsValid())
+                return BadRequest();
+
+            return Ok(await expenseManager.Save(model));
         }
 
         // GET: api/<ExpenseController>
         [HttpGet("GetExpenseStatus")]
         public IEnumerable<DropDownItem> GetExpenseStatus()
         {
-            var selectList = new List<DropDownItem>();
-            selectList.Add(new DropDownItem { Id = "", Name = "All" });
+            var selectList = new List<DropDownItem>
+            {
+                new DropDownItem { Id = "", Name = "All" }
+            };
             foreach (ExpenseStatus item in Enum.GetValues(typeof(ExpenseStatus)))
             {
                 selectList.Add(new DropDownItem { Id = ((int)item).ToString(), Name = item.GetDescription() });
@@ -58,10 +65,27 @@ namespace Web.Controllers
             return selectList;
         }
 
-        // PUT api/<ExpenseController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost("actions")]
+        public async Task<IActionResult> Actions([FromBody] ExpenseActionModel actionModel)
         {
+            Result result;
+            switch (actionModel.Action)
+            {
+                case HttpExpenseActions.Approve:
+                    result = await expenseManager.Approve(actionModel.Id);
+                    break;
+                case HttpExpenseActions.Pay:
+                    result = await expenseManager.Pay(actionModel.Id, actionModel.Date);
+                    break;
+                case HttpExpenseActions.Cancel:
+                    result = await expenseManager.Cancel(actionModel.Id, actionModel.CancellationReason);
+                    break;
+                default:
+                    result = new Result();
+                    result.SetError(UserMessages.ActionNotFound);
+                    break;
+            }
+            return Ok(result);
         }
 
         // DELETE api/<ExpenseController>/5

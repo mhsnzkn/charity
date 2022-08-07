@@ -11,5 +11,6 @@ namespace Data.Dtos
     public class ExpenseTableParamsDto : TableParams
     {
         public string Status { get; set; }
+        public DateTime? Date { get; set; }
     }
 }

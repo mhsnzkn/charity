@@ -1,14 +1,7 @@
-import { useFormik } from 'formik';
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import LoaderButton from '../components/LoaderButton';
+import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../components/Loader';
-import * as yup from 'yup'
-import { getHttpHeader } from '../helpers/helpers';
 import axios from 'axios';
-import alertify from 'alertifyjs';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default function AgreementView() {
     const params = useParams();

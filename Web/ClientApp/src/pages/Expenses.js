@@ -7,18 +7,19 @@ import ApiSelect from '../components/ApiSelect';
 import Paginator from '../components/Paginator';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
-import { Cancelled, Completed, OnHold } from '../constants/volunteerStatus';
+import { Cancelled, Accepted, Paid } from '../constants/expenseStatus';
+import ReactDatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function Expenses() {
-    const baseUrl = "/api/volunteer"
-    const [url, setUrl] = useState(baseUrl + "?start=0&length=10");
+    const baseUrl = "/api/expense"
+    const [url, setUrl] = useState("start=0&length=10");
     const [update, setUpdate] = useState(0);
 
-    let response = useAxiosGet(url, update);
+    let response = useAxiosGet(baseUrl + "?" + url, update);
 
     const paramChangeHandler = (key, value) => {
-        let paramUrl = url.split('?')[1];
-        let params = new URLSearchParams(paramUrl);
+        let params = new URLSearchParams(url);
         if (key === "page") {
             if (value < 1) return;
             let length = getLengthUrl(url);
@@ -29,11 +30,11 @@ export default function Expenses() {
         }
 
         params.set(key, value);
-        setUrl(baseUrl + "?" + params.toString());
+        setUrl(params.toString());
     }
 
     const approve = (id) => {
-        alertify.confirm("Approve", "Do you confirm to approve?",
+        alertify.confirm("Accept", "Do you confirm to accept?",
             function () {
                 let model = { id: id, action: "approve", cancellationReason: "" };
                 axios.post(baseUrl + "/actions", model)
@@ -47,7 +48,7 @@ export default function Expenses() {
             }, null);
     }
     const cancel = (id) => {
-        alertify.prompt('Reject Volunteer Application', 'Reject Reason:', '',
+        alertify.prompt('Reject Expense Payment', 'Reject Reason:', '',
             function (evt, value) {
                 let model = { id: id, action: "cancel", cancellationReason: value };
                 axios.post(baseUrl + "/actions", model)
@@ -60,32 +61,23 @@ export default function Expenses() {
                     })
             }, null);
     }
-    const onHold = (id) => {
-        alertify.confirm("On Hold", "Do you confirm to put the application on hold?",
-            function () {
-                let model = { id: id, action: "onhold" };
-                axios.post(baseUrl + "/actions", model)
-                    .then(res => {
-                        if (res.data.error) {
-                            return alertify.error(res.data.message);
-                        }
-                        alertify.success(res.data.message);
-                        setUpdate(update + 1);
-                    })
-            }, null);
-    }
-    const sendMail = (id) => {
-        alertify.confirm("Send Mail", "Do you confirm to send the last email?",
-            function () {
-                let model = { id: id };
-                axios.post(baseUrl + "/sendMail", model)
-                    .then(res => {
-                        if (res.data.error) {
-                            return alertify.error(res.data.message);
-                        }
-                        alertify.success(res.data.message);
-                    })
-            }, null);
+    const pay = (id) => {
+        alertify.prompt('Expense Payment', 'Paid Date:', '',
+            function (evt, value) {
+                if (value) {
+                    let model = { id: id, action: "pay", date: value };
+                    axios.post(baseUrl + "/actions", model)
+                        .then(res => {
+                            if (res.data.error) {
+                                return alertify.error(res.data.message);
+                            }
+                            alertify.success(res.data.message);
+                            setUpdate(update + 1);
+                        })
+                } else {
+                    alertify.alert("Payment is not done", "Date is required")
+                }
+            }, null).set('type', 'date');
     }
 
     const showReason = (reason) => {
@@ -98,60 +90,46 @@ export default function Expenses() {
 
             tableRows = response.data.records.map(item => {
                 return <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>{item.email}</td>
-                    <td>{item.mobileNumber}</td>
-                    <td>{new Date(item.crtDate).toLocaleDateString('uk')}</td>
+                    <td>{item.userName}</td>
+                    <td>{new Date(item.date).toLocaleDateString('uk')}</td>
+                    <td>{item.amount}</td>
                     <td>{item.status === Cancelled ?
                         <span className="badge badge-danger">{item.status}</span>
                         :
-                        item.status === Completed ?
+                        item.status === Paid ?
                             <span className="badge badge-success">{item.status}</span>
                             :
-                            item.status === OnHold ?
-                                <span className="badge badge-secondary">{item.status}</span>
+                            item.status === Accepted ?
+                                <span className="badge badge-info ">{item.status}</span>
                                 :
                                 <span className="badge badge-light text-dark">{item.status}</span>}
                     </td>
+                    <td>{item.payDate && new Date(item.payDate).toLocaleDateString('uk')}</td>
                     <td>
-                        <div className="btn-group dropleft">
-                            <button type="button" className="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
+                        <Link className='btn btn-sm btn-info m-1' to={`/VolunteerExpenses/Edit/${item.id}`} title="Edit">
+                            <i className='fas fa-edit'></i>
+                        </Link>
+                        {item.status === Accepted ?
+                            <button className='btn btn-sm btn-success m-1' onClick={() => pay(item.id)} title="Pay">
+                                <i className="fas fas fa-money-bill"></i>
                             </button>
-                            <div className="dropdown-menu">
-                                <Link className='dropdown-item' to={`/VolunteerApplications/detail/${item.id}`}>
-                                    <i className='fas fa-list'></i> Details
-                                </Link>
-                                <button className='dropdown-item'
-                                    onClick={() => sendMail(item.id)}>
-                                    <i className='fas fa-envelope'></i> Resend Mail
-                                </button>
+                            :
+                            <button className='btn btn-sm btn-success m-1' onClick={() => approve(item.id)} title="Accept">
+                                <i className='fas fa-check'></i>
+                            </button>
+                        }
 
-                                {item.status !== Completed && item.status !== Cancelled &&
-                                    <>
-                                        <button className='dropdown-item'
-                                            onClick={() => approve(item.id)}>
-                                            <i className='fas fa-check'></i> Approve
-                                        </button>
-                                        {item.status !== OnHold &&
-                                            <button className='dropdown-item'
-                                                onClick={() => onHold(item.id)}>
-                                                <i className='fas fa-stop-circle'></i> On Hold
-                                            </button>}
-                                    </>
-                                }
 
-                                {item.status === Cancelled ?
-                                    <button className='dropdown-item' onClick={() => showReason(item.cancellationReason)}>
-                                        <i className="fas fa-comment-slash"></i> Show Reason
-                                    </button>
-                                    :
-                                    <button className='dropdown-item' onClick={() => cancel(item.id)}>
-                                        <i className="far fa-times-circle"></i> Cancel
-                                    </button>
-                                }
-                            </div>
-                        </div>
+                        {item.status === Cancelled ?
+                            <button className='btn btn-sm btn-danger m-1' onClick={() => showReason(item.description)} title="Show Reason">
+                                <i className="fas fa-comment-slash"></i>
+                            </button>
+                            :
+                            <button className='btn btn-sm btn-danger m-1' onClick={() => cancel(item.id)} title="Cancel">
+                                <i className="far fa-times-circle"></i>
+                            </button>
+                        }
+
                     </td>
                 </tr>
             })
@@ -168,16 +146,28 @@ export default function Expenses() {
 
     return (
         <>
-            <h4>Volunteers</h4>
-            <hr />
+            <h4>Expenses</h4><hr />
+            <div className='m-1 p-1'>
+                <Link to="/VolunteerExpenses/Add" className='btn btn-primary'><i className='fas fa-plus'></i> Add</Link>
+            </div>
+
             <div className='m-3 p-3'>
                 <div className="form-group row">
                     <label className="col-sm-2 col-form-label">Status</label>
                     <div className="col-sm-4">
                         <ApiSelect
                             className="form-select"
-                            url="/api/volunteer/GetVolunteerStatus"
+                            url="/api/expense/GetExpenseStatus"
                             onChange={value => paramChangeHandler('status', value)}
+                        />
+                    </div>
+                    <label className="col-sm-2 col-form-label">Date</label>
+                    <div className="col-sm-4">
+                        <ReactDatePicker
+                            onChange={v => paramChangeHandler('date', v.toLocaleDateString())}
+                            showMonthYearPicker
+                            dateFormat="MM/yyyy"
+                            val
                         />
                     </div>
                 </div>
@@ -203,10 +193,10 @@ export default function Expenses() {
                 <thead className="thead-light">
                     <tr>
                         <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Mobile No</th>
-                        <th scope="col">Application Date</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Amount</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Date Paid</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>

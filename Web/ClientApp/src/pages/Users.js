@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Paginator from '../components/Paginator';
 import Loader from '../components/Loader';
 import { Passive } from '../constants/userStatus';
-import { getHttpHeader, getLengthUrl, getPageIndex } from '../helpers/helpers';
+import { getHttpHeader, getLengthUrl, getPageIndex, getRole } from '../helpers/helpers';
 import { useAxiosGet } from '../Hooks/HttpRequests';
 
 export default function Users() {
@@ -53,7 +53,7 @@ export default function Users() {
                     <td>{item.name}</td>
                     <td>{item.email}</td>
                     <td>{item.job}</td>
-                    <td>{item.role}</td>
+                    <td>{getRole(item.role)}</td>
                     <td>{item.status === Passive ?
                         <span className="badge badge-danger">{item.status}</span>
                         :
@@ -97,7 +97,6 @@ export default function Users() {
             <div className='m-1 p-1'>
                 <Link to="/Users/Add" className='btn btn-primary'><i className='fas fa-plus'></i> Add</Link>
             </div>
-
 
             <div className='d-flex justify-content-between'>
                 <div className='col-md-6 row text-center'>

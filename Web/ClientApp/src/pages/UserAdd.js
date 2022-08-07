@@ -5,11 +5,19 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup'
 import LoaderButton from '../components/LoaderButton'
+import { Admin, Volunteer } from '../constants/userRoles';
 import { getHttpHeader } from '../helpers/helpers';
+import { useAxiosGet } from '../Hooks/HttpRequests';
 
 export default function UserAdd() {
     const [btnLoading, setBtnLoading] = useState(false);
     const navigate = useNavigate();
+    const volunteerResponse = useAxiosGet("/api/Volunteer/VolunteersForDropDown");
+    let volunteerOptions;
+    if(volunteerResponse.data){
+        volunteerOptions = volunteerResponse.data.map(item => {return <option key={item.id} value={item.id}>{item.name}</option>})
+    }
+
     const initialValues = {
         name:'',
         email:'',
@@ -17,7 +25,8 @@ export default function UserAdd() {
         passwordConfirm:'',
         job:'',
         role:'',
-        status: 'Active'
+        status: 'Active',
+        volunteerId: ''
     };
     const validationSchema = yup.object().shape({
         name: yup.string().required('Required'),
@@ -88,8 +97,8 @@ export default function UserAdd() {
                                 <label htmlFor="role">Role</label>
                                 <Field as="select" id="role" name="role" className="form-select" >
                                     <option value="">--Choose--</option>
-                                    <option value="volunteer">Volunteer</option>
-                                    <option value="admin">Admin</option>
+                                    <option value={Volunteer}>Volunteer</option>
+                                    <option value={Admin}>Admin</option>
                                 </Field>
                                 <ErrorMessage component="span" name="role" className="text-danger" />
                             </div>
@@ -100,6 +109,14 @@ export default function UserAdd() {
                                     <option value="Active">Active</option>
                                 </Field>
                                 <ErrorMessage component="span" name="status" className="text-danger" />
+                            </div>
+                            <div className="form-group col-md-6">
+                                <label htmlFor="volunteerId">Volunteer</label>
+                                <Field as="select" id="volunteerId" name="volunteerId" className="form-select" >
+                                    <option value="">--Choose--</option>
+                                    {volunteerOptions}
+                                </Field>
+                                <ErrorMessage component="span" name="volunteerId" className="text-danger" />
                             </div>
                         </div>
 

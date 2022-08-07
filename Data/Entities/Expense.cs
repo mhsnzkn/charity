@@ -29,7 +29,7 @@ namespace Data.Entities
         public string Description { get; set; }
         public DateTime Date { get; set; }
         public DateTime? PayDate { get; set; }
-        public CommonFile CommmonFile { get; set; }
+        public CommonFile CommonFile { get; set; }
         public int? CommonFileId { get; set; }
     }
 }

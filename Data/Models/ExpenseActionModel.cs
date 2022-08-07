@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Data.Models
 {
-    public class VolunteerActionModel
+    public class ExpenseActionModel : ActionModel
     {
-        public int Id { get; set; }
-        public string CancellationReason { get; set; }
-        public string Action { get; set; }
+        public DateTime Date { get; set; }
     }
 }

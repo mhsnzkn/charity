@@ -34,7 +34,8 @@ namespace Data.Utility.Security
             return new AccessToken()
             {
                 Token = token,
-                Role = user.Role
+                Role = user.Role,
+                VolunteerId = user.VolunteerId ?? 0
             };
         }
 

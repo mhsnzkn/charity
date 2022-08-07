@@ -51,7 +51,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Agreements");
+                    b.ToTable("Agreements", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.CommonFile", b =>
@@ -82,7 +82,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CommonFiles");
+                    b.ToTable("CommonFiles", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.Expense", b =>
@@ -142,7 +142,7 @@ namespace Data.Migrations
 
                     b.HasIndex("VolunteerId");
 
-                    b.ToTable("Expenses");
+                    b.ToTable("Expenses", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.User", b =>
@@ -191,7 +191,7 @@ namespace Data.Migrations
 
                     b.HasIndex("VolunteerId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
@@ -277,7 +277,7 @@ namespace Data.Migrations
                     b.HasIndex("Key")
                         .IsUnique();
 
-                    b.ToTable("Volunteers");
+                    b.ToTable("Volunteers", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.VolunteerAgreement", b =>
@@ -306,7 +306,7 @@ namespace Data.Migrations
 
                     b.HasIndex("VolunteerId");
 
-                    b.ToTable("VolunteerAgreements");
+                    b.ToTable("VolunteerAgreements", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.VolunteerFile", b =>
@@ -335,7 +335,7 @@ namespace Data.Migrations
 
                     b.HasIndex("VolunteerId");
 
-                    b.ToTable("VolunteerFiles");
+                    b.ToTable("VolunteerFiles", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.Expense", b =>

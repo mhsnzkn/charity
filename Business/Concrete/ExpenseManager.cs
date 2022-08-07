@@ -29,12 +29,21 @@ namespace Business.Concrete
             CommonFileManager = commonFileManager;
         }
 
-        public async Task<TableResponseDto<ExpenseTableDto>> GetTable(TableParams param)
+        public async Task<TableResponseDto<ExpenseTableDto>> GetTable(ExpenseTableParamsDto param)
         {
             var query = expenseDal.Get().OrderBy(a=>a.CrtDate).AsQueryable();
 
             if (!string.IsNullOrEmpty(param.SearchString))
                 query = query.Where(a => a.Volunteer.FirstName.Contains(param.SearchString) || a.Volunteer.LastName.Contains(param.SearchString));
+            if (!string.IsNullOrEmpty(param.Status))
+            {
+                var status = Enum.Parse<ExpenseStatus>(param.Status);
+                query = query.Where(a => a.Status == status);
+            }
+            if(param.Date is not null)
+            {
+                query = query.Where(a => a.Date >= param.Date && a.Date < param.Date.Value.AddMonths(1));
+            }
 
             var total = await query.CountAsync();
             if (param.Length > 0)
@@ -52,18 +61,55 @@ namespace Business.Concrete
             return tableModel;
         }
 
-        public async Task<Result> Add(Expense expense, IFormFile formFile)
+        public async Task<Result> Save(ExpenseModel model)
+        {
+            if (model.Id == 0)
+                return await Add(model);
+            else
+                return await Update(model);
+
+        }
+        public async Task<Result> Update(ExpenseModel model)
         {
             var result = new Result();
             try
             {
+                var expense = await expenseDal.GetByIdAsync(model.Id);
+                expense.Details = model.Details;
+                expense.ModeOfTransport = model.ModeOfTransport;
+                expense.Amount = model.Amount;
+                expense.Claim = model.Claim;
+                expense.TotalMileage = model.TotalMileage;
+                expense.Date = model.Date;
+                expense.VolunteerId = model.VolunteerId;
+
+                await expenseDal.Save();
+
+                if (model.FormFile != null)
+                {
+                    await CommonFileManager.UploadVolunteerFile(expense.VolunteerId, model.FormFile, $"{expense.VolunteerId}-{expense.Id}", CommonFileTypes.Expense);
+                }
+
+            }
+            catch (Exception)
+            {
+                result.SetError(UserMessages.Fail);
+            }
+            return result;
+        }
+        public async Task<Result> Add(ExpenseModel model)
+        {
+            var result = new Result();
+            try
+            {
+                var expense = mapper.Map<Expense>(model);
                 expense.Status = ExpenseStatus.Pending;
                 expenseDal.Add(expense);
                 await expenseDal.Save();
 
-                if (formFile != null)
+                if (model.FormFile != null)
                 {
-                    await CommonFileManager.UploadVolunteerFile(expense.VolunteerId, formFile, $"{expense.VolunteerId}-{expense.Id}", CommonFileTypes.Expense);
+                    await CommonFileManager.UploadVolunteerFile(expense.VolunteerId, model.FormFile, $"{expense.VolunteerId}-{expense.Id}", CommonFileTypes.Expense);
                 }
 
             }
@@ -76,7 +122,45 @@ namespace Business.Concrete
 
         public async Task<ExpenseModel> GetModelById(int id)
         {
-            return mapper.Map<ExpenseModel>(await expenseDal.GetByIdAsync(id));
+            return await mapper.ProjectTo<ExpenseModel>(expenseDal.Get(a=>a.Id == id)).FirstOrDefaultAsync();
+        }
+
+        public async Task<Result> Approve(int id)
+        {
+            var result = new Result();
+            var expense = await expenseDal.GetByIdAsync(id);
+            if (expense is null)
+                return result.SetError(UserMessages.DataNotFound);
+
+            expense.Status = ExpenseStatus.Accepted;
+            await expenseDal.Save();
+            return result;
+        }
+
+        public async Task<Result> Pay(int id, DateTime date)
+        {
+            var result = new Result();
+            var expense = await expenseDal.GetByIdAsync(id);
+            if (expense is null)
+                return result.SetError(UserMessages.DataNotFound);
+
+            expense.Status = ExpenseStatus.Paid;
+            expense.PayDate = date;
+            await expenseDal.Save();
+            return result;
+        }
+
+        public async Task<Result> Cancel(int id, string cancellationReason)
+        {
+            var result = new Result();
+            var expense = await expenseDal.GetByIdAsync(id);
+            if (expense is null)
+                return result.SetError(UserMessages.DataNotFound);
+
+            expense.Status = ExpenseStatus.Cancelled;
+            expense.Description = cancellationReason;
+            await expenseDal.Save();
+            return result;
         }
     }
 }
