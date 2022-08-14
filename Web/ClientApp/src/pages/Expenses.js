@@ -7,7 +7,7 @@ import ApiSelect from '../components/ApiSelect';
 import Paginator from '../components/Paginator';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
-import { Cancelled, Accepted, Paid } from '../constants/expenseStatus';
+import { Cancelled, Accepted, Paid, Pending } from '../constants/expenseStatus';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { Admin } from '../constants/userRoles';
@@ -35,7 +35,7 @@ export default function Expenses() {
     }
     const getDateValue = () => {
         let urlDate = new URLSearchParams(url).get('date');
-        if(urlDate){
+        if (urlDate) {
             // return `${urlFormattedDate.getMonth()+1}/${urlFormattedDate.getFullYear()}`
             return new Date(urlDate)
         }
@@ -115,18 +115,21 @@ export default function Expenses() {
                     </td>
                     <td>{item.payDate && new Date(item.payDate).toLocaleDateString('uk')}</td>
                     <td>
-                        <Link className='btn btn-sm btn-info m-1' to={`/VolunteerExpenses/Edit/${item.id}`} title="Edit">
-                            <i className='fas fa-edit'></i>
-                        </Link>
-                        {getUserRole === Admin &&
+                        {(getUserRole() === Admin || item.status === Pending) &&
+                            <Link className='btn btn-sm btn-info m-1' to={`/VolunteerExpenses/Edit/${item.id}`} title="Edit">
+                                <i className='fas fa-edit'></i>
+                            </Link>
+                        }
+                        
+                        {getUserRole() === Admin &&
                             (item.status === Accepted ?
-                            <button className='btn btn-sm btn-success m-1' onClick={() => pay(item.id)} title="Pay">
-                                <i className="fas fas fa-money-bill"></i>
-                            </button>
-                            :
-                            <button className='btn btn-sm btn-success m-1' onClick={() => approve(item.id)} title="Accept">
-                                <i className='fas fa-check'></i>
-                            </button>)
+                                <button className='btn btn-sm btn-success m-1' onClick={() => pay(item.id)} title="Pay">
+                                    <i className="fas fas fa-money-bill"></i>
+                                </button>
+                                :
+                                <button className='btn btn-sm btn-success m-1' onClick={() => approve(item.id)} title="Accept">
+                                    <i className='fas fa-check'></i>
+                                </button>)
                         }
 
                         {item.status === Cancelled ?
@@ -178,7 +181,7 @@ export default function Expenses() {
                             onChange={v => paramChangeHandler('date', v?.toLocaleDateString() || "")}
                             showMonthYearPicker
                             dateFormat="MM/yyyy"
-                            selected = {getDateValue()}
+                            selected={getDateValue()}
                         />
                     </div>
                 </div>

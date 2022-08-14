@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Data.AutoMapper;
 using Business.Utility.MailService;
+using Microsoft.AspNetCore.Http;
 
 namespace Web
 {
@@ -69,6 +70,7 @@ namespace Web
             services.AddAutoMapper(typeof(AppProfile).Assembly);
 
             #region Services
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ITokenHelper, JwtHelper>();
             services.AddScoped<IMailService, MailService>();
 

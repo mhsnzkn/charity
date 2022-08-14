@@ -30,7 +30,7 @@ namespace Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] ExpenseTableParamsDto param)
         {
-            return Ok(await expenseManager.GetTable(param, User.FindFirst()));
+            return Ok(await expenseManager.GetTable(param));
         }
 
         // GET api/<ExpenseController>/5

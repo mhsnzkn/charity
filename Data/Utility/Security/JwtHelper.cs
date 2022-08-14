@@ -56,7 +56,7 @@ namespace Data.Utility.Security
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.VolunteerId?.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.VolunteerId?.ToString() ?? "0"),
                 new Claim(ClaimTypes.Role, user.Role),
             };
             return claims;

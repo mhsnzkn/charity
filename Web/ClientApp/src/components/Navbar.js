@@ -1,8 +1,6 @@
 import React from 'react';
-import { useAuth } from '../Hooks/Auth';
 
 export default function Navbar({toggleMenu}) {
-    const auth = useAuth();
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark">

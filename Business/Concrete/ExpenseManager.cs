@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Business.Concrete
@@ -19,19 +20,26 @@ namespace Business.Concrete
     {
         private readonly IExpenseDal expenseDal;
         private readonly IMapper mapper;
+        private readonly IHttpContextAccessor contextAccessor;
 
         public ICommonFileManager CommonFileManager { get; }
 
-        public ExpenseManager(IExpenseDal expenseDal, IMapper mapper, ICommonFileManager commonFileManager)
+        public ExpenseManager(IExpenseDal expenseDal, IMapper mapper, ICommonFileManager commonFileManager, IHttpContextAccessor contextAccessor)
         {
             this.expenseDal = expenseDal;
             this.mapper = mapper;
             CommonFileManager = commonFileManager;
+            this.contextAccessor = contextAccessor;
         }
 
         public async Task<TableResponseDto<ExpenseTableDto>> GetTable(ExpenseTableParamsDto param)
         {
             var query = expenseDal.Get().OrderBy(a=>a.CrtDate).AsQueryable();
+
+            if (!contextAccessor.HttpContext.User.IsInRole(UserRoles.Admin))
+            {
+                query = query.Where(x => x.VolunteerId == GetUserVolunteerId());
+            }
 
             if (!string.IsNullOrEmpty(param.SearchString))
                 query = query.Where(a => a.Volunteer.FirstName.Contains(param.SearchString) || a.Volunteer.LastName.Contains(param.SearchString));
@@ -104,6 +112,9 @@ namespace Business.Concrete
             {
                 var expense = mapper.Map<Expense>(model);
                 expense.Status = ExpenseStatus.Pending;
+                if (model.VolunteerId == 0 && !contextAccessor.HttpContext.User.IsInRole(UserRoles.Admin))
+                    expense.VolunteerId = GetUserVolunteerId();
+
                 expenseDal.Add(expense);
                 await expenseDal.Save();
 
@@ -118,6 +129,11 @@ namespace Business.Concrete
                 result.SetError(UserMessages.Fail);
             }
             return result;
+        }
+
+        private int GetUserVolunteerId()
+        {
+            return Convert.ToInt32(contextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
         }
 
         public async Task<ExpenseModel> GetModelById(int id)
