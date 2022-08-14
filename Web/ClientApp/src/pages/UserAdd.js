@@ -34,7 +34,8 @@ export default function UserAdd() {
         password: yup.string().min(5, "Must be at least 5 characters").required('Required'),
         passwordConfirm: yup.string().oneOf([yup.ref('password'), null], "Passwords don't match!").required('Required'),
         role: yup.string().required('Required'),
-        status: yup.string().oneOf(['Active','Passive']).required('Required')
+        status: yup.string().oneOf(['Active','Passive']).required('Required'),
+        volunteerId: yup.string().required('Required'),
     });
 
     const submitHandler = values =>{
