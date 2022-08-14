@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useAxiosGet } from '../Hooks/HttpRequests';
 import axios from 'axios';
-import { getLengthUrl, getPageIndex } from '../helpers/helpers';
+import { getLengthUrl, getPageIndex, getUserRole } from '../helpers/helpers';
 import alertify from 'alertifyjs';
 import ApiSelect from '../components/ApiSelect';
 import Paginator from '../components/Paginator';
 import { Link } from 'react-router-dom';
 import Loader from '../components/Loader';
 import { Cancelled, Accepted, Paid } from '../constants/expenseStatus';
-import ReactDatePicker from 'react-datepicker';
+import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { Admin } from '../constants/userRoles';
 
 export default function Expenses() {
     const baseUrl = "/api/expense"
@@ -31,6 +32,14 @@ export default function Expenses() {
 
         params.set(key, value);
         setUrl(params.toString());
+    }
+    const getDateValue = () => {
+        let urlDate = new URLSearchParams(url).get('date');
+        if(urlDate){
+            // return `${urlFormattedDate.getMonth()+1}/${urlFormattedDate.getFullYear()}`
+            return new Date(urlDate)
+        }
+        return null;
     }
 
     const approve = (id) => {
@@ -109,25 +118,27 @@ export default function Expenses() {
                         <Link className='btn btn-sm btn-info m-1' to={`/VolunteerExpenses/Edit/${item.id}`} title="Edit">
                             <i className='fas fa-edit'></i>
                         </Link>
-                        {item.status === Accepted ?
+                        {getUserRole === Admin &&
+                            (item.status === Accepted ?
                             <button className='btn btn-sm btn-success m-1' onClick={() => pay(item.id)} title="Pay">
                                 <i className="fas fas fa-money-bill"></i>
                             </button>
                             :
                             <button className='btn btn-sm btn-success m-1' onClick={() => approve(item.id)} title="Accept">
                                 <i className='fas fa-check'></i>
-                            </button>
+                            </button>)
                         }
-
 
                         {item.status === Cancelled ?
                             <button className='btn btn-sm btn-danger m-1' onClick={() => showReason(item.description)} title="Show Reason">
                                 <i className="fas fa-comment-slash"></i>
                             </button>
                             :
+                            getUserRole() === Admin &&
                             <button className='btn btn-sm btn-danger m-1' onClick={() => cancel(item.id)} title="Cancel">
                                 <i className="far fa-times-circle"></i>
                             </button>
+
                         }
 
                     </td>
@@ -163,11 +174,11 @@ export default function Expenses() {
                     </div>
                     <label className="col-sm-2 col-form-label">Date</label>
                     <div className="col-sm-4">
-                        <ReactDatePicker
-                            onChange={v => paramChangeHandler('date', v.toLocaleDateString())}
+                        <DatePicker
+                            onChange={v => paramChangeHandler('date', v?.toLocaleDateString() || "")}
                             showMonthYearPicker
                             dateFormat="MM/yyyy"
-                            val
+                            selected = {getDateValue()}
                         />
                     </div>
                 </div>

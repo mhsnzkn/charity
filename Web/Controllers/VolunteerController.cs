@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = UserRoles.Admin)]
     [Route("api/[controller]")]
     [ApiController]
     public class VolunteerController : ControllerBase

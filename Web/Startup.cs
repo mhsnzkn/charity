@@ -69,7 +69,7 @@ namespace Web
             services.AddAutoMapper(typeof(AppProfile).Assembly);
 
             #region Services
-            services.AddScoped<ITokenHelper, JwtHelper>();
+            services.AddSingleton<ITokenHelper, JwtHelper>();
             services.AddScoped<IMailService, MailService>();
 
             services.AddScoped<IUserManager, UserManager>();

@@ -14,7 +14,7 @@ namespace Data.Utility.Security
     public class JwtHelper : ITokenHelper
     {
         public IConfiguration Configuration { get; }
-        private TokenOptions tokenOptions;
+        private readonly TokenOptions tokenOptions;
         private DateTime _accessTokenExpiration;
 
         public JwtHelper(IConfiguration configuration)
@@ -56,8 +56,8 @@ namespace Data.Utility.Security
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.NameIdentifier, user.VolunteerId?.ToString()),
+                new Claim(ClaimTypes.Role, user.Role),
             };
             return claims;
         }
