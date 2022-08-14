@@ -24,6 +24,7 @@ namespace Data.Constants
 
         // User
         public const string EmailExists = "Email is already registered!";
+        public const string VolunteerExists = "Volunteer is already registered!";
 
         // Mail
         public const string EmailSendFailed = " There has been an error while sending email!";

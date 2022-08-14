@@ -21,5 +21,9 @@ namespace DataAccess.Concrete
         {
             return await  context.Users.Where(a => a.Email == email).FirstOrDefaultAsync();
         }
+        public async Task<bool> IsExistByVolunteerId(int volunteerId)
+        {
+            return await context.Users.AnyAsync(a => a.VolunteerId == volunteerId);
+        }
     }
 }

@@ -35,15 +35,22 @@ namespace Business.Concrete
             var result = new Result();
             if (string.IsNullOrEmpty(model.Password))
             {
-                result.SetError(UserMessages.DataNotFound);
-                return result;
+                return result.SetError(UserMessages.DataNotFound);
             }
             var emailCheckEntity = await userDal.GetByMail(model.Email);
             if(emailCheckEntity is not null)
             {
-                result.SetError(UserMessages.EmailExists);
-                return result;
+                return result.SetError(UserMessages.EmailExists);
             }
+            if(model.VolunteerId != 0)
+            {
+                var userByVolunteerId = await userDal.IsExistByVolunteerId(model.VolunteerId);
+                if (userByVolunteerId)
+                {
+                    return result.SetError(UserMessages.VolunteerExists);
+                }
+            }
+            
             try
             {
                 var entity = mapper.Map<User>(model);

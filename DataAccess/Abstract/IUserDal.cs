@@ -7,5 +7,6 @@ namespace DataAccess.Abstract
     public interface IUserDal : IRepositoryBase<User>
     {
         Task<User> GetByMail(string email);
+        Task<bool> IsExistByVolunteerId(int volunteerId);
     }
 }

@@ -103,12 +103,12 @@ export default function UserEdit() {
                                 <ErrorMessage component="span" name="status" className="text-danger" />
                             </div>
                             <div className="form-group col-md-6">
-                                <label htmlFor="volunteer">Volunteer</label>
-                                <Field as="select" id="volunteer" name="volunteer" className="form-select" >
+                                <label htmlFor="volunteerId">Volunteer</label>
+                                <Field as="select" id="volunteerId" name="volunteerId" className="form-select" >
                                     <option value="">--Choose--</option>
                                     {volunteerOptions}
                                 </Field>
-                                <ErrorMessage component="span" name="volunteer" className="text-danger" />
+                                <ErrorMessage component="span" name="volunteerId" className="text-danger" />
                             </div>
                         </div>
 
