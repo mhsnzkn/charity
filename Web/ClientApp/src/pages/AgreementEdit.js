@@ -47,8 +47,7 @@ export default function AgreementEdit() {
             title: values.title || '',
             order: values.order || 1,
             content: values.content || '',
-            isActive: values.isActive ?? true,
-            inUse: values.inUse
+            isActive: values.isActive ?? true
         },
         onSubmit: submitHandler,
         validationSchema: yup.object().shape({
@@ -62,12 +61,6 @@ export default function AgreementEdit() {
     return (
         <>
             <Link to="/Agreements" className='btn btn-dark m-1'><i className='fas fa-undo'></i> Back</Link>
-            {values.inUse ?
-            <div className='d-flex justify-content-center'>
-                <p className='text-danger'>This agreement is in use. Only "Status" can be changed.</p>
-            </div>
-            :
-            <></>}
             {loading ?
                 <Loader />
                 :
@@ -80,7 +73,6 @@ export default function AgreementEdit() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.title}
-                                disabled={formik.values.inUse}
                             />
                             {formik.touched.title && formik.errors.title && <small className='text-danger'>{formik.errors.title}</small>}
                         </div>
@@ -90,7 +82,6 @@ export default function AgreementEdit() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.order}
-                                disabled={formik.values.inUse}
                             />
                             {formik.touched.order && formik.errors.order && <small className='text-danger'>{formik.errors.order}</small>}
                         </div>
@@ -113,7 +104,6 @@ export default function AgreementEdit() {
                                     //const data = editor.getData();
                                     formik.setFieldValue('content', editor.getData())
                                 }}
-                                disabled={formik.values.inUse}
                             />
                             {formik.touched.content && formik.errors.content && <small className='text-danger'>{formik.errors.content}</small>}
                         </div>

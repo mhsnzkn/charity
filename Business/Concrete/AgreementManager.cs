@@ -59,11 +59,6 @@ namespace Business.Concrete
             return await agreementDal.GetByIdAsync(id);
         }
 
-        public async Task<AgreementModel> GetModelById(int id)
-        {
-            return await agreementDal.GetModelById(id);
-        }
-
         public async Task<List<Agreement>> GetActiveAgreements()
         {
             return await agreementDal.Get(a=>a.IsActive).ToListAsync();
@@ -92,22 +87,6 @@ namespace Business.Concrete
             try
             {
                 var entity = await agreementDal.GetByIdAsync(model.Id);
-                var existingData = await volunteerAgreementDal.Get(a => a.AgreementId == model.Id).AnyAsync();
-                if (existingData)
-                {
-                    if(entity.Title != model.Title || entity.Content != model.Content || entity.Order != model.Order)
-                    {
-                        result.SetError(UserMessages.AgreementInUse);
-                    }
-                    if (entity.IsActive != model.IsActive)
-                    {
-                        entity.IsActive = model.IsActive;
-                        result.AddMessage(UserMessages.AgreementDisabled);
-                    }
-                    await agreementDal.Save();
-                    return result;
-                }
-
                 entity.Title = model.Title;
                 entity.Content = model.Content;
                 entity.Order = model.Order;

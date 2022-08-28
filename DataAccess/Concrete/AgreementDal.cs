@@ -18,18 +18,5 @@ namespace DataAccess.Concrete
             this.context = context;
         }
 
-        public async Task<AgreementModel> GetModelById(int id)
-        {
-            return await context.Agreements.Where(x => x.Id == id)
-                .Select(x => new AgreementModel
-                {
-                    Id = x.Id,
-                    Content = x.Content,
-                    IsActive = x.IsActive,
-                    Order = x.Order,
-                    Title = x.Title,
-                    InUse = x.VolunteerAgreements.Count > 0,
-                }).FirstOrDefaultAsync();
-        }
     }
 }
