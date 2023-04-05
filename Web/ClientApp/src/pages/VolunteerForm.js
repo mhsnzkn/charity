@@ -39,7 +39,7 @@ export default function VolunteerForm() {
         email: yup.string()
             .email("Invalid email address format")
             .required("Required"),
-        reason: yup.string().required('Required').max(100, 'Cannot exceed 1000 characters'),
+        reason: yup.string().required('Required').max(1000, 'Cannot exceed 1000 characters'),
         organisations: yup.array().of(yup.object().shape({
             organisation: yup.string().required("Required"),
             role: yup.string().required("Required"),
