@@ -13,34 +13,35 @@ namespace Business.Utility.MailService
     public class MailService : IMailService
     {
         private readonly MailSettings mailSettings;
+        private readonly SmtpClient client;
         private const string Header = "<div style=\"width:100%;background-color:#f2f2f0\"><img width=\"350\" src=\"https://management.heart4refugees.org/logo.png\"/></div>";
         private const string Footer = "<br/><p>Kind Regards</p><p>The Admin Team</p><p>Heart4Refugees</p>";
         public MailService(IConfiguration config)
         {
-            this.mailSettings = config.GetSection("MailSettings").Get<MailSettings>();
+            mailSettings = config.GetSection("MailSettings").Get<MailSettings>();
+            client = new SmtpClient
+            {
+                Host = mailSettings.Host,
+                Port = mailSettings.Port,
+                EnableSsl = true,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(mailSettings.Email, mailSettings.Password),
+                DeliveryMethod = SmtpDeliveryMethod.Network
+            };
         }
         public async Task<Result> SendMail(string subject, string body, string to, string[] cc = null)
         {
             var result = new Result();
             try
             {
-                var client = new SmtpClient
-                {
-                    Host = mailSettings.Host,
-                    Port = mailSettings.Port,
-                    EnableSsl = true,
-                    UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential(mailSettings.Email, mailSettings.Password),
-                    DeliveryMethod = SmtpDeliveryMethod.Network
-                };
-
-                var mailMessage = new MailMessage
+                using var mailMessage = new MailMessage
                 {
                     From = new MailAddress(mailSettings.Email, mailSettings.DisplayName),
                     Subject = subject,
                     IsBodyHtml = true,
                     Body = body
                 };
+
                 if(cc != null && cc.Length > 0)
                 {
                     foreach(var item in cc)
